@@ -78,7 +78,7 @@ namespace Kursivoy_Konkin
                 FormAdmin f = new FormAdmin();
                 
                 this.Hide();
-                f.Show();
+                f.Hide();
 
                 authAtt = 0;
                 captchaTrue = false;
