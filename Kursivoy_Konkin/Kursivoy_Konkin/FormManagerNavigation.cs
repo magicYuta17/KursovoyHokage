@@ -23,5 +23,10 @@ namespace Kursivoy_Konkin
             f.Show();
             this.Close();
         }
+
+        private void FormManagerNavigation_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
