@@ -42,6 +42,8 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.AddUser = new System.Windows.Forms.ToolStripMenuItem();
             this.EditUser = new System.Windows.Forms.ToolStripMenuItem();
+            this.label4 = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -50,7 +52,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.label3.Location = new System.Drawing.Point(741, 9);
+            this.label3.Location = new System.Drawing.Point(870, 7);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(214, 47);
@@ -61,7 +63,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.label2.Location = new System.Drawing.Point(465, 7);
+            this.label2.Location = new System.Drawing.Point(433, 8);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(205, 47);
@@ -83,21 +85,23 @@
             // 
             this.comboBox3.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
             this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Location = new System.Drawing.Point(750, 59);
+            this.comboBox3.Location = new System.Drawing.Point(878, 58);
             this.comboBox3.Margin = new System.Windows.Forms.Padding(4);
             this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(291, 55);
+            this.comboBox3.Size = new System.Drawing.Size(365, 55);
             this.comboBox3.TabIndex = 11;
+            this.comboBox3.SelectedIndexChanged += new System.EventHandler(this.comboBox3_SelectedIndexChanged_1);
             // 
             // comboBox1
             // 
             this.comboBox1.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(474, 58);
+            this.comboBox1.Location = new System.Drawing.Point(441, 59);
             this.comboBox1.Margin = new System.Windows.Forms.Padding(4);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(199, 55);
+            this.comboBox1.Size = new System.Drawing.Size(404, 55);
             this.comboBox1.TabIndex = 10;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged_1);
             // 
             // textBox1
             // 
@@ -107,11 +111,12 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(404, 55);
             this.textBox1.TabIndex = 9;
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged_1);
             // 
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(14, 123);
+            this.dataGridView1.Location = new System.Drawing.Point(14, 248);
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 51;
@@ -124,7 +129,7 @@
             // 
             this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
             this.button2.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.button2.Location = new System.Drawing.Point(880, 651);
+            this.button2.Location = new System.Drawing.Point(880, 871);
             this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(363, 60);
@@ -136,7 +141,7 @@
             // 
             this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
             this.button1.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.button1.Location = new System.Drawing.Point(22, 651);
+            this.button1.Location = new System.Drawing.Point(22, 871);
             this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(191, 60);
@@ -166,12 +171,36 @@
             this.EditUser.Size = new System.Drawing.Size(180, 24);
             this.EditUser.Text = "Редактировать";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
+            this.label4.Location = new System.Drawing.Point(324, 153);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(485, 47);
+            this.label4.TabIndex = 18;
+            this.label4.Text = "Фильтрация по сотрудникам";
+            this.label4.Click += new System.EventHandler(this.label4_Click);
+            // 
+            // textBox2
+            // 
+            this.textBox2.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
+            this.textBox2.Location = new System.Drawing.Point(867, 153);
+            this.textBox2.Margin = new System.Windows.Forms.Padding(4);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(376, 55);
+            this.textBox2.TabIndex = 19;
+            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            // 
             // FormViewClients
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1282, 724);
+            this.ClientSize = new System.Drawing.Size(1282, 944);
+            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label3);
@@ -183,7 +212,7 @@
             this.Controls.Add(this.dataGridView1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormViewClients";
-            this.Text = "FormManagerNavigation";
+            this.Text = "Просмотр клиентов";
             this.Load += new System.EventHandler(this.FormManagerNavigation_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
@@ -206,5 +235,7 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem AddUser;
         private System.Windows.Forms.ToolStripMenuItem EditUser;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox textBox2;
     }
 }
