@@ -25,43 +25,49 @@ namespace Kursivoy_Konkin
         {
 
         }
-        string com = @"SELECT c.*, s.status as StatusName 
-                          FROM mydb.clients c 
-                          LEFT JOIN mydb.status_client s ON c.Status_client_ID_Status_client = s.ID_Status_client;";
+        // Новый SQL-запрос с INNER JOIN для закреплённых сотрудников
+        string com = @"SELECT c.*, s.status as StatusName
+    FROM mydb.clients c
+    LEFT JOIN mydb.status_client s ON c.Status_client_ID_Status_client = s.ID_Status_client;";
 
-        private void FillTableData(string cmd = "")
+        string comAttached = @"SELECT c.*, s.status as StatusName, w.FIO as EmployeeName
+    FROM mydb.clients c
+    LEFT JOIN mydb.status_client s ON c.Status_client_ID_Status_client = s.ID_Status_client
+    LEFT JOIN mydb.worker w ON c.ID_Client = w.ID_Clientsl
+    WHERE w.FIO IS NOT NULL;";
+        private void FillTableData(string filter = "")
         {
             dataGridView1.Columns.Clear();
 
-            // ИЗМЕНЕННЫЙ ЗАПРОС С JOIN ДЛЯ ПОЛУЧЕНИЯ НАЗВАНИЙ СТАТУСОВ
-            string com = @"SELECT c.*, s.status as StatusName 
-                  FROM mydb.clients c 
-                  LEFT JOIN mydb.status_client s ON c.Status_client_ID_Status_client = s.ID_Status_client;";
+            // Всегда используем расширенный запрос с JOIN на работников
+            string query = comAttached;
 
             MySqlConnection connection = new MySqlConnection(connect.con);
             connection.Open();
-            MySqlCommand command = new MySqlCommand(com, connection);
+            MySqlCommand command = new MySqlCommand(query, connection);
             MySqlDataAdapter adapter = new MySqlDataAdapter(command);
             DataTable table = new DataTable();
 
             adapter.Fill(table);
 
-            // Сохраняем оригинальные данные для фильтрации
             originalDataTable = table.Copy();
 
             dataGridView1.DataSource = table;
 
+            // Настройка столбцов
             dataGridView1.Columns["ID_contract"].HeaderText = "Контракт";
             dataGridView1.Columns["FullName_client"].HeaderText = "ФИО";
             dataGridView1.Columns["phone"].HeaderText = "Телефон";
             dataGridView1.Columns["Age"].HeaderText = "Возраст";
-            dataGridView1.Columns["StatusName"].HeaderText = "Статус"; // Используем новый столбец с названиями
+            dataGridView1.Columns["StatusName"].HeaderText = "Статус";
             dataGridView1.Columns["Qualified_lead"].HeaderText = "Квал лид";
             dataGridView1.Columns["LTV"].HeaderText = "LTV";
+            if (table.Columns.Contains("EmployeeName"))
+                dataGridView1.Columns["EmployeeName"].HeaderText = "Сотрудник";
 
             dataGridView1.Columns["ID_Client"].Visible = false;
             dataGridView1.Columns["photo_clients"].Visible = false;
-            dataGridView1.Columns["Status_client_ID_Status_client"].Visible = false; // Скрываем старый столбец с ID
+            dataGridView1.Columns["Status_client_ID_Status_client"].Visible = false;
 
             DataGridViewImageColumn imageColumn = new DataGridViewImageColumn();
             imageColumn.Name = "Фото";
@@ -89,12 +95,10 @@ namespace Kursivoy_Konkin
         {
             if (originalDataTable == null) return;
 
-            // Создаем копию данных для фильтрации
             DataTable filteredTable = originalDataTable.Clone();
             IEnumerable<DataRow> rows = originalDataTable.AsEnumerable();
 
-            // Применяем поиск
-            // Применяем поиск
+            // Поиск по клиенту (textBox1)
             string searchText = textBox1.Text.Trim().ToLower();
             if (!string.IsNullOrEmpty(searchText))
             {
@@ -103,7 +107,7 @@ namespace Kursivoy_Konkin
                     string fullName = GetSafeString(row["FullName_client"]);
                     string phone = GetSafeString(row["phone"]);
                     string contract = GetSafeString(row["ID_contract"]);
-                    string status = GetSafeString(row["StatusName"]); // Добавляем поиск по названию статуса
+                    string status = GetSafeString(row["StatusName"]);
 
                     return fullName.ToLower().Contains(searchText) ||
                            phone.ToLower().Contains(searchText) ||
@@ -112,30 +116,40 @@ namespace Kursivoy_Konkin
                 });
             }
 
-            // Применяем фильтрацию
+            // Поиск по сотруднику (textBox2)
+            string employeeSearch = textBox2.Text.Trim().ToLower();
+            if (!string.IsNullOrEmpty(employeeSearch) && originalDataTable.Columns.Contains("EmployeeName"))
+            {
+                rows = rows.Where(row =>
+                    GetSafeString(row["EmployeeName"]).ToLower().Contains(employeeSearch));
+            }
+
+            // Фильтрация по статусу и другим параметрам
             string filter = comboBox3.SelectedItem?.ToString();
             if (!string.IsNullOrEmpty(filter) && filter != "Все клиенты")
             {
                 switch (filter)
                 {
                     case "LTV > 500000":
-                        rows = rows.Where(row =>
-                            GetSafeDecimal(row["LTV"]) > 500000);
+                        rows = rows.Where(row => GetSafeDecimal(row["LTV"]) > 500000);
                         break;
-                    case "Активные клиенты":
-                        // Фильтруем по названию статуса
-                        rows = rows.Where(row =>
-                            GetSafeString(row["StatusName"]).ToLower() == "В работе");
+                    case "Клиенты в работе":
+                        rows = rows.Where(row => GetSafeString(row["StatusName"]).Trim() == "Идет строительство");
                         break;
-                    case "Новые клиенты":
-                        // Фильтруем по названию статуса
-                        rows = rows.Where(row =>
-                            GetSafeString(row["StatusName"]).ToLower() == "план");
+                    case "Буфер клиентов":
+                        rows = rows.Where(row => GetSafeString(row["StatusName"]).Trim() == "Буфер");
+                        break;
+                    case "Подписываем договор":
+                        rows = rows.Where(row => GetSafeString(row["StatusName"]).Trim() == "Подписываем договор");
+                        break;
+                    case "Завершён":
+                        rows = rows.Where(row => GetSafeString(row["StatusName"]).Trim() == "Завершён");
                         break;
                     case "Закрепленные сотрудники":
-                        // Адаптируйте это условие под вашу базу данных
-                        rows = rows.Where(row =>
-                            GetSafeBool(row["IsAttached"]) == true);
+                        if (originalDataTable.Columns.Contains("EmployeeName"))
+                            rows = rows.Where(row => !string.IsNullOrEmpty(GetSafeString(row["EmployeeName"])));
+                        else
+                            rows = Enumerable.Empty<DataRow>();
                         break;
                 }
             }
@@ -146,7 +160,7 @@ namespace Kursivoy_Konkin
                 filteredTable.ImportRow(row);
             }
 
-            // Применяем сортировку
+            // Сортировка
             string sortBy = comboBox1.SelectedItem?.ToString();
             if (!string.IsNullOrEmpty(sortBy) && sortBy != "Без сортировки")
             {
@@ -156,7 +170,7 @@ namespace Kursivoy_Konkin
                         filteredTable.DefaultView.Sort = "FullName_client ASC";
                         break;
                     case "По статусу":
-                        filteredTable.DefaultView.Sort = "StatusName ASC"; // Сортируем по названию статуса
+                        filteredTable.DefaultView.Sort = "StatusName ASC";
                         break;
                     case "По LTV (по убыванию)":
                         filteredTable.DefaultView.Sort = "LTV DESC";
@@ -169,8 +183,6 @@ namespace Kursivoy_Konkin
             }
 
             dataGridView1.DataSource = filteredTable;
-
-            // Обновляем фото после фильтрации
             UpdatePhotosAfterFilter();
         }
 
@@ -254,9 +266,11 @@ namespace Kursivoy_Konkin
             {
                 "Все клиенты",
                 "LTV > 500000",
-                "Активные клиенты",
-                "Новые клиенты",
-                "Закрепленные сотрудники"
+                "Клиенты в работе",
+                "Буфер клиентов",
+                "Подписываем договор",
+                "Завершён",
+              //  "Закрепленные сотрудники"
             });
             comboBox3.SelectedIndex = 0;
 
@@ -265,7 +279,7 @@ namespace Kursivoy_Konkin
             dataGridView1.MouseDown += dataGridView1_MouseDown;
         }
 
-        // ДОБАВЬТЕ ОБРАБОТЧИКИ СОБЫТИЙ ДЛЯ КОНТРОЛОВ
+     
 
      
 
@@ -316,6 +330,16 @@ namespace Kursivoy_Konkin
         }
 
         private void comboBox3_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            ApplyFiltersAndSorting();
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
         {
             ApplyFiltersAndSorting();
         }
