@@ -60,6 +60,7 @@ namespace Kursivoy_Konkin
 
             bool credentialsValid = (textBox1.Text == "admin" && textBox2.Text == "admin");
             bool credentialsValidManager = (textBox1.Text == "manager" && textBox2.Text == "manager");
+            bool credentialsValidHead= (textBox1.Text == "head" && textBox2.Text == "head");
 
             if (credentialsValid)
             {
@@ -75,7 +76,7 @@ namespace Kursivoy_Konkin
                 }
 
                 MessageBox.Show("Вход выполнен!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                FormAdmin f = new FormAdmin();
+                FormAdminNavigation f = new FormAdminNavigation();
                 
                 this.Hide();
                 f.Hide();
@@ -99,6 +100,27 @@ namespace Kursivoy_Konkin
                 MessageBox.Show("Вход выполнен!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 FormManagerNavigation f = new FormManagerNavigation();
                 
+                this.Hide();
+                f.Show();
+                authAtt = 0;
+                captchaTrue = false;
+                textBoxCaptcha.Clear();
+            }
+            else if (credentialsValidHead)
+            {
+                if (authAtt >= 1)
+                {
+                    if (!CheckCaptcha())
+                    {
+                        MessageBox.Show("Неверная капча! Форма заблокирована на 10 секунд", "Ошибка",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        BlockSystem();
+                        return;
+                    }
+                }
+                MessageBox.Show("Вход выполнен!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                FormManagerNavigation f = new FormManagerNavigation();
+
                 this.Hide();
                 f.Show();
                 authAtt = 0;

@@ -290,7 +290,7 @@ namespace Kursivoy_Konkin
 
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
+            //final
         }
 
         private void dataGridView1_MouseDown(object sender, MouseEventArgs e)
@@ -314,8 +314,9 @@ namespace Kursivoy_Konkin
 
         private void button1_Click(object sender, EventArgs e)
         {
-            // Обновление данных
-            FillTableData();
+            FormManagerNavigation f = new FormManagerNavigation();
+            f.Show();
+            this.Close();   
         }
 
         private void textBox1_TextChanged_1(object sender, EventArgs e)

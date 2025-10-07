@@ -28,5 +28,43 @@ namespace Kursivoy_Konkin
         {
 
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            FormViewContract f = new FormViewContract();
+            f.Show();
+            this.Close();  
+        }
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            FormViewObject f = new FormViewObject();
+            f.Show();
+            this.Close();
+        }
+
+        private void button4_Click_1(object sender, EventArgs e)
+        {
+            FormPrintContract f = new FormPrintContract();
+            f.Show();
+            this.Close();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            FormAutorization f = new FormAutorization();
+            f.Show();
+            this.Close();
+        }
     }
 }

@@ -1,7 +1,6 @@
-﻿
-namespace Kursivoy_Konkin
+﻿namespace Kursivoy_Konkin
 {
-    partial class FormAdmin
+    partial class FormPrintContract
     {
         /// <summary>
         /// Required designer variable.
@@ -29,19 +28,18 @@ namespace Kursivoy_Konkin
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAdmin));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPrintContract));
             this.SuspendLayout();
             // 
-            // FormAdmin
+            // FormPrintContract
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "FormAdmin";
-            this.Text = "FormAdmin";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormAdmin_FormClosing);
+            this.Name = "FormPrintContract";
+            this.Text = "Печать контракта";
             this.ResumeLayout(false);
 
         }
