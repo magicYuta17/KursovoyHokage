@@ -23,5 +23,27 @@ namespace Kursivoy_Konkin
             formAutorization.Show();
             this.Close();
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            FormHeadViewStatus f = new FormHeadViewStatus();
+            this.Hide();
+            f.ShowDialog();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            FormHeadViewClients f = new FormHeadViewClients();  
+            this.Hide();
+            f.ShowDialog();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            FormHeadContract contract = new FormHeadContract();
+            this.Hide();
+            contract.ShowDialog();
+
+        }
     }
 }

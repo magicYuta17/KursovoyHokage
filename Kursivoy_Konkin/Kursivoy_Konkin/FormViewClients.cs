@@ -27,67 +27,82 @@ namespace Kursivoy_Konkin
         }
         // Новый SQL-запрос с INNER JOIN для закреплённых сотрудников
         string com = @"SELECT c.*, s.status as StatusName
-    FROM mydb.clients c
-    LEFT JOIN mydb.status_client s ON c.Status_client_ID_Status_client = s.ID_Status_client;";
+        FROM mydb.clients c
+        LEFT JOIN mydb.status_client s ON c.Status_client_ID_Status_client = s.ID_Status_client
+        WHERE c.IsDeleted = 0;";
 
         string comAttached = @"SELECT c.*, s.status as StatusName, w.FIO as EmployeeName
-    FROM mydb.clients c
-    LEFT JOIN mydb.status_client s ON c.Status_client_ID_Status_client = s.ID_Status_client
-    LEFT JOIN mydb.worker w ON c.ID_Client = w.ID_Clientsl
-    WHERE w.FIO IS NOT NULL;";
+        FROM mydb.clients c
+        LEFT JOIN mydb.status_client s ON c.Status_client_ID_Status_client = s.ID_Status_client
+        LEFT JOIN mydb.worker w ON c.ID_Client = w.ID_Clientsl
+        WHERE w.FIO IS NOT NULL AND c.IsDeleted = 0;";
         private void FillTableData(string filter = "")
         {
             dataGridView1.Columns.Clear();
 
-            // Всегда используем расширенный запрос с JOIN на работников
-            string query = comAttached;
+            // По умолчанию показываем всех клиентов; если нужно — можно передать filter = "attached" для показа только закреплённых
+            string query = string.IsNullOrEmpty(filter) ? com : comAttached;
 
-            MySqlConnection connection = new MySqlConnection(connect.con);
-            connection.Open();
-            MySqlCommand command = new MySqlCommand(query, connection);
-            MySqlDataAdapter adapter = new MySqlDataAdapter(command);
-            DataTable table = new DataTable();
-
-            adapter.Fill(table);
-
-            originalDataTable = table.Copy();
-
-            dataGridView1.DataSource = table;
-
-            // Настройка столбцов
-            dataGridView1.Columns["ID_contract"].HeaderText = "Контракт";
-            dataGridView1.Columns["FullName_client"].HeaderText = "ФИО";
-            dataGridView1.Columns["phone"].HeaderText = "Телефон";
-            dataGridView1.Columns["Age"].HeaderText = "Возраст";
-            dataGridView1.Columns["StatusName"].HeaderText = "Статус";
-            dataGridView1.Columns["Qualified_lead"].HeaderText = "Квал лид";
-            dataGridView1.Columns["LTV"].HeaderText = "LTV";
-            if (table.Columns.Contains("EmployeeName"))
-                dataGridView1.Columns["EmployeeName"].HeaderText = "Сотрудник";
-
-            dataGridView1.Columns["ID_Client"].Visible = false;
-            dataGridView1.Columns["photo_clients"].Visible = false;
-            dataGridView1.Columns["Status_client_ID_Status_client"].Visible = false;
-
-            DataGridViewImageColumn imageColumn = new DataGridViewImageColumn();
-            imageColumn.Name = "Фото";
-            imageColumn.ImageLayout = DataGridViewImageCellLayout.Zoom;
-
-            dataGridView1.Columns.Add(imageColumn);
-            dataGridView1.AllowUserToAddRows = false;
-
-            foreach (DataGridViewRow row in dataGridView1.Rows)
+            using (MySqlConnection connection = new MySqlConnection(connect.con))
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
             {
-                string namee = row.Cells["photo_clients"].Value == null ? "picture.png" : row.Cells["photo_clients"].Value.ToString();
+                DataTable table = new DataTable();
+                connection.Open();
+                adapter.Fill(table);
+                originalDataTable = table.Copy();
+                dataGridView1.DataSource = table;
 
-                if (namee == "")
+                // Настройка столбцов
+                if (table.Columns.Contains("FullName_client")) dataGridView1.Columns["FullName_client"].HeaderText = "ФИО";
+                if (table.Columns.Contains("phone")) dataGridView1.Columns["phone"].HeaderText = "Телефон";
+                if (table.Columns.Contains("Age")) dataGridView1.Columns["Age"].HeaderText = "Возраст";
+                if (table.Columns.Contains("StatusName")) dataGridView1.Columns["StatusName"].HeaderText = "Статус";
+                if (table.Columns.Contains("Qualified_lead")) dataGridView1.Columns["Qualified_lead"].HeaderText = "Квал лид";
+                if (table.Columns.Contains("LTV")) dataGridView1.Columns["LTV"].HeaderText = "LTV";
+                if (table.Columns.Contains("EmployeeName")) dataGridView1.Columns["EmployeeName"].HeaderText = "Сотрудник";
+
+                if (table.Columns.Contains("ID_Client")) dataGridView1.Columns["ID_Client"].Visible = false;
+                if (table.Columns.Contains("photo_clients")) dataGridView1.Columns["photo_clients"].Visible = false;
+                if (table.Columns.Contains("Status_client_ID_Status_client")) dataGridView1.Columns["Status_client_ID_Status_client"].Visible = false;
+
+                // Скрываем флаг soft-delete, если он пришёл в выборке
+                if (table.Columns.Contains("IsDeleted"))
+                    dataGridView1.Columns["IsDeleted"].Visible = false;
+
+                // Добавляем колонку с изображением (если ещё нет)
+                if (!dataGridView1.Columns.Contains("Фото"))
                 {
-                    namee = "picture.png";
+                    DataGridViewImageColumn imageColumn = new DataGridViewImageColumn
+                    {
+                        Name = "Фото",
+                        ImageLayout = DataGridViewImageCellLayout.Zoom
+                    };
+                    dataGridView1.Columns.Add(imageColumn);
                 }
-                row.Cells["Фото"].Value = Image.FromFile(@"./img/picture.png");
-            }
 
-            connection.Close();
+                dataGridView1.AllowUserToAddRows = false;
+
+                foreach (DataGridViewRow row in dataGridView1.Rows)
+                {
+                    if (row.IsNewRow) continue;
+
+                    string namee = (table.Columns.Contains("photo_clients") && row.Cells["photo_clients"].Value != null)
+                        ? row.Cells["photo_clients"].Value.ToString()
+                        : "picture.png";
+
+                    if (string.IsNullOrWhiteSpace(namee)) namee = "picture.png";
+
+                    try
+                    {
+                        row.Cells["Фото"].Value = Image.FromFile(@"./img/picture.png");
+                    }
+                    catch
+                    {
+                        // Игнорируем ошибку загрузки изображения
+                    }
+                }
+            }
         }
 
         // ДОБАВЬТЕ ЭТУ ФУНКЦИЮ ДЛЯ ФИЛЬТРАЦИИ И СОРТИРОВКИ
@@ -106,12 +121,11 @@ namespace Kursivoy_Konkin
                 {
                     string fullName = GetSafeString(row["FullName_client"]);
                     string phone = GetSafeString(row["phone"]);
-                    string contract = GetSafeString(row["ID_contract"]);
+
                     string status = GetSafeString(row["StatusName"]);
 
                     return fullName.ToLower().Contains(searchText) ||
                            phone.ToLower().Contains(searchText) ||
-                           contract.ToLower().Contains(searchText) ||
                            status.ToLower().Contains(searchText);
                 });
             }
@@ -183,6 +197,11 @@ namespace Kursivoy_Konkin
             }
 
             dataGridView1.DataSource = filteredTable;
+
+            // Скрываем флаг soft-delete в фильтрованной таблице, если он есть
+            if (filteredTable.Columns.Contains("IsDeleted") && dataGridView1.Columns.Contains("IsDeleted"))
+                dataGridView1.Columns["IsDeleted"].Visible = false;
+
             UpdatePhotosAfterFilter();
         }
 
@@ -251,7 +270,7 @@ namespace Kursivoy_Konkin
 
         private void FormManagerNavigation_Load(object sender, EventArgs e)
         {
-            // ДОБАВЬТЕ ИНИЦИАЛИЗАЦИЮ КОМБОБОКСОВ
+            // Инициализация комбобоксов
             comboBox1.Items.AddRange(new string[]
             {
                 "Без сортировки",
@@ -274,18 +293,146 @@ namespace Kursivoy_Konkin
             });
             comboBox3.SelectedIndex = 0;
 
+            // Загружаем данные в таблицу
             FillTableData();
+
+            // Устанавливаем контекстное меню и обработчик мыши
             dataGridView1.ContextMenuStrip = contextMenuStrip1;
             dataGridView1.MouseDown += dataGridView1_MouseDown;
+
+            // Гарантированно создаём пункты контекстного меню (если их нет в Designer или они были случайно удалены)
+            contextMenuStrip1.Items.Clear();
+
+            var addItem = new ToolStripMenuItem("Добавить") { Name = "AddUser" };
+            var editItem = new ToolStripMenuItem("Редактировать") { Name = "EditUser" };
+            var deleteItem = new ToolStripMenuItem("Удалить") { Name = "DeleteUser" };
+
+            contextMenuStrip1.Items.Add(addItem);
+            contextMenuStrip1.Items.Add(editItem);
+            contextMenuStrip1.Items.Add(deleteItem);
+
+            // Подписываем обработчики (без дублирования)
+            addItem.Click -= AddUser_Click;
+            addItem.Click += AddUser_Click;
+
+            editItem.Click -= EditUser_Click;
+            editItem.Click += EditUser_Click;
+
+            deleteItem.Click -= DeleteUser_Click;
+            deleteItem.Click += DeleteUser_Click;
         }
 
-     
+        private void AddUser_Click(object sender, EventArgs e)
+        {
+            var addForm = new FormManagerAddClient();
+            var result = addForm.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                FillTableData();
+            }
+        }
 
-     
+        private void EditUser_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Выберите строку для редактирования.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            var row = dataGridView1.SelectedRows[0];
+
+            if (row.Cells["ID_Client"].Value == null || row.Cells["ID_Client"].Value == DBNull.Value)
+            {
+                MessageBox.Show("Не найден ID выбранного клиента.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            int clientId;
+            try
+            {
+                clientId = Convert.ToInt32(row.Cells["ID_Client"].Value);
+            }
+            catch
+            {
+                MessageBox.Show("Некорректный ID клиента.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            var editForm = new FormManagerEditClients();
+            editForm.LoadStatusCombo();
+            editForm.LoadClientById(clientId);
+
+            var result = editForm.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                FillTableData();
+            }
+        }
+
+        // Новый обработчик для удаления клиента из контекстного меню
+        private void DeleteUser_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Выберите строку для удаления.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            var row = dataGridView1.SelectedRows[0];
+            if (row.Cells["ID_Client"].Value == null || row.Cells["ID_Client"].Value == DBNull.Value)
+            {
+                MessageBox.Show("Не найден ID выбранного клиента.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            int clientId;
+            try
+            {
+                clientId = Convert.ToInt32(row.Cells["ID_Client"].Value);
+            }
+            catch
+            {
+                MessageBox.Show("Некорректный ID клиента.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            string fullName = row.Cells["FullName_client"]?.Value?.ToString() ?? $"ID {clientId}";
+            var confirm = MessageBox.Show($"Скрыть клиента \"{fullName}\" (ID {clientId}) из списка? Запись останется в БД.", "Подтвердите действие", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (confirm != DialogResult.Yes) return;
+
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connect.con))
+                using (MySqlCommand cmd = new MySqlCommand("UPDATE mydb.clients SET IsDeleted = 1 WHERE ID_Client = @id", conn))
+                {
+                    cmd.Parameters.AddWithValue("@id", clientId);
+                    conn.Open();
+                    int affected = cmd.ExecuteNonQuery();
+                    if (affected > 0)
+                    {
+                        MessageBox.Show("Клиент скрыт из списка.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        FillTableData();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Клиент не найден или уже скрыт.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show($"Ошибка БД при изменении: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при выполнении: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
+
         }
 
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
@@ -316,7 +463,7 @@ namespace Kursivoy_Konkin
         {
             FormManagerNavigation f = new FormManagerNavigation();
             f.Show();
-            this.Close();   
+            this.Close();
         }
 
         private void textBox1_TextChanged_1(object sender, EventArgs e)
@@ -344,5 +491,21 @@ namespace Kursivoy_Konkin
         {
             ApplyFiltersAndSorting();
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            using (var addForm = new FormManagerAddClient())
+            {
+                var result = addForm.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    // Если клиент успешно добавлен — перезагрузим данные в таблице
+                    FillTableData();
+                }
+            }
+        }
     }
+
+    // Новый SQL-запрос с фильтрацией по IsDeleted = 0
+   
 }

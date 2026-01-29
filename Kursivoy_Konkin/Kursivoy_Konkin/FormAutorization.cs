@@ -119,10 +119,10 @@ namespace Kursivoy_Konkin
                     }
                 }
                 MessageBox.Show("Вход выполнен!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                FormManagerNavigation f = new FormManagerNavigation();
+                FormHeadNavigation f = new FormHeadNavigation();
 
                 this.Hide();
-                f.Show();
+                f.ShowDialog();
                 authAtt = 0;
                 captchaTrue = false;
                 textBoxCaptcha.Clear();

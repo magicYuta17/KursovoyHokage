@@ -110,6 +110,18 @@
     <Compile Include="FormHeadViewStatus.Designer.cs">
       <DependentUpon>FormHeadViewStatus.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormManagerAddClient.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormManagerAddClient.Designer.cs">
+      <DependentUpon>FormManagerAddClient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormManagerEditClients.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormManagerEditClients.Designer.cs">
+      <DependentUpon>FormManagerEditClients.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormManagerNavigation.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -172,6 +184,12 @@
     <EmbeddedResource Include="FormHeadViewStatus.resx">
       <DependentUpon>FormHeadViewStatus.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormManagerAddClient.resx">
+      <DependentUpon>FormManagerAddClient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormManagerEditClients.resx">
+      <DependentUpon>FormManagerEditClients.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormManagerNavigation.resx">
       <DependentUpon>FormManagerNavigation.cs</DependentUpon>
     </EmbeddedResource>
@@ -219,6 +237,7 @@
     <Content Include="3.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="picture.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
