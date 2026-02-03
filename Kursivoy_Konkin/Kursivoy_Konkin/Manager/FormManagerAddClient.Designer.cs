@@ -32,7 +32,6 @@
             this.txtFullName_client = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.txtPhone = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtAge = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -46,6 +45,7 @@
             this.buttonAddClientPhoto = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.comboBoxStatus = new System.Windows.Forms.ComboBox();
+            this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -73,14 +73,6 @@
             this.label1.Size = new System.Drawing.Size(170, 47);
             this.label1.TabIndex = 23;
             this.label1.Text = "Телефон";
-            // 
-            // txtPhone
-            // 
-            this.txtPhone.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.txtPhone.Location = new System.Drawing.Point(40, 190);
-            this.txtPhone.Name = "txtPhone";
-            this.txtPhone.Size = new System.Drawing.Size(283, 55);
-            this.txtPhone.TabIndex = 22;
             // 
             // label2
             // 
@@ -214,12 +206,23 @@
             this.comboBoxStatus.Size = new System.Drawing.Size(283, 55);
             this.comboBoxStatus.TabIndex = 39;
             // 
+            // maskedTextBox1
+            // 
+            this.maskedTextBox1.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
+            this.maskedTextBox1.Location = new System.Drawing.Point(12, 190);
+            this.maskedTextBox1.Mask = "+7 (000) 000-00-00";
+            this.maskedTextBox1.Name = "maskedTextBox1";
+            this.maskedTextBox1.Size = new System.Drawing.Size(334, 55);
+            this.maskedTextBox1.TabIndex = 40;
+            this.maskedTextBox1.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.maskedTextBox1_MaskInputRejected);
+            // 
             // FormManagerAddClient
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1247, 743);
+            this.Controls.Add(this.maskedTextBox1);
             this.Controls.Add(this.comboBoxStatus);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.buttonAddClientPhoto);
@@ -234,7 +237,6 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtAge);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.txtPhone);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.txtFullName_client);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -251,7 +253,6 @@
         private System.Windows.Forms.TextBox txtFullName_client;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtPhone;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtAge;
         private System.Windows.Forms.Label label3;
@@ -265,5 +266,6 @@
         private System.Windows.Forms.Button buttonAddClientPhoto;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ComboBox comboBoxStatus;
+        private System.Windows.Forms.MaskedTextBox maskedTextBox1;
     }
 }

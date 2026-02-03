@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 
@@ -69,7 +70,7 @@ namespace Kursivoy_Konkin
                         }
 
                         txtFullName_client.Text = reader["FullName_client"] == DBNull.Value ? string.Empty : reader["FullName_client"].ToString();
-                        txtPhone.Text = reader["phone"] == DBNull.Value ? string.Empty : reader["phone"].ToString();
+                        maskedTextBox1.Text = reader["phone"] == DBNull.Value ? string.Empty : reader["phone"].ToString();
                         txtAge.Text = reader["Age"] == DBNull.Value ? string.Empty : reader["Age"].ToString();
                         txtQualified_lead.Text = reader["Qualified_lead"] == DBNull.Value ? string.Empty : reader["Qualified_lead"].ToString();
                         txtLTV.Text = reader["LTV"] == DBNull.Value ? string.Empty : reader["LTV"].ToString();
@@ -126,11 +127,11 @@ namespace Kursivoy_Konkin
             }
 
             // Проверка номера телефона
-            string phone = txtPhone.Text.Replace(" ", "");
-            if (!(phone.StartsWith("+7") && phone.Length == 12) && !(phone.StartsWith("8") && phone.Length == 11))
+            string phone = Regex.Replace(maskedTextBox1.Text, @"\D", ""); // Убираем все нецифровые символы
+            if (phone.Length != 11)
             {
-                MessageBox.Show("Некорректный номер телефона. Номер должен начинаться с '+7' или '8' и содержать правильное количество цифр.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtPhone.BackColor = Color.MistyRose;
+                MessageBox.Show("Некорректный номер телефона. Номер должен содержать ровно 11 цифр.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                maskedTextBox1.BackColor = Color.MistyRose; // Подсвечиваем поле
                 return;
             }
 
@@ -192,7 +193,7 @@ namespace Kursivoy_Konkin
                 using (MySqlCommand cmd = new MySqlCommand(updateQuery, conn))
                 {
                     cmd.Parameters.Add("@FullName", MySqlDbType.VarChar, 100).Value = txtFullName_client.Text.Trim();
-                    cmd.Parameters.Add("@Phone", MySqlDbType.VarChar, 50).Value = txtPhone.Text.Trim();
+                    cmd.Parameters.Add("@Phone", MySqlDbType.VarChar, 50).Value = maskedTextBox1.Text.Trim();
                     cmd.Parameters.Add("@Age", MySqlDbType.Int32).Value = age;
                     cmd.Parameters.Add("@IDStatus", MySqlDbType.Int32).Value = statusId;
                     cmd.Parameters.Add("@QLead", MySqlDbType.VarChar, 50).Value = txtQualified_lead.Text.Trim();
@@ -276,6 +277,14 @@ namespace Kursivoy_Konkin
 
         private void SetupFormConstraints()
         {
+            // Удаляем валидацию с txtPhone
+            // TextBoxFilters.InputValidators.ApplyPhoneValidation(txtPhone);
+            // TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtPhone);
+
+            // Применяем валидацию для maskedTextBox1
+            TextBoxFilters.InputValidators.ApplyPhoneValidation(maskedTextBox1);
+            TextBoxFilters.InputValidators.ApplyNotEmptyValidation(maskedTextBox1);
+
             // Применяем валидацию для текстовых полей
             TextBoxFilters.InputValidators.ApplyRussianLettersOnly(txtFullName_client);
             TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtFullName_client);
@@ -289,10 +298,11 @@ namespace Kursivoy_Konkin
             TextBoxFilters.InputValidators.ApplyNotEmptyValidation(comboBoxStatus);
             TextBoxFilters.InputValidators.ApplyRussianLettersOnly(txtQualified_lead);
             TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtQualified_lead);
+        }
 
-            // Применяем валидацию для телефона
-            TextBoxFilters.InputValidators.ApplyPhoneValidation(txtPhone);
-            TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtPhone);
+        private void maskedTextBox1_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+            buttonEditClient.Enabled = true;
         }
     }
 }

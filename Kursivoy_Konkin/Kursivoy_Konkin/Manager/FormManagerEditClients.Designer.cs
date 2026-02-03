@@ -43,9 +43,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtAge = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.txtPhone = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.txtFullName_client = new System.Windows.Forms.TextBox();
+            this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -188,14 +188,6 @@
             this.label1.TabIndex = 42;
             this.label1.Text = "Телефон";
             // 
-            // txtPhone
-            // 
-            this.txtPhone.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.txtPhone.Location = new System.Drawing.Point(58, 204);
-            this.txtPhone.Name = "txtPhone";
-            this.txtPhone.Size = new System.Drawing.Size(283, 55);
-            this.txtPhone.TabIndex = 41;
-            // 
             // label4
             // 
             this.label4.Location = new System.Drawing.Point(18, 14);
@@ -211,12 +203,24 @@
             this.txtFullName_client.Size = new System.Drawing.Size(283, 55);
             this.txtFullName_client.TabIndex = 40;
             // 
+            // maskedTextBox1
+            // 
+            this.maskedTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.maskedTextBox1.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
+            this.maskedTextBox1.Location = new System.Drawing.Point(33, 204);
+            this.maskedTextBox1.Mask = "+7 (000) 000-00-00";
+            this.maskedTextBox1.Name = "maskedTextBox1";
+            this.maskedTextBox1.Size = new System.Drawing.Size(330, 55);
+            this.maskedTextBox1.TabIndex = 57;
+            this.maskedTextBox1.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.maskedTextBox1_MaskInputRejected);
+            // 
             // FormManagerEditClients
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1165, 752);
+            this.Controls.Add(this.maskedTextBox1);
             this.Controls.Add(this.comboBoxStatus);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.buttonEditClientPhoto);
@@ -231,7 +235,6 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtAge);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.txtPhone);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.txtFullName_client);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -259,8 +262,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtAge;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtPhone;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtFullName_client;
+        private System.Windows.Forms.MaskedTextBox maskedTextBox1;
     }
 }

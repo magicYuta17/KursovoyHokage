@@ -148,12 +148,15 @@ namespace Kursivoy_Konkin
 
             /// <summary>
             /// Валидация поля телефона: только цифры и знак "+", удаление пробелов, проверка начала номера и длины.
+            /// Теперь поддерживает как TextBox, так и MaskedTextBox.
             /// </summary>
-            public static void ApplyPhoneValidation(TextBox textBox)
+            public static void ApplyPhoneValidation(Control control)
             {
-                if (textBox == null) throw new ArgumentNullException(nameof(textBox));
+                if (control == null) throw new ArgumentNullException(nameof(control));
+                if (!(control is TextBox || control is MaskedTextBox))
+                    throw new ArgumentException("Control должен быть TextBox или MaskedTextBox.");
 
-                textBox.KeyPress += (sender, e) =>
+                control.KeyPress += (sender, e) =>
                 {
                     // Разрешаем только цифры, знак "+" и управляющие символы
                     if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '+')
@@ -162,9 +165,9 @@ namespace Kursivoy_Konkin
                     }
                 };
 
-                textBox.TextChanged += (sender, e) =>
+                control.TextChanged += (sender, e) =>
                 {
-                    string text = textBox.Text;
+                    string text = control.Text;
 
                     // Удаляем пробелы
                     text = text.Replace(" ", "");
@@ -172,7 +175,7 @@ namespace Kursivoy_Konkin
                     // Проверяем начало номера
                     if (!text.StartsWith("+7") && !text.StartsWith("8"))
                     {
-                        textBox.BackColor = ErrorBackColor;
+                        control.BackColor = ErrorBackColor;
                         return;
                     }
 
@@ -183,13 +186,24 @@ namespace Kursivoy_Konkin
                     }
 
                     // Применяем изменения
-                    textBox.TextChanged -= (EventHandler)((sender2, e2) => { }); // Исправлено удаление обработчика
-                    textBox.Text = text;
-                    textBox.SelectionStart = text.Length;
-                    textBox.TextChanged += (EventHandler)((sender2, e2) => { }); // Исправлено добавление обработчика
+                    // Исправлено: используем приведение к TextBox или MaskedTextBox для доступа к SelectionStart
+                    if (control is TextBox tb)
+                    {
+                        tb.TextChanged -= (EventHandler)((sender2, e2) => { });
+                        tb.Text = text;
+                        tb.SelectionStart = text.Length;
+                        tb.TextChanged += (EventHandler)((sender2, e2) => { });
+                    }
+                    else if (control is MaskedTextBox mtb)
+                    {
+                        mtb.TextChanged -= (EventHandler)((sender2, e2) => { });
+                        mtb.Text = text;
+                        mtb.SelectionStart = text.Length;
+                        mtb.TextChanged += (EventHandler)((sender2, e2) => { });
+                    }
 
                     // Сбрасываем цвет, если номер корректен
-                    textBox.BackColor = SystemColors.Window;
+                    control.BackColor = SystemColors.Window;
                 };
             }
 
@@ -239,6 +253,16 @@ namespace Kursivoy_Konkin
                     else if (info.Type == ValidatorType.NumericWithDecimal && !Regex.IsMatch(text, "^[0-9]+([.,][0-9]+)?$"))
                     {
                         isValid = false;
+                    }
+
+                    // Добавлена проверка для MaskedTextBox
+                    if (ctrl.Name == "maskerTextBox1" && ctrl is MaskedTextBox maskedTextBox)
+                    {
+                        // Пример проверки: поле должно быть полностью заполнено
+                        if (!maskedTextBox.MaskFull)
+                        {
+                            isValid = false;
+                        }
                     }
 
                     try

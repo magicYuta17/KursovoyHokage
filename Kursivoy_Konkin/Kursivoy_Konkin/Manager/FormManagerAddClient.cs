@@ -23,6 +23,12 @@ namespace Kursivoy_Konkin
         // =========================================================
         private void SetupFormConstraints()
         {
+            // Удаляем валидацию с txtPhone
+            // TextBoxFilters.InputValidators.ApplyPhoneValidation(txtPhone);
+            // TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtPhone);
+
+           
+
             // Применяем валидацию для текстовых полей
             TextBoxFilters.InputValidators.ApplyRussianLettersOnly(txtFullName_client);
             TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtFullName_client);
@@ -36,10 +42,6 @@ namespace Kursivoy_Konkin
             TextBoxFilters.InputValidators.ApplyNotEmptyValidation(comboBoxStatus);
             TextBoxFilters.InputValidators.ApplyRussianLettersOnly(txtQualified_lead);
             TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtQualified_lead);
-
-            // Применяем валидацию для телефона
-            TextBoxFilters.InputValidators.ApplyPhoneValidation(txtPhone);
-            TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtPhone);
         }
 
         // --- Методы фильтрации клавиш ---
@@ -85,26 +87,28 @@ namespace Kursivoy_Konkin
         // =========================================================
         private void buttonAddClient_Click(object sender, EventArgs e)
         {
-            // Проверяем все зарегистрированные поля
-            if (!TextBoxFilters.InputValidators.ValidateAll(out Control[] invalidControls))
+            // Перед добавлением данных в базу
+            Control[] invalidControls;
+            if (!TextBoxFilters.InputValidators.ValidateAll(out invalidControls))
             {
-                MessageBox.Show("Заполните все обязательные поля, отмеченные красным!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                // Если есть некорректные поля, показываем сообщение и выходим
+                MessageBox.Show("Пожалуйста, заполните все поля корректно.", "Ошибка валидации", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return; // Прерываем выполнение метода
             }
 
             // Проверка номера телефона
-            string phone = txtPhone.Text.Replace(" ", "");
-            if (!(phone.StartsWith("+7") && phone.Length == 12) && !(phone.StartsWith("8") && phone.Length == 11))
+            string phone = Regex.Replace(maskedTextBox1.Text, @"\D", ""); // Убираем все нецифровые символы
+            if (phone.Length != 11)
             {
-                MessageBox.Show("Некорректный номер телефона. Номер должен начинаться с '+7' или '8' и содержать правильное количество цифр.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtPhone.BackColor = Color.MistyRose; // или другой цвет, который вы используете для ошибок
+                MessageBox.Show("Некорректный номер телефона. Номер должен содержать ровно 11 цифр.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                maskedTextBox1.BackColor = Color.MistyRose; // Подсвечиваем поле
                 return;
             }
 
             // --- Остальная логика ---
             // --- 1. Проверка заполненности ---
             if (string.IsNullOrWhiteSpace(txtFullName_client.Text) ||
-                string.IsNullOrWhiteSpace(txtPhone.Text) ||
+                string.IsNullOrWhiteSpace(maskedTextBox1.Text) ||
                 string.IsNullOrWhiteSpace(txtAge.Text) ||
                 string.IsNullOrWhiteSpace(comboBoxStatus.Text) ||
                 string.IsNullOrWhiteSpace(txtQualified_lead.Text) ||               
@@ -133,7 +137,7 @@ namespace Kursivoy_Konkin
             
 
             // --- 4. Проверка на дубликаты в БД ---
-            if (IsClientDuplicate(txtFullName_client.Text, txtPhone.Text))
+            if (IsClientDuplicate(txtFullName_client.Text, maskedTextBox1.Text))
             {
                 MessageBox.Show("Такой клиент уже существует!", "Дубликат", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
@@ -209,7 +213,7 @@ namespace Kursivoy_Konkin
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.Add("@FullName", MySqlDbType.VarChar, 100).Value = txtFullName_client.Text.Trim();
-                        cmd.Parameters.Add("@Phone", MySqlDbType.VarChar, 50).Value = txtPhone.Text.Trim();
+                        cmd.Parameters.Add("@Phone", MySqlDbType.VarChar, 50).Value = maskedTextBox1.Text.Trim();
                         cmd.Parameters.Add("@Age", MySqlDbType.Int32).Value = age;
                         cmd.Parameters.Add("@IDStatus", MySqlDbType.Int32).Value = statusId;
                         cmd.Parameters.Add("@QLead", MySqlDbType.VarChar, 50).Value = txtQualified_lead.Text.Trim();
@@ -245,7 +249,7 @@ namespace Kursivoy_Konkin
         private void ClearAllFields()
         {
             txtFullName_client.Clear();
-            txtPhone.Clear();
+            maskedTextBox1.Clear();
             txtAge.Clear();
             
             txtQualified_lead.Clear();
@@ -330,7 +334,7 @@ namespace Kursivoy_Konkin
             }
 
             // --- 3. Проверка на дубликаты в БД ---
-            if (IsClientDuplicate(txtFullName_client.Text, txtPhone.Text))
+            if (IsClientDuplicate(txtFullName_client.Text, maskedTextBox1.Text))
             {
                 MessageBox.Show("Такой клиент уже существует!", "Дубликат", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
@@ -362,6 +366,11 @@ namespace Kursivoy_Konkin
             {
                 MessageBox.Show("Не удалось загрузить статусы: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void maskedTextBox1_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+            buttonAddClient.Enabled = true;
         }
     }
 }
