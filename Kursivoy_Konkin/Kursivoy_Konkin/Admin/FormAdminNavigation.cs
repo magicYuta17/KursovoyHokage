@@ -35,14 +35,14 @@ namespace Kursivoy_Konkin
         private void button5_Click(object sender, EventArgs e)
         {
             FormAutorization formAutorization = new FormAutorization();
-            formAutorization.Show();
+            formAutorization.ShowDialog();
             this.Close();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             FormAdminWorker formAdminWorkers = new FormAdminWorker();
-            formAdminWorkers.Show();
+            formAdminWorkers.ShowDialog();
             this.Close();
         }
     }

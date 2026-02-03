@@ -10,18 +10,11 @@ using System.Windows.Forms;
 
 namespace Kursivoy_Konkin
 {
-    public partial class FormAdminWorker : Form
+    public partial class FormAdminEditWorker : Form
     {
-        public FormAdminWorker()
+        public FormAdminEditWorker()
         {
             InitializeComponent();
-        }
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-            FormAdminNavigation formAdminNavigation = new FormAdminNavigation();
-            formAdminNavigation.Show();
-            this.Close();
         }
     }
 }

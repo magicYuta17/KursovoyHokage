@@ -23,24 +23,21 @@ namespace Kursivoy_Konkin
         // =========================================================
         private void SetupFormConstraints()
         {
-            // Ограничение длины (MaxLength)
-            txtFullName_client.MaxLength = 100;
-            txtPhone.MaxLength = 20;
-            txtAge.MaxLength = 3;
-            
-            txtQualified_lead.MaxLength = 50;
-            txtLTV.MaxLength = 15;
+            // Применяем валидацию для текстовых полей
+            TextBoxFilters.InputValidators.ApplyRussianLettersOnly(txtFullName_client);
+            TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtFullName_client);
 
-            // Навешиваем события блокировки клавиш
-            txtFullName_client.KeyPress += InputOnlyRussian_KeyPress;
-           
-            txtQualified_lead.KeyPress += InputOnlyRussian_KeyPress;
+            TextBoxFilters.InputValidators.ApplyNumericWithDecimal(txtAge);
+            TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtAge);
 
-            txtAge.KeyPress += InputOnlyDigits_KeyPress;
-           
+            TextBoxFilters.InputValidators.ApplyNumericWithDecimal(txtLTV);
+            TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtLTV);
 
-            txtPhone.KeyPress += InputPhone_KeyPress;     // Цифры + скобки
-            txtLTV.KeyPress += InputDecimal_KeyPress;     // Цифры + запятая
+            TextBoxFilters.InputValidators.ApplyNotEmptyValidation(comboBoxStatus);
+            TextBoxFilters.InputValidators.ApplyRussianLettersOnly(txtQualified_lead);
+            TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtQualified_lead);
+
+            TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtPhone);
         }
 
         // --- Методы фильтрации клавиш ---
@@ -91,8 +88,7 @@ namespace Kursivoy_Konkin
                 string.IsNullOrWhiteSpace(txtPhone.Text) ||
                 string.IsNullOrWhiteSpace(txtAge.Text) ||
                 string.IsNullOrWhiteSpace(comboBoxStatus.Text) ||
-                string.IsNullOrWhiteSpace(txtQualified_lead.Text) ||
-                
+                string.IsNullOrWhiteSpace(txtQualified_lead.Text) ||               
                 string.IsNullOrWhiteSpace(txtLTV.Text))
             {
                 MessageBox.Show("Заполните все поля!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -294,45 +290,34 @@ namespace Kursivoy_Konkin
 
         private void buttonAddClient_Click_1(object sender, EventArgs e)
         {
-            // --- 1. Проверка заполненности ---
-            if (string.IsNullOrWhiteSpace(txtFullName_client.Text) ||
-                string.IsNullOrWhiteSpace(txtPhone.Text) ||
-                string.IsNullOrWhiteSpace(txtAge.Text) ||
-                string.IsNullOrWhiteSpace(comboBoxStatus.Text) ||
-                string.IsNullOrWhiteSpace(txtQualified_lead.Text) ||
-
-                string.IsNullOrWhiteSpace(txtLTV.Text))
+            // Проверяем все зарегистрированные поля
+            if (!TextBoxFilters.InputValidators.ValidateAll(out Control[] invalidControls))
             {
-                MessageBox.Show("Заполните все поля!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Заполните все обязательные поля, отмеченные красным!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // --- 2. Финальная проверка на Русские буквы (защита от вставки Ctrl+V) ---
-            if (!Regex.IsMatch(txtFullName_client.Text, @"^[а-яА-ЯёЁ\s]+$"))
-            {
-                MessageBox.Show("ФИО должно содержать только русские буквы!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // --- 3. Парсинг чисел ---
+            // --- 2. Парсинг чисел ---
             if (!int.TryParse(txtAge.Text, out int age))
             {
-                MessageBox.Show("Некорректный возраст.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning); return;
+                MessageBox.Show("Некорректный возраст.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
+
             if (!decimal.TryParse(txtLTV.Text.Replace('.', ','), out decimal ltv))
             {
-                MessageBox.Show("Некорректный LTV.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning); return;
+                MessageBox.Show("Некорректный LTV.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
 
-
-            // --- 4. Проверка на дубликаты в БД ---
+            // --- 3. Проверка на дубликаты в БД ---
             if (IsClientDuplicate(txtFullName_client.Text, txtPhone.Text))
             {
                 MessageBox.Show("Такой клиент уже существует!", "Дубликат", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
 
-            // --- 5. Вставка ---
+            // --- 4. Вставка данных в БД ---
             InsertClientToDb(age, ltv);
         }
 

@@ -50,35 +50,41 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="connect.cs" />
-    <Compile Include="FormAdminObject.cs">
+    <Compile Include="Admin\FormAdminObject.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormAdminObject.Designer.cs">
+    <Compile Include="Admin\FormAdminObject.Designer.cs">
       <DependentUpon>FormAdminObject.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormAdminNavigation.cs">
+    <Compile Include="Admin\FormAdminNavigation.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormAdminNavigation.Designer.cs">
+    <Compile Include="Admin\FormAdminNavigation.Designer.cs">
       <DependentUpon>FormAdminNavigation.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormAdminRepairAndImportExportData.cs">
+    <Compile Include="Admin\FormAdminRepairAndImportExportData.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormAdminRepairAndImportExportData.Designer.cs">
+    <Compile Include="Admin\FormAdminRepairAndImportExportData.Designer.cs">
       <DependentUpon>FormAdminRepairAndImportExportData.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormAdminRole.cs">
+    <Compile Include="Admin\FormAdminRole.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormAdminRole.Designer.cs">
+    <Compile Include="Admin\FormAdminRole.Designer.cs">
       <DependentUpon>FormAdminRole.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormAdminWorker.cs">
+    <Compile Include="Admin\FormAdminWorker.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormAdminWorker.Designer.cs">
+    <Compile Include="Admin\FormAdminWorker.Designer.cs">
       <DependentUpon>FormAdminWorker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\FormAdminEditWorker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Admin\FormAdminEditWorker.Designer.cs">
+      <DependentUpon>FormAdminEditWorker.cs</DependentUpon>
     </Compile>
     <Compile Include="FormAutorization.cs">
       <SubType>Form</SubType>
@@ -86,123 +92,124 @@
     <Compile Include="FormAutorization.Designer.cs">
       <DependentUpon>FormAutorization.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormHeadContract.cs">
+    <Compile Include="Head\FormHeadContract.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormHeadContract.Designer.cs">
+    <Compile Include="Head\FormHeadContract.Designer.cs">
       <DependentUpon>FormHeadContract.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormHeadNavigation.cs">
+    <Compile Include="Head\FormHeadNavigation.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormHeadNavigation.Designer.cs">
+    <Compile Include="Head\FormHeadNavigation.Designer.cs">
       <DependentUpon>FormHeadNavigation.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormHeadViewClients.cs">
+    <Compile Include="Head\FormHeadViewClients.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormHeadViewClients.Designer.cs">
+    <Compile Include="Head\FormHeadViewClients.Designer.cs">
       <DependentUpon>FormHeadViewClients.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormHeadViewStatus.cs">
+    <Compile Include="Head\FormHeadViewStatus.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormHeadViewStatus.Designer.cs">
+    <Compile Include="Head\FormHeadViewStatus.Designer.cs">
       <DependentUpon>FormHeadViewStatus.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormManagerAddClient.cs">
+    <Compile Include="Manager\FormManagerAddClient.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormManagerAddClient.Designer.cs">
+    <Compile Include="Manager\FormManagerAddClient.Designer.cs">
       <DependentUpon>FormManagerAddClient.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormManagerEditClients.cs">
+    <Compile Include="Manager\FormManagerEditClients.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormManagerEditClients.Designer.cs">
+    <Compile Include="Manager\FormManagerEditClients.Designer.cs">
       <DependentUpon>FormManagerEditClients.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormManagerNavigation.cs">
+    <Compile Include="Manager\FormManagerNavigation.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormManagerNavigation.Designer.cs">
+    <Compile Include="Manager\FormManagerNavigation.Designer.cs">
       <DependentUpon>FormManagerNavigation.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormPrintContract.cs">
+    <Compile Include="Manager\FormPrintContract.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormPrintContract.Designer.cs">
+    <Compile Include="Manager\FormPrintContract.Designer.cs">
       <DependentUpon>FormPrintContract.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormViewClients.cs">
+    <Compile Include="Manager\FormViewClients.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormViewClients.Designer.cs">
+    <Compile Include="Manager\FormViewClients.Designer.cs">
       <DependentUpon>FormViewClients.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormViewContract.cs">
+    <Compile Include="Manager\FormViewContract.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormViewContract.Designer.cs">
+    <Compile Include="Manager\FormViewContract.Designer.cs">
       <DependentUpon>FormViewContract.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormViewObject.cs">
+    <Compile Include="Manager\FormViewObject.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormViewObject.Designer.cs">
+    <Compile Include="Manager\FormViewObject.Designer.cs">
       <DependentUpon>FormViewObject.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="FormAdminNavigation.resx">
+    <Compile Include="TextBoxFilters.cs" />
+    <EmbeddedResource Include="Admin\FormAdminNavigation.resx">
       <DependentUpon>FormAdminNavigation.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormAdminObject.resx">
+    <EmbeddedResource Include="Admin\FormAdminObject.resx">
       <DependentUpon>FormAdminObject.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormAdminRepairAndImportExportData.resx">
+    <EmbeddedResource Include="Admin\FormAdminRepairAndImportExportData.resx">
       <DependentUpon>FormAdminRepairAndImportExportData.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormAdminRole.resx">
+    <EmbeddedResource Include="Admin\FormAdminRole.resx">
       <DependentUpon>FormAdminRole.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormAdminWorker.resx">
+    <EmbeddedResource Include="Admin\FormAdminWorker.resx">
       <DependentUpon>FormAdminWorker.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormAutorization.resx">
       <DependentUpon>FormAutorization.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormHeadContract.resx">
+    <EmbeddedResource Include="Head\FormHeadContract.resx">
       <DependentUpon>FormHeadContract.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormHeadNavigation.resx">
+    <EmbeddedResource Include="Head\FormHeadNavigation.resx">
       <DependentUpon>FormHeadNavigation.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormHeadViewClients.resx">
+    <EmbeddedResource Include="Head\FormHeadViewClients.resx">
       <DependentUpon>FormHeadViewClients.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormHeadViewStatus.resx">
+    <EmbeddedResource Include="Head\FormHeadViewStatus.resx">
       <DependentUpon>FormHeadViewStatus.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormManagerAddClient.resx">
+    <EmbeddedResource Include="Manager\FormManagerAddClient.resx">
       <DependentUpon>FormManagerAddClient.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormManagerEditClients.resx">
+    <EmbeddedResource Include="Manager\FormManagerEditClients.resx">
       <DependentUpon>FormManagerEditClients.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormManagerNavigation.resx">
+    <EmbeddedResource Include="Manager\FormManagerNavigation.resx">
       <DependentUpon>FormManagerNavigation.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormPrintContract.resx">
+    <EmbeddedResource Include="Manager\FormPrintContract.resx">
       <DependentUpon>FormPrintContract.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormViewClients.resx">
+    <EmbeddedResource Include="Manager\FormViewClients.resx">
       <DependentUpon>FormViewClients.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormViewContract.resx">
+    <EmbeddedResource Include="Manager\FormViewContract.resx">
       <DependentUpon>FormViewContract.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormViewObject.resx">
+    <EmbeddedResource Include="Manager\FormViewObject.resx">
       <DependentUpon>FormViewObject.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -238,6 +245,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="picture.png" />
+    <Content Include="Properties\picture.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

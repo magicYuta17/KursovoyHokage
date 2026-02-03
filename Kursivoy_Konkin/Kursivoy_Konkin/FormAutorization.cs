@@ -79,7 +79,7 @@ namespace Kursivoy_Konkin
                 FormAdminNavigation f = new FormAdminNavigation();
                 
                 this.Hide();
-                f.Hide();
+                f.ShowDialog();
 
                 authAtt = 0;
                 captchaTrue = false;

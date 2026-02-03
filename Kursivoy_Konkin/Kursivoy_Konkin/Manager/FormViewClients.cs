@@ -12,11 +12,11 @@ using System.Windows.Forms;
 
 namespace Kursivoy_Konkin
 {
-    public partial class FormHeadViewClients : Form
+    public partial class FormViewClients : Form
     {
         private DataTable originalDataTable; // Добавьте это поле
 
-        public FormHeadViewClients()
+        public FormViewClients()
         {
             InitializeComponent();
         }
@@ -38,79 +38,73 @@ namespace Kursivoy_Konkin
         WHERE w.FIO IS NOT NULL AND c.IsDeleted = 0;";
         private void FillTableData(string filter = "")
         {
-            try
+            dataGridView1.Columns.Clear();
+
+            string query = string.IsNullOrEmpty(filter) ? com : comAttached;
+
+            using (var connection = new MySqlConnection(connect.con))
+            using (var command = new MySqlCommand(query, connection))
+            using (var adapter = new MySqlDataAdapter(command))
             {
-                dataGridView1.Columns.Clear();
-                dataGridView1.AutoGenerateColumns = true;
+                DataTable table = new DataTable();
+                connection.Open();
+                adapter.Fill(table);
 
-                // По умолчанию показываем всех клиентов; если нужно — можно передать filter = "attached"
-                string query = string.IsNullOrEmpty(filter) ? com : comAttached;
+                // ❗ КРИТИЧНО: полностью убираем photo_clients
+                if (table.Columns.Contains("photo_clients"))
+                    table.Columns.Remove("photo_clients");
 
-                using (MySqlConnection connection = new MySqlConnection(connect.con))
-                using (MySqlCommand command = new MySqlCommand(query, connection))
-                using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
+                originalDataTable = table.Copy();
+                dataGridView1.DataSource = table;
+
+                // =========================
+                // Заголовки
+                // =========================
+                SetHeader("FullName_client", "ФИО");
+                SetHeader("phone", "Телефон");
+                SetHeader("Age", "Возраст");
+                SetHeader("StatusName", "Статус");
+                SetHeader("Qualified_lead", "Квал лид");
+                SetHeader("LTV", "LTV");
+                SetHeader("EmployeeName", "Сотрудник");
+
+                // =========================
+                // Скрытые поля
+                // =========================
+                HideColumn("ID_Client");
+                HideColumn("Status_client_ID_Status_client");
+                HideColumn("IsDeleted");
+
+                // =========================
+                // Колонка с фото (РУЧНАЯ)
+                // =========================
+                var imageColumn = new DataGridViewImageColumn
                 {
-                    DataTable table = new DataTable();
-                    connection.Open();
-                    adapter.Fill(table);
+                    Name = "Фото",
+                    HeaderText = "Фото",
+                    ImageLayout = DataGridViewImageCellLayout.Zoom
+                };
 
-                    // Диагностика: покажем количество строк (временно)
-                    if (table == null)
-                    {
-                        MessageBox.Show("Запрос выполнился, но DataTable == null", "Диагностика", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        dataGridView1.DataSource = null;
-                        return;
-                    }
+                dataGridView1.Columns.Insert(0, imageColumn);
 
-                    originalDataTable = table.Copy();
+                dataGridView1.AllowUserToAddRows = false;
 
-                    dataGridView1.DataSource = table;
-
-                    // Настройка столбцов (без падений, проверяем наличие)
-                    if (table.Columns.Contains("FullName_client")) dataGridView1.Columns["FullName_client"].HeaderText = "ФИО";
-                    if (table.Columns.Contains("phone")) dataGridView1.Columns["phone"].HeaderText = "Телефон";
-                    if (table.Columns.Contains("Age")) dataGridView1.Columns["Age"].HeaderText = "Возраст";
-                    if (table.Columns.Contains("StatusName")) dataGridView1.Columns["StatusName"].HeaderText = "Статус";
-                    if (table.Columns.Contains("Qualified_lead")) dataGridView1.Columns["Qualified_lead"].HeaderText = "Квал лид";
-                    if (table.Columns.Contains("LTV")) dataGridView1.Columns["LTV"].HeaderText = "LTV";
-                    if (table.Columns.Contains("EmployeeName")) dataGridView1.Columns["EmployeeName"].HeaderText = "Сотрудник";
-
-                    if (table.Columns.Contains("ID_Client")) dataGridView1.Columns["ID_Client"].Visible = false;
-                    if (table.Columns.Contains("photo_clients")) dataGridView1.Columns["photo_clients"].Visible = false;
-                    if (table.Columns.Contains("Status_client_ID_Status_client")) dataGridView1.Columns["Status_client_ID_Status_client"].Visible = false;
-
-                    // Скрываем флаг soft-delete, если он пришёл в выборке
-                    if (table.Columns.Contains("IsDeleted") && dataGridView1.Columns.Contains("IsDeleted"))
-                        dataGridView1.Columns["IsDeleted"].Visible = false;
-
-                    // Если строк нет — информируем
-                    if (table.Rows.Count == 0)
-                    {
-                        MessageBox.Show("Запрос выполнился — данных не найдено (0 строк). Проверьте фильтр IsDeleted и наличие записей в БД.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-
-                    // Доп.защита: если колонка Фото нужна — добавляйте аккуратно
-                    if (!dataGridView1.Columns.Contains("Фото"))
-                    {
-                        var imageColumn = new DataGridViewImageColumn
-                        {
-                            Name = "Фото",
-                            ImageLayout = DataGridViewImageCellLayout.Zoom
-                        };
-                        dataGridView1.Columns.Add(imageColumn);
-                    }
-
-                    dataGridView1.AllowUserToAddRows = false;
-                }
+                // =========================
+                // Заполнение изображений
+                // =========================
+               
             }
-            catch (MySqlException mex)
-            {
-                MessageBox.Show($"Ошибка MySQL: {mex.Message}\nПроверьте connect.con и структуру таблиц.", "Ошибка БД", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка при заполнении таблицы: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+        }
+        private void SetHeader(string columnName, string headerText)
+        {
+            if (dataGridView1.Columns.Contains(columnName))
+                dataGridView1.Columns[columnName].HeaderText = headerText;
+        }
+
+        private void HideColumn(string columnName)
+        {
+            if (dataGridView1.Columns.Contains(columnName))
+                dataGridView1.Columns[columnName].Visible = false;
         }
 
         // ДОБАВЬТЕ ЭТУ ФУНКЦИЮ ДЛЯ ФИЛЬТРАЦИИ И СОРТИРОВКИ
@@ -515,5 +509,5 @@ namespace Kursivoy_Konkin
     }
 
     // Новый SQL-запрос с фильтрацией по IsDeleted = 0
-
+   
 }
