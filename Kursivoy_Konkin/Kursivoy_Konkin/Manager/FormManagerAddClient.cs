@@ -37,6 +37,8 @@ namespace Kursivoy_Konkin
             TextBoxFilters.InputValidators.ApplyRussianLettersOnly(txtQualified_lead);
             TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtQualified_lead);
 
+            // Применяем валидацию для телефона
+            TextBoxFilters.InputValidators.ApplyPhoneValidation(txtPhone);
             TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtPhone);
         }
 
@@ -83,6 +85,23 @@ namespace Kursivoy_Konkin
         // =========================================================
         private void buttonAddClient_Click(object sender, EventArgs e)
         {
+            // Проверяем все зарегистрированные поля
+            if (!TextBoxFilters.InputValidators.ValidateAll(out Control[] invalidControls))
+            {
+                MessageBox.Show("Заполните все обязательные поля, отмеченные красным!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Проверка номера телефона
+            string phone = txtPhone.Text.Replace(" ", "");
+            if (!(phone.StartsWith("+7") && phone.Length == 12) && !(phone.StartsWith("8") && phone.Length == 11))
+            {
+                MessageBox.Show("Некорректный номер телефона. Номер должен начинаться с '+7' или '8' и содержать правильное количество цифр.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtPhone.BackColor = Color.MistyRose; // или другой цвет, который вы используете для ошибок
+                return;
+            }
+
+            // --- Остальная логика ---
             // --- 1. Проверка заполненности ---
             if (string.IsNullOrWhiteSpace(txtFullName_client.Text) ||
                 string.IsNullOrWhiteSpace(txtPhone.Text) ||

@@ -15,6 +15,7 @@ namespace Kursivoy_Konkin
         public FormManagerEditClients()
         {
             InitializeComponent();
+            SetupFormConstraints();
             // Подписки на кнопки
             this.buttonEditClient.Click += buttonEditClient_Click;
             this.buttonEditClientPhoto.Click += buttonEditClientPhoto_Click;
@@ -117,18 +118,23 @@ namespace Kursivoy_Konkin
         // Обработчик кнопки "Сохранить редактирование"
         private void buttonEditClient_Click(object sender, EventArgs e)
         {
-            // Валидация полей (копия логики из формы добавления)
-            if (string.IsNullOrWhiteSpace(txtFullName_client.Text) ||
-                string.IsNullOrWhiteSpace(txtPhone.Text) ||
-                string.IsNullOrWhiteSpace(txtAge.Text) ||
-                string.IsNullOrWhiteSpace(comboBoxStatus.Text) ||
-                string.IsNullOrWhiteSpace(txtQualified_lead.Text) ||
-                string.IsNullOrWhiteSpace(txtLTV.Text))
+            // Проверяем все зарегистрированные поля
+            if (!TextBoxFilters.InputValidators.ValidateAll(out Control[] invalidControls))
             {
-                MessageBox.Show("Заполните все поля!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Заполните все обязательные поля, отмеченные красным!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
+            // Проверка номера телефона
+            string phone = txtPhone.Text.Replace(" ", "");
+            if (!(phone.StartsWith("+7") && phone.Length == 12) && !(phone.StartsWith("8") && phone.Length == 11))
+            {
+                MessageBox.Show("Некорректный номер телефона. Номер должен начинаться с '+7' или '8' и содержать правильное количество цифр.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtPhone.BackColor = Color.MistyRose;
+                return;
+            }
+
+            // --- 2. Парсинг чисел ---
             if (!int.TryParse(txtAge.Text, out int age))
             {
                 MessageBox.Show("Некорректный возраст.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -163,6 +169,12 @@ namespace Kursivoy_Konkin
                 return;
             }
 
+            // --- 4. Обновление данных в БД ---
+            UpdateClientInDb(age, ltv, statusId);
+        }
+
+        private void UpdateClientInDb(int age, decimal ltv, int statusId)
+        {
             string updateQuery = @"
                 UPDATE mydb.clients
                 SET FullName_client = @FullName,
@@ -260,6 +272,27 @@ namespace Kursivoy_Konkin
                 pictureBox1.Image = null;
             }
             _selectedImagePath = string.Empty;
+        }
+
+        private void SetupFormConstraints()
+        {
+            // Применяем валидацию для текстовых полей
+            TextBoxFilters.InputValidators.ApplyRussianLettersOnly(txtFullName_client);
+            TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtFullName_client);
+
+            TextBoxFilters.InputValidators.ApplyNumericWithDecimal(txtAge);
+            TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtAge);
+
+            TextBoxFilters.InputValidators.ApplyNumericWithDecimal(txtLTV);
+            TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtLTV);
+
+            TextBoxFilters.InputValidators.ApplyNotEmptyValidation(comboBoxStatus);
+            TextBoxFilters.InputValidators.ApplyRussianLettersOnly(txtQualified_lead);
+            TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtQualified_lead);
+
+            // Применяем валидацию для телефона
+            TextBoxFilters.InputValidators.ApplyPhoneValidation(txtPhone);
+            TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtPhone);
         }
     }
 }

@@ -146,6 +146,53 @@ namespace Kursivoy_Konkin
                 RegisterControl(control, ValidatorType.NotEmpty, 0);
             }
 
+            /// <summary>
+            /// Валидация поля телефона: только цифры и знак "+", удаление пробелов, проверка начала номера и длины.
+            /// </summary>
+            public static void ApplyPhoneValidation(TextBox textBox)
+            {
+                if (textBox == null) throw new ArgumentNullException(nameof(textBox));
+
+                textBox.KeyPress += (sender, e) =>
+                {
+                    // Разрешаем только цифры, знак "+" и управляющие символы
+                    if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '+')
+                    {
+                        e.Handled = true;
+                    }
+                };
+
+                textBox.TextChanged += (sender, e) =>
+                {
+                    string text = textBox.Text;
+
+                    // Удаляем пробелы
+                    text = text.Replace(" ", "");
+
+                    // Проверяем начало номера
+                    if (!text.StartsWith("+7") && !text.StartsWith("8"))
+                    {
+                        textBox.BackColor = ErrorBackColor;
+                        return;
+                    }
+
+                    // Проверяем длину номера
+                    if ((text.StartsWith("+7") && text.Length > 12) || (text.StartsWith("8") && text.Length > 11))
+                    {
+                        text = text.Substring(0, text.StartsWith("+7") ? 12 : 11);
+                    }
+
+                    // Применяем изменения
+                    textBox.TextChanged -= (EventHandler)((sender2, e2) => { }); // Исправлено удаление обработчика
+                    textBox.Text = text;
+                    textBox.SelectionStart = text.Length;
+                    textBox.TextChanged += (EventHandler)((sender2, e2) => { }); // Исправлено добавление обработчика
+
+                    // Сбрасываем цвет, если номер корректен
+                    textBox.BackColor = SystemColors.Window;
+                };
+            }
+
             private static void RegisterControl(Control control, ValidatorType type, int maxLength)
             {
                 if (!_registered.ContainsKey(control))
