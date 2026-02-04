@@ -40,12 +40,12 @@
             this.label6 = new System.Windows.Forms.Label();
             this.txtLTV = new System.Windows.Forms.TextBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.buttonAddClient = new System.Windows.Forms.Button();
             this.buttonDeleteClientPhoto = new System.Windows.Forms.Button();
             this.buttonAddClientPhoto = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.comboBoxStatus = new System.Windows.Forms.ComboBox();
             this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
+            this.buttonAdd = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -147,19 +147,6 @@
             this.pictureBox1.TabIndex = 36;
             this.pictureBox1.TabStop = false;
             // 
-            // buttonAddClient
-            // 
-            this.buttonAddClient.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
-            this.buttonAddClient.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.buttonAddClient.Location = new System.Drawing.Point(626, 638);
-            this.buttonAddClient.Margin = new System.Windows.Forms.Padding(4);
-            this.buttonAddClient.Name = "buttonAddClient";
-            this.buttonAddClient.Size = new System.Drawing.Size(332, 70);
-            this.buttonAddClient.TabIndex = 33;
-            this.buttonAddClient.Text = "Добавить клиента";
-            this.buttonAddClient.UseVisualStyleBackColor = false;
-            this.buttonAddClient.Click += new System.EventHandler(this.buttonAddClient_Click_1);
-            // 
             // buttonDeleteClientPhoto
             // 
             this.buttonDeleteClientPhoto.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
@@ -214,7 +201,19 @@
             this.maskedTextBox1.Name = "maskedTextBox1";
             this.maskedTextBox1.Size = new System.Drawing.Size(334, 55);
             this.maskedTextBox1.TabIndex = 40;
-            this.maskedTextBox1.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.maskedTextBox1_MaskInputRejected);
+            // 
+            // buttonAdd
+            // 
+            this.buttonAdd.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
+            this.buttonAdd.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
+            this.buttonAdd.Location = new System.Drawing.Point(674, 625);
+            this.buttonAdd.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonAdd.Name = "buttonAdd";
+            this.buttonAdd.Size = new System.Drawing.Size(374, 70);
+            this.buttonAdd.TabIndex = 42;
+            this.buttonAdd.Text = "Добавить клиента";
+            this.buttonAdd.UseVisualStyleBackColor = false;
+            this.buttonAdd.Click += new System.EventHandler(this.buttonAdd_Click);
             // 
             // FormManagerAddClient
             // 
@@ -222,12 +221,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1247, 743);
+            this.Controls.Add(this.buttonAdd);
             this.Controls.Add(this.maskedTextBox1);
             this.Controls.Add(this.comboBoxStatus);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.buttonAddClientPhoto);
             this.Controls.Add(this.buttonDeleteClientPhoto);
-            this.Controls.Add(this.buttonAddClient);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.txtLTV);
@@ -261,11 +260,11 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox txtLTV;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Button buttonAddClient;
         private System.Windows.Forms.Button buttonDeleteClientPhoto;
         private System.Windows.Forms.Button buttonAddClientPhoto;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ComboBox comboBoxStatus;
         private System.Windows.Forms.MaskedTextBox maskedTextBox1;
+        private System.Windows.Forms.Button buttonAdd;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
@@ -126,11 +127,11 @@ namespace Kursivoy_Konkin
                 return;
             }
 
-            // Проверка номера телефона
-            string phone = Regex.Replace(maskedTextBox1.Text, @"\D", ""); // Убираем все нецифровые символы
-            if (phone.Length != 11)
+            // Проверка длины номера телефона
+            string phone = Regex.Replace(maskedTextBox1.Text, @"\s+", ""); // Удаляем все пробелы и пустое пространство
+            if (phone.Length != 16)
             {
-                MessageBox.Show("Некорректный номер телефона. Номер должен содержать ровно 11 цифр.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Некорректный номер телефона. Поле должно содержать ровно 16 символов (включая форматирование).", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 maskedTextBox1.BackColor = Color.MistyRose; // Подсвечиваем поле
                 return;
             }
@@ -282,8 +283,8 @@ namespace Kursivoy_Konkin
             // TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtPhone);
 
             // Применяем валидацию для maskedTextBox1
-            TextBoxFilters.InputValidators.ApplyPhoneValidation(maskedTextBox1);
-            TextBoxFilters.InputValidators.ApplyNotEmptyValidation(maskedTextBox1);
+            //TextBoxFilters.InputValidators.ApplyPhoneValidation(maskedTextBox1);
+            //TextBoxFilters.InputValidators.ApplyNotEmptyValidation(maskedTextBox1);
 
             // Применяем валидацию для текстовых полей
             TextBoxFilters.InputValidators.ApplyRussianLettersOnly(txtFullName_client);

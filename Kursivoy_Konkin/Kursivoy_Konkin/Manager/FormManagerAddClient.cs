@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions; 
 using System.Windows.Forms;
 using MySql.Data.MySqlClient; 
@@ -85,67 +86,7 @@ namespace Kursivoy_Konkin
         // =========================================================
         // 3. КНОПКА: ДОБАВИТЬ КЛИЕНТА В БД
         // =========================================================
-        private void buttonAddClient_Click(object sender, EventArgs e)
-        {
-            // Перед добавлением данных в базу
-            Control[] invalidControls;
-            if (!TextBoxFilters.InputValidators.ValidateAll(out invalidControls))
-            {
-                // Если есть некорректные поля, показываем сообщение и выходим
-                MessageBox.Show("Пожалуйста, заполните все поля корректно.", "Ошибка валидации", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return; // Прерываем выполнение метода
-            }
-
-            // Проверка номера телефона
-            string phone = Regex.Replace(maskedTextBox1.Text, @"\D", ""); // Убираем все нецифровые символы
-            if (phone.Length != 11)
-            {
-                MessageBox.Show("Некорректный номер телефона. Номер должен содержать ровно 11 цифр.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                maskedTextBox1.BackColor = Color.MistyRose; // Подсвечиваем поле
-                return;
-            }
-
-            // --- Остальная логика ---
-            // --- 1. Проверка заполненности ---
-            if (string.IsNullOrWhiteSpace(txtFullName_client.Text) ||
-                string.IsNullOrWhiteSpace(maskedTextBox1.Text) ||
-                string.IsNullOrWhiteSpace(txtAge.Text) ||
-                string.IsNullOrWhiteSpace(comboBoxStatus.Text) ||
-                string.IsNullOrWhiteSpace(txtQualified_lead.Text) ||               
-                string.IsNullOrWhiteSpace(txtLTV.Text))
-            {
-                MessageBox.Show("Заполните все поля!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // --- 2. Финальная проверка на Русские буквы (защита от вставки Ctrl+V) ---
-            if (!Regex.IsMatch(txtFullName_client.Text, @"^[а-яА-ЯёЁ\s]+$"))
-            {
-                MessageBox.Show("ФИО должно содержать только русские буквы!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // --- 3. Парсинг чисел ---
-            if (!int.TryParse(txtAge.Text, out int age))
-            {
-                MessageBox.Show("Некорректный возраст.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning); return;
-            }
-            if (!decimal.TryParse(txtLTV.Text.Replace('.', ','), out decimal ltv))
-            {
-                MessageBox.Show("Некорректный LTV.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning); return;
-            }
-            
-
-            // --- 4. Проверка на дубликаты в БД ---
-            if (IsClientDuplicate(txtFullName_client.Text, maskedTextBox1.Text))
-            {
-                MessageBox.Show("Такой клиент уже существует!", "Дубликат", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                return;
-            }
-
-            // --- 5. Вставка ---
-            InsertClientToDb(age, ltv);
-        }
+        
 
         // --- Вспомогательный метод: Проверка дубля ---
         private bool IsClientDuplicate(string fullName, string phone)
@@ -311,38 +252,7 @@ namespace Kursivoy_Konkin
             _selectedImagePath = string.Empty;
         }
 
-        private void buttonAddClient_Click_1(object sender, EventArgs e)
-        {
-            // Проверяем все зарегистрированные поля
-            if (!TextBoxFilters.InputValidators.ValidateAll(out Control[] invalidControls))
-            {
-                MessageBox.Show("Заполните все обязательные поля, отмеченные красным!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // --- 2. Парсинг чисел ---
-            if (!int.TryParse(txtAge.Text, out int age))
-            {
-                MessageBox.Show("Некорректный возраст.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (!decimal.TryParse(txtLTV.Text.Replace('.', ','), out decimal ltv))
-            {
-                MessageBox.Show("Некорректный LTV.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // --- 3. Проверка на дубликаты в БД ---
-            if (IsClientDuplicate(txtFullName_client.Text, maskedTextBox1.Text))
-            {
-                MessageBox.Show("Такой клиент уже существует!", "Дубликат", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                return;
-            }
-
-            // --- 4. Вставка данных в БД ---
-            InsertClientToDb(age, ltv);
-        }
+       
 
         // Пример загрузки ComboBox (выполнить один раз, например в конструкторе после InitializeComponent)
         private void LoadStatusCombo()
@@ -368,9 +278,68 @@ namespace Kursivoy_Konkin
             }
         }
 
-        private void maskedTextBox1_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+     
+
+        private void buttonAdd_Click(object sender, EventArgs e)
         {
-            buttonAddClient.Enabled = true;
+            // Перед добавлением данных в базу
+            Control[] invalidControls;
+            if (!TextBoxFilters.InputValidators.ValidateAll(out invalidControls))
+            {
+                // Если есть некорректные поля, показываем сообщение и выходим
+                MessageBox.Show("Пожалуйста, заполните все поля корректно.", "Ошибка валидации", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return; // Прерываем выполнение метода
+            }
+
+            // Проверка длины номера телефона
+            string phone = Regex.Replace(maskedTextBox1.Text, @"\s+", ""); // Удаляем все пробелы и пустое пространство
+            if (phone.Length != 16)
+            {
+                MessageBox.Show("Некорректный номер телефона. Поле должно содержать ровно 16 символов (включая форматирование).", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                maskedTextBox1.BackColor = Color.MistyRose; // Подсвечиваем поле
+                return;
+            }
+
+            // --- Остальная логика ---
+            // --- 1. Проверка заполненности ---
+            if (string.IsNullOrWhiteSpace(txtFullName_client.Text) ||
+                string.IsNullOrWhiteSpace(maskedTextBox1.Text) ||
+                string.IsNullOrWhiteSpace(txtAge.Text) ||
+                string.IsNullOrWhiteSpace(comboBoxStatus.Text) ||
+                string.IsNullOrWhiteSpace(txtQualified_lead.Text) ||
+                string.IsNullOrWhiteSpace(txtLTV.Text))
+            {
+                MessageBox.Show("Заполните все поля!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // --- 2. Финальная проверка на Русские буквы (защита от вставки Ctrl+V) ---
+            if (!Regex.IsMatch(txtFullName_client.Text, @"^[а-яА-ЯёЁ\s]+$"))
+            {
+                MessageBox.Show("ФИО должно содержать только русские буквы!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // --- 3. Парсинг чисел ---
+            if (!int.TryParse(txtAge.Text, out int age))
+            {
+                MessageBox.Show("Некорректный возраст.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning); return;
+            }
+            if (!decimal.TryParse(txtLTV.Text.Replace('.', ','), out decimal ltv))
+            {
+                MessageBox.Show("Некорректный LTV.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning); return;
+            }
+
+
+            // --- 4. Проверка на дубликаты в БД ---
+            if (IsClientDuplicate(txtFullName_client.Text, maskedTextBox1.Text))
+            {
+                MessageBox.Show("Такой клиент уже существует!", "Дубликат", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return;
+            }
+
+            // --- 5. Вставка ---
+            InsertClientToDb(age, ltv);
         }
     }
 }
