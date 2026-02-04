@@ -20,29 +20,7 @@ namespace Kursivoy_Konkin
         public FormHeadViewClients()
         {
             InitializeComponent();
-            
-
-            // Явно привязываем обработчик кнопки на случай, если Designer не связал событие
-            try
-            {
-                this.button3.Click -= this.button3_Click;
-                this.button3.Click += this.button3_Click;
-            }
-            catch
-            {
-                // если кнопки нет в Designer под именем button3 — ничего не делаем
-            }
-
-            // Гарантированно загружаем данные при создании формы
-            // (если вы предпочитаете — можно подписаться на Load событие)
-            try
-            {
-                FillTableData();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка при загрузке данных в конструкторе: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+          
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -62,89 +40,61 @@ namespace Kursivoy_Konkin
         WHERE w.FIO IS NOT NULL AND c.IsDeleted = 0;";
         private void FillTableData(string filter = "")
         {
-            try
+            dataGridView1.Columns.Clear();
+
+            string query = string.IsNullOrEmpty(filter) ? com : comAttached;
+
+            using (var connection = new MySqlConnection(connect.con))
+            using (var command = new MySqlCommand(query, connection))
+            using (var adapter = new MySqlDataAdapter(command))
             {
-                dataGridView1.Columns.Clear();
-                dataGridView1.AutoGenerateColumns = true; // гарантируем автогенерацию колонок из DataTable
+                DataTable table = new DataTable();
+                connection.Open();
+                adapter.Fill(table);
 
-                string query = string.IsNullOrEmpty(filter) ? com : comAttached;
+                // ❗ КРИТИЧНО: полностью убираем photo_clients
+                if (table.Columns.Contains("photo_clients"))
+                    table.Columns.Remove("photo_clients");
 
-                using (var connection = new MySqlConnection(connect.con))
-                using (var command = new MySqlCommand(query, connection))
-                using (var adapter = new MySqlDataAdapter(command))
+                originalDataTable = table.Copy();
+                dataGridView1.DataSource = table;
+
+                // =========================
+                // Заголовки
+                // =========================
+                SetHeader("FullName_client", "ФИО");
+                SetHeader("phone", "Телефон");
+                SetHeader("Age", "Возраст");
+                SetHeader("StatusName", "Статус");
+                SetHeader("Qualified_lead", "Квал лид");
+                SetHeader("LTV", "LTV");
+                SetHeader("EmployeeName", "Сотрудник");
+
+                // =========================
+                // Скрытые поля
+                // =========================
+                HideColumn("ID_Client");
+                HideColumn("Status_client_ID_Status_client");
+                HideColumn("IsDeleted");
+
+                // =========================
+                // Колонка с фото (РУЧНАЯ)
+                // =========================
+                var imageColumn = new DataGridViewImageColumn
                 {
-                    DataTable table = new DataTable();
-                    connection.Open();
-                    adapter.Fill(table);
+                    Name = "Фото",
+                    HeaderText = "Фото",
+                    ImageLayout = DataGridViewImageCellLayout.Zoom
+                };
 
-                    // диагностика: проверяем, что подключение верное и таблица заполнена
-                    // если таблица пуста — сообщаем, но продолжаем (может быть корректно)
-                    if (table == null)
-                    {
-                        MessageBox.Show("Ошибка: результат запроса вернул null таблицу.", "Диагностика", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        dataGridView1.DataSource = null;
-                        return;
-                    }
+                dataGridView1.Columns.Insert(0, imageColumn);
 
-                    if (table.Rows.Count == 0)
-                    {
-                        // Можно убрать или заменить на логирование
-                        //MessageBox.Show("Данные не найдены: запрос вернул 0 строк. Проверьте, нет ли фильтра IsDeleted или пустой БД.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
+                dataGridView1.AllowUserToAddRows = false;
 
-                    // ❗ КРИТИЧНО: полностью убираем photo_clients из таблицы, чтобы избежать ошибок при отображении
-                    if (table.Columns.Contains("photo_clients"))
-                        table.Columns.Remove("photo_clients");
+                // =========================
+                // Заполнение изображений
+                // =========================
 
-                    originalDataTable = table.Copy();
-                    dataGridView1.DataSource = table;
-
-                    // =========================
-                    // Заголовки
-                    // =========================
-                    SetHeader("FullName_client", "ФИО");
-                    SetHeader("phone", "Телефон");
-                    SetHeader("Age", "Возраст");
-                    SetHeader("StatusName", "Статус");
-                    SetHeader("Qualified_lead", "Квал лид");
-                    SetHeader("LTV", "LTV");
-                    SetHeader("EmployeeName", "Сотрудник");
-
-                    // =========================
-                    // Скрытые поля
-                    // =========================
-                    HideColumn("ID_Client");
-                    HideColumn("Status_client_ID_Status_client");
-                    HideColumn("IsDeleted");
-
-                    // =========================
-                    // Колонка с фото (РУЧНАЯ) — вставляем только если ещё нет
-                    // =========================
-                    if (!dataGridView1.Columns.Contains("Фото"))
-                    {
-                        var imageColumn = new DataGridViewImageColumn
-                        {
-                            Name = "Фото",
-                            HeaderText = "Фото",
-                            ImageLayout = DataGridViewImageCellLayout.Zoom
-                        };
-
-                        // Вставляем в начало, если есть хотя бы одна колонка
-                        dataGridView1.Columns.Insert(0, imageColumn);
-                    }
-
-                    dataGridView1.AllowUserToAddRows = false;
-
-                    UpdatePhotosAfterFilter();
-                }
-            }
-            catch (MySqlException mex)
-            {
-                MessageBox.Show($"Ошибка MySQL при загрузке клиентов: {mex.Message}", "Ошибка БД", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка при заполнении таблицы: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void SetHeader(string columnName, string headerText)
@@ -263,75 +213,24 @@ namespace Kursivoy_Konkin
         // ДОБАВЬТЕ ЭТУ ФУНКЦИЮ ДЛЯ ОБНОВЛЕНИЯ ФОТО
         private void UpdatePhotosAfterFilter()
         {
-            bool hasPhotoColumn = dataGridView1.Columns.Contains("photo_clients");
-            bool hasФотоColumn = dataGridView1.Columns.Contains("Фото");
-
             foreach (DataGridViewRow row in dataGridView1.Rows)
             {
                 if (row.IsNewRow) continue;
 
-                string namee = "picture.png";
+                string namee = row.Cells["photo_clients"].Value == null ? "picture.png" : row.Cells["photo_clients"].Value.ToString();
 
-                if (hasPhotoColumn)
+                if (string.IsNullOrEmpty(namee))
                 {
-                    try
-                    {
-                        var cellValue = row.Cells["photo_clients"].Value;
-                        if (cellValue != null && cellValue != DBNull.Value)
-                        {
-                            var s = cellValue.ToString();
-                            if (!string.IsNullOrWhiteSpace(s)) namee = s;
-                        }
-                    }
-                    catch
-                    {
-                        // На случай непредвиденных типов — оставляем default
-                        namee = "picture.png";
-                    }
+                    namee = "picture.png";
                 }
 
-                if (string.IsNullOrWhiteSpace(namee)) namee = "picture.png";
-
-                // Устанавливаем картинку только если колонка "Фото" присутствует
-                if (hasФотоColumn)
+                try
                 {
-                    try
-                    {
-                        // Безопасно загружаем файл, если существует — иначе стандартный placeholder
-                        string imgPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "img", "picture.png");
-                        Image img = null;
-                        try
-                        {
-                            if (!string.IsNullOrEmpty(namee) && File.Exists(namee))
-                                img = Image.FromFile(namee);
-                            else if (File.Exists(imgPath))
-                                img = Image.FromFile(imgPath);
-                        }
-                        catch
-                        {
-                            // Игнорируем ошибки загрузки конкретного файла
-                            if (File.Exists(imgPath))
-                                img = Image.FromFile(imgPath);
-                        }
-
-                        // Присвоение (освобождаем старую картинку если нужно)
-                        if (img != null)
-                        {
-                            // Если ранее в ячейке было Image, попытаемся освободить (без исключений)
-                            try
-                            {
-                                var existing = row.Cells["Фото"].Value as Image;
-                                if (existing != null) existing.Dispose();
-                            }
-                            catch { }
-
-                            row.Cells["Фото"].Value = img;
-                        }
-                    }
-                    catch
-                    {
-                        // Ничего не делаем — не критично для UX
-                    }
+                    row.Cells["Фото"].Value = Image.FromFile(@"./img/picture.png");
+                }
+                catch
+                {
+                    // Обработка ошибки загрузки изображения
                 }
             }
         }
@@ -382,7 +281,7 @@ namespace Kursivoy_Konkin
                 "По ФИО",
                 "По статусу",
                 "По LTV (по убыванию)",
-                "По LTV (по возрастание)"
+                "По LTV (по возрастанию)"
             });
             comboBox1.SelectedIndex = 0;
 
@@ -599,33 +498,73 @@ namespace Kursivoy_Konkin
 
         private void button3_Click(object sender, EventArgs e)
         {
-            try
+            using (var addForm = new FormManagerAddClient())
             {
-                using (var addForm = new FormManagerAddClient())
+                var result = addForm.ShowDialog();
+                if (result == DialogResult.OK)
                 {
-                    // Показываем модально; передаём this как владелец
-                    var result = addForm.ShowDialog(this);
-
-                    if (result == DialogResult.OK)
-                    {
-                        // Обновляем таблицу только при успешном добавлении
-                        FillTableData();
-                    }
+                    // Если клиент успешно добавлен — перезагрузим данные в таблице
+                    FillTableData();
                 }
             }
-            catch (Exception ex)
-            {
-                // Если конструктор FormManagerAddClient или ShowDialog бросает исключение — покажем его
-                MessageBox.Show($"Не удалось открыть форму добавления клиента: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
-        private void button3_Click_1(object sender, EventArgs e)
+        private void FormHeadViewClients_Load(object sender, EventArgs e)
         {
+           
+            // Инициализация комбобоксов
+            comboBox1.Items.AddRange(new string[]
+            {
+                "Без сортировки",
+                "По ФИО",
+                "По статусу",
+                "По LTV (по убыванию)",
+                "По LTV (по возрастанию)"
+            });
+            comboBox1.SelectedIndex = 0;
 
+            comboBox3.Items.AddRange(new string[]
+            {
+                "Все клиенты",
+                "LTV > 500000",
+                "Клиенты в работе",
+                "Буфер клиентов",
+                "Подписываем договор",
+                "Завершён",
+              //  "Закрепленные сотрудники"
+            });
+            comboBox3.SelectedIndex = 0;
+
+            // Загружаем данные в таблицу
+            FillTableData();
+
+            // Устанавливаем контекстное меню и обработчик мыши
+            dataGridView1.ContextMenuStrip = contextMenuStrip1;
+            dataGridView1.MouseDown += dataGridView1_MouseDown;
+
+            // Гарантированно создаём пункты контекстного меню (если их нет в Designer или они были случайно удалены)
+            contextMenuStrip1.Items.Clear();
+
+            var addItem = new ToolStripMenuItem("Добавить") { Name = "AddUser" };
+            var editItem = new ToolStripMenuItem("Редактировать") { Name = "EditUser" };
+            var deleteItem = new ToolStripMenuItem("Удалить") { Name = "DeleteUser" };
+
+            contextMenuStrip1.Items.Add(addItem);
+            contextMenuStrip1.Items.Add(editItem);
+            contextMenuStrip1.Items.Add(deleteItem);
+
+            // Подписываем обработчики (без дублирования)
+            addItem.Click -= AddUser_Click;
+            addItem.Click += AddUser_Click;
+
+            editItem.Click -= EditUser_Click;
+            editItem.Click += EditUser_Click;
+
+            deleteItem.Click -= DeleteUser_Click;
+            deleteItem.Click += DeleteUser_Click;
         }
+    
     }
 
-    // Новый SQL-запрос с фильтрацией по IsDeleted = 0
 
 }

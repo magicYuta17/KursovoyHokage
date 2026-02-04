@@ -136,7 +136,7 @@ namespace Kursivoy_Konkin
                 return;
             }
 
-            // --- 2. Парсинг чисел ---
+            // --- Логика редактирования клиента ---
             if (!int.TryParse(txtAge.Text, out int age))
             {
                 MessageBox.Show("Некорректный возраст.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -171,8 +171,14 @@ namespace Kursivoy_Konkin
                 return;
             }
 
-            // --- 4. Обновление данных в БД ---
             UpdateClientInDb(age, ltv, statusId);
+
+            // Возвращаемся на предыдущую форму
+            if (Owner != null)
+            {
+                Owner.Show(); // Показываем предыдущую форму
+            }
+            this.Close(); // Закрываем текущую форму
         }
 
         private void UpdateClientInDb(int age, decimal ltv, int statusId)
@@ -284,7 +290,7 @@ namespace Kursivoy_Konkin
 
             // Применяем валидацию для maskedTextBox1
             //TextBoxFilters.InputValidators.ApplyPhoneValidation(maskedTextBox1);
-            //TextBoxFilters.InputValidators.ApplyNotEmptyValidation(maskedTextBox1);
+            //TextBoxFilters.InputValidators.ApplyNotEmptyValidation(maskedTextBox1
 
             // Применяем валидацию для текстовых полей
             TextBoxFilters.InputValidators.ApplyRussianLettersOnly(txtFullName_client);

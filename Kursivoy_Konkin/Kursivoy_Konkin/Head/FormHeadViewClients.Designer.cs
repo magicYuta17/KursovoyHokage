@@ -39,13 +39,10 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.AddUser = new System.Windows.Forms.ToolStripMenuItem();
-            this.EditUser = new System.Windows.Forms.ToolStripMenuItem();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
@@ -147,23 +144,8 @@
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.AddUser,
-            this.EditUser});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 52);
-            // 
-            // AddUser
-            // 
-            this.AddUser.Name = "AddUser";
-            this.AddUser.Size = new System.Drawing.Size(180, 24);
-            this.AddUser.Text = "Добавить";
-            // 
-            // EditUser
-            // 
-            this.EditUser.Name = "EditUser";
-            this.EditUser.Size = new System.Drawing.Size(180, 24);
-            this.EditUser.Text = "Редактировать";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
             // textBox2
             // 
@@ -195,7 +177,7 @@
             this.button3.TabIndex = 31;
             this.button3.Text = "Добавить клиента";
             this.button3.UseVisualStyleBackColor = false;
-            this.button3.Click += new System.EventHandler(this.button3_Click_1);
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // FormHeadViewClients
             // 
@@ -217,8 +199,8 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormHeadViewClients";
             this.Text = "FormHeadViewClients";
+            this.Load += new System.EventHandler(this.FormHeadViewClients_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -234,8 +216,6 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem AddUser;
-        private System.Windows.Forms.ToolStripMenuItem EditUser;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button button3;

@@ -341,6 +341,53 @@ namespace Kursivoy_Konkin
             // --- 5. Вставка ---
             InsertClientToDb(age, ltv);
         }
+
+        private void buttonAddClient_Click(object sender, EventArgs e)
+        {
+            // Проверяем все зарегистрированные поля
+            if (!TextBoxFilters.InputValidators.ValidateAll(out Control[] invalidControls))
+            {
+                MessageBox.Show("Заполните все обязательные поля, отмеченные красным!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Проверка длины номера телефона
+            string phone = Regex.Replace(maskedTextBox1.Text, @"\s+", ""); // Удаляем все пробелы и пустое пространство
+            if (phone.Length != 16)
+            {
+                MessageBox.Show("Некорректный номер телефона. Поле должно содержать ровно 16 символов (включая форматирование).", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                maskedTextBox1.BackColor = Color.MistyRose; // Подсвечиваем поле
+                return;
+            }
+
+            // --- Логика добавления клиента ---
+            if (!int.TryParse(txtAge.Text, out int age))
+            {
+                MessageBox.Show("Некорректный возраст.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (!decimal.TryParse(txtLTV.Text.Replace('.', ','), out decimal ltv))
+            {
+                MessageBox.Show("Некорректный LTV.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (IsClientDuplicate(txtFullName_client.Text, maskedTextBox1.Text))
+            {
+                MessageBox.Show("Такой клиент уже существует!", "Дубликат", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return;
+            }
+
+            InsertClientToDb(age, ltv);
+
+            // Возвращаемся на предыдущую форму
+            if (Owner != null)
+            {
+                Owner.Show(); // Показываем предыдущую форму
+            }
+            this.Close(); // Закрываем текущую форму
+}
     }
 }
 

@@ -122,6 +122,7 @@
     <Compile Include="Manager\FormManagerAddClient.Designer.cs">
       <DependentUpon>FormManagerAddClient.cs</DependentUpon>
     </Compile>
+    <Compile Include="Manager\FormManagerClientBase.cs" />
     <Compile Include="Manager\FormManagerEditClients.cs">
       <SubType>Form</SubType>
     </Compile>

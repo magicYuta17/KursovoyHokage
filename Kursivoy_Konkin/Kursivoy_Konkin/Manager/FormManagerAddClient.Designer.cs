@@ -206,7 +206,7 @@
             // 
             this.buttonAdd.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
             this.buttonAdd.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.buttonAdd.Location = new System.Drawing.Point(674, 625);
+            this.buttonAdd.Location = new System.Drawing.Point(584, 620);
             this.buttonAdd.Margin = new System.Windows.Forms.Padding(4);
             this.buttonAdd.Name = "buttonAdd";
             this.buttonAdd.Size = new System.Drawing.Size(374, 70);
