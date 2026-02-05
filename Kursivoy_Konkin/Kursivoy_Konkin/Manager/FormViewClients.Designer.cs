@@ -47,7 +47,9 @@
             this.EditUser = new System.Windows.Forms.ToolStripMenuItem();
             this.button3 = new System.Windows.Forms.Button();
             this.DeleteUser = new System.Windows.Forms.ToolStripMenuItem();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // label3
@@ -157,7 +159,7 @@
             this.button2.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
             this.button2.Location = new System.Drawing.Point(661, 706);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(291, 76);
+            this.button2.Size = new System.Drawing.Size(306, 76);
             this.button2.TabIndex = 16;
             this.button2.Text = "Оформить заказ";
             this.button2.UseVisualStyleBackColor = false;
@@ -208,11 +210,22 @@
             this.DeleteUser.Size = new System.Drawing.Size(210, 24);
             this.DeleteUser.Text = "Удалить клиента";
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.Location = new System.Drawing.Point(973, 706);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(122, 76);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.TabIndex = 48;
+            this.pictureBox2.TabStop = false;
+            // 
             // FormViewClients
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1151, 793);
+            this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
@@ -230,6 +243,7 @@
             this.Text = "Просмотр клиентов";
             this.Load += new System.EventHandler(this.FormViewClients_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -251,5 +265,6 @@
         private System.Windows.Forms.ToolStripMenuItem EditUser;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.ToolStripMenuItem DeleteUser;
+        private System.Windows.Forms.PictureBox pictureBox2;
     }
 }

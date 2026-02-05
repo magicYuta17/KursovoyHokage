@@ -27,7 +27,7 @@ namespace Kursivoy_Konkin
             buttonCheckCaptcha2.Visible = false;
 
 
-            this.Width = 400;
+            this.Width = 600;
         }
 
         private int lastCaptchaID = 0;

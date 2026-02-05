@@ -20,8 +20,7 @@ namespace Kursivoy_Konkin
             SetupFormConstraints();
             // Подписки на кнопки
             this.buttonEditClient.Click += buttonEditClient_Click;
-            this.buttonEditClientPhoto.Click += buttonEditClientPhoto_Click;
-            this.buttonDeleteClientPhoto.Click += buttonDeleteClientPhoto_Click;
+          
         }
 
         // Загружаем список статусов в comboBox (можно вызывать перед LoadClientById)

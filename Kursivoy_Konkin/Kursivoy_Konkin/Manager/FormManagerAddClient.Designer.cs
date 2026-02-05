@@ -45,6 +45,8 @@
             this.comboBoxQualified_lead = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // txtFullName_client
@@ -201,12 +203,23 @@
             this.dateTimePicker1.Size = new System.Drawing.Size(354, 55);
             this.dateTimePicker1.TabIndex = 46;
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.Location = new System.Drawing.Point(484, 515);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(282, 232);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.TabIndex = 47;
+            this.pictureBox2.TabStop = false;
+            // 
             // FormManagerAddClient
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(764, 743);
+            this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.dateTimePicker1);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.comboBoxQualified_lead);
@@ -226,6 +239,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormManagerAddClient";
             this.Text = "Форма добавления клиента";
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -249,5 +263,6 @@
         private System.Windows.Forms.ComboBox comboBoxQualified_lead;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private System.Windows.Forms.PictureBox pictureBox2;
     }
 }
