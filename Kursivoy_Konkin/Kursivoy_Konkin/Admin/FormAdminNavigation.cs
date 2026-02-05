@@ -42,7 +42,15 @@ namespace Kursivoy_Konkin
         private void button1_Click(object sender, EventArgs e)
         {
             FormAdminWorker formAdminWorkers = new FormAdminWorker();
+            this.Visible = false;
             formAdminWorkers.ShowDialog();
+            this.Close();
+        }
+
+        private void buttonViewObject_Click(object sender, EventArgs e)
+        {
+            FormAdminObject formAdminObject = new FormAdminObject();
+            formAdminObject.ShowDialog();
             this.Close();
         }
     }

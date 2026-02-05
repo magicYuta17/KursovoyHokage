@@ -41,8 +41,7 @@ namespace Kursivoy_Konkin
             TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtLTV);
 
             TextBoxFilters.InputValidators.ApplyNotEmptyValidation(comboBoxStatus);
-            TextBoxFilters.InputValidators.ApplyRussianLettersOnly(txtQualified_lead);
-            TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtQualified_lead);
+            
         }
 
         // --- Методы фильтрации клавиш ---
@@ -115,13 +114,13 @@ namespace Kursivoy_Konkin
         }
 
         // --- Вспомогательный метод: SQL Insert ---
-        private void InsertClientToDb(int age, decimal ltv)
+        private void InsertClientToDb(int age, decimal ltv, DateTime birthday)
         {
             string query = @"
                 INSERT INTO Clients 
-                (FullName_client, phone, Age, Status_client_ID_Status_client, Qualified_lead, LTV, photo_clients) 
+                (FullName_client, phone, Age, Status_client_ID_Status_client, Qualified_lead, LTV, Birthday) 
                 VALUES 
-                (@FullName, @Phone, @Age, @IDStatus, @QLead, @LTV, @Photo)";
+                (@FullName, @Phone, @Age, @IDStatus, @QLead, @LTV, @Birthday)";
 
             // Проверим выбранный статус и получим int ID
             if (comboBoxStatus.SelectedValue == null)
@@ -157,13 +156,9 @@ namespace Kursivoy_Konkin
                         cmd.Parameters.Add("@Phone", MySqlDbType.VarChar, 50).Value = maskedTextBox1.Text.Trim();
                         cmd.Parameters.Add("@Age", MySqlDbType.Int32).Value = age;
                         cmd.Parameters.Add("@IDStatus", MySqlDbType.Int32).Value = statusId;
-                        cmd.Parameters.Add("@QLead", MySqlDbType.VarChar, 50).Value = txtQualified_lead.Text.Trim();
+                        cmd.Parameters.Add("@QLead", MySqlDbType.VarChar, 50).Value = comboBoxQualified_lead.Text.Trim();
                         cmd.Parameters.Add("@LTV", MySqlDbType.Decimal).Value = ltv;
-
-                        if (string.IsNullOrEmpty(_selectedImagePath))
-                            cmd.Parameters.Add("@Photo", MySqlDbType.VarChar).Value = DBNull.Value;
-                        else
-                            cmd.Parameters.Add("@Photo", MySqlDbType.VarChar).Value = _selectedImagePath;
+                        cmd.Parameters.Add("@Birthday", MySqlDbType.Date).Value = birthday;
 
                         int rows = cmd.ExecuteNonQuery();
                         if (rows > 0)
@@ -192,66 +187,16 @@ namespace Kursivoy_Konkin
             txtFullName_client.Clear();
             maskedTextBox1.Clear();
             txtAge.Clear();
+
             
-            txtQualified_lead.Clear();
             
             txtLTV.Clear();
             buttonDeleteClientPhoto_Click(null, null); // Сброс фото
         }
 
 
-        // =========================================================
-        // 2. КНОПКИ РАБОТЫ С ФОТО
-        // =========================================================
 
-        // КНОПКА: Добавить фото
-        private void buttonAddClientPhoto_Click_1(object sender, EventArgs e)
-        {
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
-            {
-                openFileDialog.Filter = "Картинки (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png";
-                openFileDialog.Title = "Выберите фото клиента";
-
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    FileInfo fileInfo = new FileInfo(openFileDialog.FileName);
-
-                    // Проверка размера (2 МБ)
-                    if (fileInfo.Length > 2 * 1024 * 1024)
-                    {
-                        MessageBox.Show("Файл слишком большой! Выберите фото до 2 МБ.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                    }
-
-                    _selectedImagePath = openFileDialog.FileName;
-
-                    // Очистка памяти перед загрузкой новой
-                    if (pictureBox1.Image != null) pictureBox1.Image.Dispose();
-
-                    try
-                    {
-                        pictureBox1.Image = Image.FromFile(_selectedImagePath);
-                        pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Не удалось загрузить изображение.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
-        }
-
-        // КНОПКА: Удалить фото
-        private void buttonDeleteClientPhoto_Click_1(object sender, EventArgs e)
-        {
-            if (pictureBox1.Image != null)
-            {
-                pictureBox1.Image.Dispose();
-                pictureBox1.Image = null;
-            }
-            _selectedImagePath = string.Empty;
-        }
-
+       
        
 
         // Пример загрузки ComboBox (выполнить один раз, например в конструкторе после InitializeComponent)
@@ -306,7 +251,7 @@ namespace Kursivoy_Konkin
                 string.IsNullOrWhiteSpace(maskedTextBox1.Text) ||
                 string.IsNullOrWhiteSpace(txtAge.Text) ||
                 string.IsNullOrWhiteSpace(comboBoxStatus.Text) ||
-                string.IsNullOrWhiteSpace(txtQualified_lead.Text) ||
+                string.IsNullOrWhiteSpace(comboBoxQualified_lead.Text) ||
                 string.IsNullOrWhiteSpace(txtLTV.Text))
             {
                 MessageBox.Show("Заполните все поля!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -339,7 +284,7 @@ namespace Kursivoy_Konkin
             }
 
             // --- 5. Вставка ---
-            InsertClientToDb(age, ltv);
+            InsertClientToDb(age, ltv, dateTimePicker1.Value);
         }
 
         private void buttonAddClient_Click(object sender, EventArgs e)
@@ -379,7 +324,11 @@ namespace Kursivoy_Konkin
                 return;
             }
 
-            InsertClientToDb(age, ltv);
+            // Получаем дату из dateTimePicker1
+            DateTime birthday = dateTimePicker1.Value;
+
+            // Вставляем данные в БД
+            InsertClientToDb(age, ltv, birthday);
 
             // Возвращаемся на предыдущую форму
             if (Owner != null)
@@ -388,6 +337,8 @@ namespace Kursivoy_Konkin
             }
             this.Close(); // Закрываем текущую форму
 }
+
+      
     }
 }
 

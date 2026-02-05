@@ -35,18 +35,16 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtAge = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.txtQualified_lead = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.txtLTV = new System.Windows.Forms.TextBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.buttonDeleteClientPhoto = new System.Windows.Forms.Button();
-            this.buttonAddClientPhoto = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.comboBoxStatus = new System.Windows.Forms.ComboBox();
             this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
             this.buttonAdd = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.comboBoxQualified_lead = new System.Windows.Forms.ComboBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.SuspendLayout();
             // 
             // txtFullName_client
@@ -68,7 +66,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.label1.Location = new System.Drawing.Point(32, 140);
+            this.label1.Location = new System.Drawing.Point(366, 17);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(170, 47);
             this.label1.TabIndex = 23;
@@ -78,7 +76,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.label2.Location = new System.Drawing.Point(32, 252);
+            this.label2.Location = new System.Drawing.Point(32, 147);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(144, 47);
             this.label2.TabIndex = 25;
@@ -87,7 +85,7 @@
             // txtAge
             // 
             this.txtAge.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.txtAge.Location = new System.Drawing.Point(40, 302);
+            this.txtAge.Location = new System.Drawing.Point(40, 197);
             this.txtAge.Name = "txtAge";
             this.txtAge.Size = new System.Drawing.Size(283, 55);
             this.txtAge.TabIndex = 24;
@@ -96,25 +94,17 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.label3.Location = new System.Drawing.Point(32, 357);
+            this.label3.Location = new System.Drawing.Point(366, 147);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(98, 47);
             this.label3.TabIndex = 27;
             this.label3.Text = "Квал";
             // 
-            // txtQualified_lead
-            // 
-            this.txtQualified_lead.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.txtQualified_lead.Location = new System.Drawing.Point(40, 407);
-            this.txtQualified_lead.Name = "txtQualified_lead";
-            this.txtQualified_lead.Size = new System.Drawing.Size(283, 55);
-            this.txtQualified_lead.TabIndex = 26;
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.label5.Location = new System.Drawing.Point(32, 489);
+            this.label5.Location = new System.Drawing.Point(32, 273);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(124, 47);
             this.label5.TabIndex = 29;
@@ -124,7 +114,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.label6.Location = new System.Drawing.Point(32, 603);
+            this.label6.Location = new System.Drawing.Point(366, 279);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(84, 47);
             this.label6.TabIndex = 31;
@@ -133,45 +123,10 @@
             // txtLTV
             // 
             this.txtLTV.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.txtLTV.Location = new System.Drawing.Point(40, 653);
+            this.txtLTV.Location = new System.Drawing.Point(374, 329);
             this.txtLTV.Name = "txtLTV";
             this.txtLTV.Size = new System.Drawing.Size(283, 55);
             this.txtLTV.TabIndex = 30;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(361, 67);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(597, 415);
-            this.pictureBox1.TabIndex = 36;
-            this.pictureBox1.TabStop = false;
-            // 
-            // buttonDeleteClientPhoto
-            // 
-            this.buttonDeleteClientPhoto.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
-            this.buttonDeleteClientPhoto.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.buttonDeleteClientPhoto.Location = new System.Drawing.Point(695, 489);
-            this.buttonDeleteClientPhoto.Margin = new System.Windows.Forms.Padding(4);
-            this.buttonDeleteClientPhoto.Name = "buttonDeleteClientPhoto";
-            this.buttonDeleteClientPhoto.Size = new System.Drawing.Size(263, 70);
-            this.buttonDeleteClientPhoto.TabIndex = 34;
-            this.buttonDeleteClientPhoto.Text = "Удалить фото";
-            this.buttonDeleteClientPhoto.UseVisualStyleBackColor = false;
-            this.buttonDeleteClientPhoto.Click += new System.EventHandler(this.buttonDeleteClientPhoto_Click_1);
-            // 
-            // buttonAddClientPhoto
-            // 
-            this.buttonAddClientPhoto.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
-            this.buttonAddClientPhoto.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.buttonAddClientPhoto.Location = new System.Drawing.Point(350, 489);
-            this.buttonAddClientPhoto.Margin = new System.Windows.Forms.Padding(4);
-            this.buttonAddClientPhoto.Name = "buttonAddClientPhoto";
-            this.buttonAddClientPhoto.Size = new System.Drawing.Size(286, 70);
-            this.buttonAddClientPhoto.TabIndex = 35;
-            this.buttonAddClientPhoto.Text = "Добавить фото";
-            this.buttonAddClientPhoto.UseVisualStyleBackColor = false;
-            this.buttonAddClientPhoto.Click += new System.EventHandler(this.buttonAddClientPhoto_Click_1);
             // 
             // label7
             // 
@@ -188,7 +143,7 @@
             this.comboBoxStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxStatus.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
             this.comboBoxStatus.FormattingEnabled = true;
-            this.comboBoxStatus.Location = new System.Drawing.Point(40, 545);
+            this.comboBoxStatus.Location = new System.Drawing.Point(40, 329);
             this.comboBoxStatus.Name = "comboBoxStatus";
             this.comboBoxStatus.Size = new System.Drawing.Size(283, 55);
             this.comboBoxStatus.TabIndex = 39;
@@ -196,7 +151,7 @@
             // maskedTextBox1
             // 
             this.maskedTextBox1.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.maskedTextBox1.Location = new System.Drawing.Point(12, 190);
+            this.maskedTextBox1.Location = new System.Drawing.Point(374, 67);
             this.maskedTextBox1.Mask = "+7 (000) 000-00-00";
             this.maskedTextBox1.Name = "maskedTextBox1";
             this.maskedTextBox1.Size = new System.Drawing.Size(334, 55);
@@ -206,7 +161,7 @@
             // 
             this.buttonAdd.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
             this.buttonAdd.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.buttonAdd.Location = new System.Drawing.Point(584, 620);
+            this.buttonAdd.Location = new System.Drawing.Point(40, 578);
             this.buttonAdd.Margin = new System.Windows.Forms.Padding(4);
             this.buttonAdd.Name = "buttonAdd";
             this.buttonAdd.Size = new System.Drawing.Size(374, 70);
@@ -215,24 +170,54 @@
             this.buttonAdd.UseVisualStyleBackColor = false;
             this.buttonAdd.Click += new System.EventHandler(this.buttonAdd_Click);
             // 
+            // comboBoxQualified_lead
+            // 
+            this.comboBoxQualified_lead.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxQualified_lead.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
+            this.comboBoxQualified_lead.FormattingEnabled = true;
+            this.comboBoxQualified_lead.Items.AddRange(new object[] {
+            "Да",
+            "Нет"});
+            this.comboBoxQualified_lead.Location = new System.Drawing.Point(374, 197);
+            this.comboBoxQualified_lead.Name = "comboBoxQualified_lead";
+            this.comboBoxQualified_lead.Size = new System.Drawing.Size(283, 55);
+            this.comboBoxQualified_lead.TabIndex = 43;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
+            this.label8.Location = new System.Drawing.Point(32, 427);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(264, 47);
+            this.label8.TabIndex = 45;
+            this.label8.Text = "Дата рождения";
+            // 
+            // dateTimePicker1
+            // 
+            this.dateTimePicker1.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
+            this.dateTimePicker1.Location = new System.Drawing.Point(40, 493);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.Size = new System.Drawing.Size(354, 55);
+            this.dateTimePicker1.TabIndex = 46;
+            // 
             // FormManagerAddClient
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1247, 743);
+            this.ClientSize = new System.Drawing.Size(764, 743);
+            this.Controls.Add(this.dateTimePicker1);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.comboBoxQualified_lead);
             this.Controls.Add(this.buttonAdd);
             this.Controls.Add(this.maskedTextBox1);
             this.Controls.Add(this.comboBoxStatus);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.buttonAddClientPhoto);
-            this.Controls.Add(this.buttonDeleteClientPhoto);
-            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.txtLTV);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.txtQualified_lead);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtAge);
             this.Controls.Add(this.label1);
@@ -241,7 +226,6 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormManagerAddClient";
             this.Text = "Форма добавления клиента";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -255,16 +239,15 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtAge;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox txtQualified_lead;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox txtLTV;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Button buttonDeleteClientPhoto;
-        private System.Windows.Forms.Button buttonAddClientPhoto;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ComboBox comboBoxStatus;
         private System.Windows.Forms.MaskedTextBox maskedTextBox1;
         private System.Windows.Forms.Button buttonAdd;
+        private System.Windows.Forms.ComboBox comboBoxQualified_lead;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.DateTimePicker dateTimePicker1;
     }
 }

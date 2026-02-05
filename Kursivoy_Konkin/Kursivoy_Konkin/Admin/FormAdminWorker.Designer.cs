@@ -56,14 +56,14 @@
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.RowTemplate.Height = 24;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(881, 388);
+            this.dataGridView1.Size = new System.Drawing.Size(1067, 428);
             this.dataGridView1.TabIndex = 0;
             // 
             // button1
             // 
             this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
             this.button1.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.button1.Location = new System.Drawing.Point(12, 440);
+            this.button1.Location = new System.Drawing.Point(12, 480);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(162, 76);
             this.button1.TabIndex = 21;
@@ -74,7 +74,7 @@
             // 
             this.buttonwddworker.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
             this.buttonwddworker.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.buttonwddworker.Location = new System.Drawing.Point(234, 440);
+            this.buttonwddworker.Location = new System.Drawing.Point(234, 480);
             this.buttonwddworker.Name = "buttonwddworker";
             this.buttonwddworker.Size = new System.Drawing.Size(401, 76);
             this.buttonwddworker.TabIndex = 22;
@@ -85,14 +85,14 @@
             // 
             this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(211, 32);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
             // FormAdminWorker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(994, 586);
+            this.ClientSize = new System.Drawing.Size(1126, 586);
             this.Controls.Add(this.buttonwddworker);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dataGridView1);
