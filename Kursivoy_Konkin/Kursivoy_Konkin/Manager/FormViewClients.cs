@@ -9,12 +9,12 @@ namespace Kursivoy_Konkin
     public partial class FormViewClients : Form
     {
         private DataTable originalDataTable;
-       
 
         public FormViewClients()
         {
             InitializeComponent();
             InitializeContextMenu();
+            InitializeSearchAndFilter();
         }
 
         private void InitializeContextMenu()
@@ -111,7 +111,7 @@ private void MenuItemDelete_Click(object sender, EventArgs e)
     }
     else
     {
-        MessageBox.Show("Выберите клиента для удаления.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        MessageBox.Show("Выведите клиента для удаления.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 }
 
@@ -233,6 +233,122 @@ private void MenuItemDelete_Click(object sender, EventArgs e)
 
             // Обновляем данные о возрасте клиентов
             UpdateClientBirthdaysAndAges();
+
+            // Инициализация ComboBox
+            comboBox1.Items.AddRange(new[] { "ФИО", "Статус", "LTV" });
+            comboBox3.Items.AddRange(new[] { "Все", "Больше 500 000", "Меньше 1 000 000", "Больше 2 000 000" });
+
+            // Загрузка статусов из базы данных
+            LoadStatusesToComboBox3();
         }
+
+        private void LoadStatusesToComboBox3()
+        {
+            try
+            {
+                string query = "SELECT DISTINCT status FROM mydb.status_client;";
+                using (var connection = new MySqlConnection(connect.con))
+                using (var command = new MySqlCommand(query, connection))
+                using (var adapter = new MySqlDataAdapter(command))
+                {
+                    DataTable statusTable = new DataTable();
+                    connection.Open();
+                    adapter.Fill(statusTable);
+
+                    foreach (DataRow row in statusTable.Rows)
+                    {
+                        comboBox3.Items.Add(row["status"].ToString());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при загрузке статусов: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void InitializeSearchAndFilter()
+        {
+            textBox1.TextChanged += (s, e) => ApplyFilters();
+            comboBox1.SelectedIndexChanged += (s, e) => ApplyFilters();
+            comboBox3.SelectedIndexChanged += (s, e) => ApplyFilters();
+        }
+
+        private void ApplyFilters()
+        {
+            if (originalDataTable == null) return;
+
+            var filteredData = originalDataTable.AsEnumerable();
+
+            // Поиск по тексту в TextBox1
+            string searchText = textBox1.Text.ToLower();
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                filteredData = filteredData.Where(row =>
+                    row["ФИО"].ToString().ToLower().Contains(searchText) ||
+                    row["Телефон"].ToString().ToLower().Contains(searchText));
+            }
+
+            // Фильтрация по статусу (ComboBox3)
+            if (comboBox3.SelectedItem != null && comboBox3.SelectedItem.ToString() != "Все")
+            {
+                string selectedStatus = comboBox3.SelectedItem.ToString();
+                filteredData = filteredData.Where(row => row["Статус"].ToString() == selectedStatus);
+            }
+
+            // Фильтрация по LTV (ComboBox3)
+            if (comboBox3.SelectedItem != null)
+            {
+                switch (comboBox3.SelectedItem.ToString())
+                {
+                    case "Больше 500 000":
+                        filteredData = filteredData.Where(row => Convert.ToDecimal(row["LTV"]) > 500000);
+                        break;
+                    case "Меньше 1 000 000":
+                        filteredData = filteredData.Where(row => Convert.ToDecimal(row["LTV"]) < 1000000);
+                        break;
+                    case "Больше 2 000 000":
+                        filteredData = filteredData.Where(row => Convert.ToDecimal(row["LTV"]) > 2000000);
+                        break;
+                }
+            }
+
+            // Сортировка (ComboBox1)
+            if (comboBox1.SelectedItem != null)
+            {
+                string sortColumn = comboBox1.SelectedItem.ToString();
+                switch (sortColumn)
+                {
+                    case "ФИО":
+                        filteredData = filteredData.OrderBy(row => row["ФИО"]);
+                        break;
+                    case "Статус":
+                        filteredData = filteredData.OrderBy(row => row["Статус"]);
+                        break;
+                    case "LTV":
+                        filteredData = filteredData.OrderBy(row => Convert.ToDecimal(row["LTV"]));
+                        break;
+                }
+            }
+
+            // Применение фильтров и сортировки
+            if (filteredData.Any())
+            {
+                dataGridView1.DataSource = filteredData.CopyToDataTable();
+            }
+            else
+            {
+                dataGridView1.DataSource = originalDataTable.Clone(); // Пустая таблица
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            FormManagerNavigation f = new FormManagerNavigation();
+            this.Visible = false;
+            f.ShowDialog();
+            this.Close();
+        }
+
     }
 }

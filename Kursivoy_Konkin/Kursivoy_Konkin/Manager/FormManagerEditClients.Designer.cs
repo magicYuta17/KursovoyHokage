@@ -43,8 +43,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.txtFullName_client = new System.Windows.Forms.TextBox();
             this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.button1 = new System.Windows.Forms.Button();
+            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.SuspendLayout();
             // 
             // comboBoxStatus
@@ -74,7 +74,7 @@
             this.buttonEditClient.Location = new System.Drawing.Point(58, 489);
             this.buttonEditClient.Margin = new System.Windows.Forms.Padding(4);
             this.buttonEditClient.Name = "buttonEditClient";
-            this.buttonEditClient.Size = new System.Drawing.Size(516, 70);
+            this.buttonEditClient.Size = new System.Drawing.Size(482, 70);
             this.buttonEditClient.TabIndex = 50;
             this.buttonEditClient.Text = "Сохранить редактирование";
             this.buttonEditClient.UseVisualStyleBackColor = false;
@@ -179,15 +179,26 @@
             this.maskedTextBox1.TabIndex = 57;
             this.maskedTextBox1.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.maskedTextBox1_MaskInputRejected);
             // 
-            // pictureBox1
+            // button1
             // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(600, 489);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(67, 70);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 58;
-            this.pictureBox1.TabStop = false;
+            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
+            this.button1.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
+            this.button1.Location = new System.Drawing.Point(58, 567);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(482, 70);
+            this.button1.TabIndex = 59;
+            this.button1.Text = "Назад";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // dateTimePicker1
+            // 
+            this.dateTimePicker1.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
+            this.dateTimePicker1.Location = new System.Drawing.Point(58, 417);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.Size = new System.Drawing.Size(354, 55);
+            this.dateTimePicker1.TabIndex = 60;
             // 
             // FormManagerEditClients
             // 
@@ -195,7 +206,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(851, 639);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.dateTimePicker1);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.maskedTextBox1);
             this.Controls.Add(this.comboBoxStatus);
             this.Controls.Add(this.label7);
@@ -212,8 +224,7 @@
             this.Controls.Add(this.txtFullName_client);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormManagerEditClients";
-            this.Text = "FormManagerEditClients";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.Text = "Форма редактирования клиента";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -235,6 +246,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtFullName_client;
         private System.Windows.Forms.MaskedTextBox maskedTextBox1;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.DateTimePicker dateTimePicker1;
     }
 }

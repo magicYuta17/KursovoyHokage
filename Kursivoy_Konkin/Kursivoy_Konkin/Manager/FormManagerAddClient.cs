@@ -42,6 +42,9 @@ namespace Kursivoy_Konkin
 
             TextBoxFilters.InputValidators.ApplyNotEmptyValidation(comboBoxStatus);
             
+            // Устанавливаем ограничения для dateTimePicker1
+            dateTimePicker1.MaxDate = DateTime.Now.AddDays(-1).AddYears(-18); // Вчерашняя дата - 18 лет
+            dateTimePicker1.Value = dateTimePicker1.MaxDate; // Устанавливаем значение по умолчанию
         }
 
         // --- Методы фильтрации клавиш ---
@@ -338,7 +341,14 @@ namespace Kursivoy_Konkin
             this.Close(); // Закрываем текущую форму
 }
 
-      
+        private void button1_Click(object sender, EventArgs e)
+        {
+            FormViewClients formViewClients = new FormViewClients();
+            this.Visible = false; 
+            formViewClients.ShowDialog();
+            this.Close();
+
+        }
     }
 }
 

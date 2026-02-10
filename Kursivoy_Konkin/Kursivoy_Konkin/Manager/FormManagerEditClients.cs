@@ -20,7 +20,6 @@ namespace Kursivoy_Konkin
             SetupFormConstraints();
             // Подписки на кнопки
             this.buttonEditClient.Click += buttonEditClient_Click;
-          
         }
 
         // Загружаем список статусов в comboBox (можно вызывать перед LoadClientById)
@@ -51,7 +50,7 @@ namespace Kursivoy_Konkin
         {
             _clientId = clientId; // запоминаем id для дальнейшего обновления
 
-            string query = @"SELECT FullName_client, phone, Age, Status_client_ID_Status_client, Qualified_lead, LTV, photo_clients
+            string query = @"SELECT FullName_client, phone, Age, Status_client_ID_Status_client, Qualified_lead, LTV
                              FROM mydb.clients WHERE ID_Client = @id LIMIT 1;";
 
             try
@@ -90,23 +89,6 @@ namespace Kursivoy_Konkin
                             // Если привязка не установлена — оставляем пустым
                         }
 
-                        // Фото
-                        string photoPath = reader["photo_clients"] == DBNull.Value ? string.Empty : reader["photo_clients"].ToString();
-                        _selectedImagePath = photoPath ?? string.Empty;
-
-                        if (!string.IsNullOrWhiteSpace(_selectedImagePath) && File.Exists(_selectedImagePath))
-                        {
-                            try
-                            {
-                                if (pictureBox1.Image != null) { pictureBox1.Image.Dispose(); pictureBox1.Image = null; }
-                                pictureBox1.Image = Image.FromFile(_selectedImagePath);
-                                pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
-                            }
-                            catch
-                            {
-                                // Игнорируем ошибки загрузки фото
-                            }
-                        }
                     }
                 }
             }
@@ -205,10 +187,7 @@ namespace Kursivoy_Konkin
                     cmd.Parameters.Add("@QLead", MySqlDbType.VarChar, 50).Value = txtQualified_lead.Text.Trim();
                     cmd.Parameters.Add("@LTV", MySqlDbType.Decimal).Value = ltv;
 
-                    if (string.IsNullOrEmpty(_selectedImagePath))
-                        cmd.Parameters.Add("@Photo", MySqlDbType.VarChar).Value = DBNull.Value;
-                    else
-                        cmd.Parameters.Add("@Photo", MySqlDbType.VarChar).Value = _selectedImagePath;
+                    cmd.Parameters.Add("@Photo", MySqlDbType.VarChar).Value = DBNull.Value; // Удаляем использование _selectedImagePath
 
                     cmd.Parameters.Add("@IDClient", MySqlDbType.Int32).Value = _clientId;
 
@@ -238,49 +217,6 @@ namespace Kursivoy_Konkin
             }
         }
 
-        // Простые обработчики для кнопок работы с фото (если нужны)
-        private void buttonEditClientPhoto_Click(object sender, EventArgs e)
-        {
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
-            {
-                openFileDialog.Filter = "Картинки (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png";
-                openFileDialog.Title = "Выберите фото клиента";
-
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    string path = openFileDialog.FileName;
-                    FileInfo fi = new FileInfo(path);
-                    if (fi.Length > 2 * 1024 * 1024)
-                    {
-                        MessageBox.Show("Файл слишком большой. Выберите до 2 МБ.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                    }
-
-                    _selectedImagePath = path;
-                    try
-                    {
-                        if (pictureBox1.Image != null) { pictureBox1.Image.Dispose(); pictureBox1.Image = null; }
-                        pictureBox1.Image = Image.FromFile(_selectedImagePath);
-                        pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Не удалось загрузить изображение.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
-        }
-
-        private void buttonDeleteClientPhoto_Click(object sender, EventArgs e)
-        {
-            if (pictureBox1.Image != null)
-            {
-                pictureBox1.Image.Dispose();
-                pictureBox1.Image = null;
-            }
-            _selectedImagePath = string.Empty;
-        }
-
         private void SetupFormConstraints()
         {
             // Удаляем валидацию с txtPhone
@@ -304,11 +240,23 @@ namespace Kursivoy_Konkin
             TextBoxFilters.InputValidators.ApplyNotEmptyValidation(comboBoxStatus);
             TextBoxFilters.InputValidators.ApplyRussianLettersOnly(txtQualified_lead);
             TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtQualified_lead);
+
+            // Устанавливаем ограничения для dateTimePicker1
+            dateTimePicker1.MaxDate = DateTime.Now.AddDays(-1).AddYears(-18); // Вчерашняя дата - 18 лет
+            dateTimePicker1.Value = dateTimePicker1.MaxDate; // Устанавливаем значение по умолчанию
         }
 
         private void maskedTextBox1_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
         {
             buttonEditClient.Enabled = true;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            FormViewClients formViewClients = new FormViewClients();
+            this.Visible = false; 
+            formViewClients.ShowDialog();
+            this.Close();
         }
     }
 }
