@@ -49,7 +49,8 @@ namespace Kursivoy_Konkin
         private void button3_Click_1(object sender, EventArgs e)
         {
             FormViewObject f = new FormViewObject();
-            f.Show();
+            this.Visible = false;   
+            f.ShowDialog();
             this.Close();
         }
 
