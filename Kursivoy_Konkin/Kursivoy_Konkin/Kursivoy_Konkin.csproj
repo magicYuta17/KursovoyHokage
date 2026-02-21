@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data.cs" />
     <Compile Include="connect.cs" />
     <Compile Include="Admin\FormAdminObject.cs">
       <SubType>Form</SubType>
@@ -86,6 +87,12 @@
     <Compile Include="Admin\FormAdminEditWorker.Designer.cs">
       <DependentUpon>FormAdminEditWorker.cs</DependentUpon>
     </Compile>
+    <Compile Include="Admin\FormAdminAddObject.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Admin\FormAdminAddObject.Designer.cs">
+      <DependentUpon>FormAdminAddObject.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormAutorization.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,7 +129,6 @@
     <Compile Include="Manager\FormManagerAddClient.Designer.cs">
       <DependentUpon>FormManagerAddClient.cs</DependentUpon>
     </Compile>
-    <Compile Include="Manager\FormManagerClientBase.cs" />
     <Compile Include="Manager\FormManagerEditClients.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -162,6 +168,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TextBoxFilters.cs" />
+    <EmbeddedResource Include="Admin\FormAdminAddObject.resx">
+      <DependentUpon>FormAdminAddObject.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Admin\FormAdminNavigation.resx">
       <DependentUpon>FormAdminNavigation.cs</DependentUpon>
     </EmbeddedResource>
@@ -248,6 +257,8 @@
     </Content>
     <Content Include="picture.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="photo_object\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,42 +1,135 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Data;
+using System.Data.SqlClient;
+using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
 
 namespace Kursivoy_Konkin
 {
     public partial class FormAdminObject : Form
     {
-        private string ConnectionString = connect.con;
-
         public FormAdminObject()
         {
             InitializeComponent();
-            LoadObjectTable();
+            this.Load += FormAdminObject_Load;
         }
 
-        private void LoadObjectTable()
+        private void InitializeContextMenu()
+        {
+
+            dataGridView1.ContextMenuStrip = contextMenuStrip1;
+
+        }
+
+
+        private void LoadData()
         {
             try
             {
-                string query = "SELECT ID_object, square, cost, building_dates, number_floors, parking_space, connection_contract_object_idconnection_contract_object FROM object";
+                dataGridView1.Columns.Clear();
+                dataGridView1.AutoGenerateColumns = true;
 
-                using (MySqlConnection connection = new MySqlConnection(ConnectionString))
-                using (MySqlCommand command = new MySqlCommand(query, connection))
-                using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
+                string query = @"
+            SELECT 
+                ID_object,
+                square AS 'Площадь',
+                cost AS 'Стоимость',
+                building_dates AS 'Дата постройки',
+                number_floors AS 'Количество комнат',
+                parking_space AS 'Площадь парковки',
+                photo
+            FROM object
+            WHERE IsDeleted = 0;";
+
+                using (var connection = new MySqlConnection(connect.con))
+                using (var command = new MySqlCommand(query, connection))
+                using (var adapter = new MySqlDataAdapter(command))
                 {
-                    DataTable table = new DataTable();
+                    var table = new DataTable();
                     connection.Open();
                     adapter.Fill(table);
 
-                    // Устанавливаем источник данных для dataGridView1
+                    if (table.Rows.Count == 0)
+                    {
+                        MessageBox.Show("Данные не найдены.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+
+                    // Привязываем данные к DataGridView
                     dataGridView1.DataSource = table;
 
-                    // Устанавливаем заголовки колонок на русском языке
-                    SetColumnHeaders();
+                    // Скрываем столбец ID_object
+                    if (dataGridView1.Columns["ID_object"] != null)
+                        dataGridView1.Columns["ID_object"].Visible = false;
 
-                    // Скрываем ненужные колонки
-                    HideColumns();
+                    // Скрываем колонку photo (raw данные из БД)
+                    if (dataGridView1.Columns["photo"] != null)
+                        dataGridView1.Columns["photo"].Visible = false;
+
+                    // Добавляем колонку для отображения фото
+                    var imageColumn = new DataGridViewImageColumn
+                    {
+                        Name = "Фото",
+                        HeaderText = "Фото",
+                        ImageLayout = DataGridViewImageCellLayout.Zoom,
+                        Width = 80,
+                        SortMode = DataGridViewColumnSortMode.NotSortable
+                    };
+                    dataGridView1.Columns.Add(imageColumn);
+
+                    // Путь к папке с фотографиями
+                    string photoDirectory = Path.Combine(Application.StartupPath, "photo_object");
+
+                    // Заглушка из ресурсов
+                    Image placeholder = Properties.Resources.picture;
+
+                    // Заполняем колонку "Фото"
+                    foreach (DataGridViewRow row in dataGridView1.Rows)
+                    {
+                        if (row.IsNewRow) continue;
+
+                        // Читаем имя файла напрямую из DataTable
+                        object photoFileName = table.Rows[row.Index]["photo"];
+
+                        if (photoFileName == null || photoFileName == DBNull.Value || string.IsNullOrWhiteSpace(photoFileName.ToString()))
+                        {
+                            row.Cells["Фото"].Value = placeholder;
+                            continue;
+                        }
+
+                        try
+                        {
+                            string photoPath = Path.Combine(photoDirectory, photoFileName.ToString());
+                            System.Diagnostics.Debug.WriteLine($"Путь к фото: {photoPath}");
+
+                            if (File.Exists(photoPath))
+                            {
+                                using (var img = Image.FromFile(photoPath))
+                                {
+                                    row.Cells["Фото"].Value = new Bitmap(img);
+                                }
+                            }
+                            else
+                            {
+                                System.Diagnostics.Debug.WriteLine($"Файл не найден: {photoPath}");
+                                row.Cells["Фото"].Value = placeholder;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"Ошибка загрузки изображения: {ex.Message}");
+                            row.Cells["Фото"].Value = placeholder;
+                        }
+                    }
+
+                    // Отключаем сортировку у всех колонок
+                    foreach (DataGridViewColumn col in dataGridView1.Columns)
+                        col.SortMode = DataGridViewColumnSortMode.NotSortable;
+
+                    dataGridView1.RowTemplate.Height = 80;
+                    dataGridView1.ClearSelection();
                 }
             }
             catch (Exception ex)
@@ -45,38 +138,8 @@ namespace Kursivoy_Konkin
             }
         }
 
-        private void SetColumnHeaders()
-        {
-            if (dataGridView1.Columns.Contains("ID_object"))
-                dataGridView1.Columns["ID_object"].HeaderText = "ID объекта";
 
-            if (dataGridView1.Columns.Contains("square"))
-                dataGridView1.Columns["square"].HeaderText = "Площадь";
 
-            if (dataGridView1.Columns.Contains("cost"))
-                dataGridView1.Columns["cost"].HeaderText = "Стоимость";
-
-            if (dataGridView1.Columns.Contains("building_dates"))
-                dataGridView1.Columns["building_dates"].HeaderText = "Сроки строительства";
-
-            if (dataGridView1.Columns.Contains("number_floors"))
-                dataGridView1.Columns["number_floors"].HeaderText = "Количество этажей";
-
-            if (dataGridView1.Columns.Contains("parking_space"))
-                dataGridView1.Columns["parking_space"].HeaderText = "Парковочные места";
-
-            if (dataGridView1.Columns.Contains("connection_contract_object_idconnection_contract_object"))
-                dataGridView1.Columns["connection_contract_object_idconnection_contract_object"].HeaderText = "ID контракта";
-        }
-
-        private void HideColumns()
-        {
-            if (dataGridView1.Columns.Contains("ID_object"))
-                dataGridView1.Columns["ID_object"].Visible = false;
-
-            if (dataGridView1.Columns.Contains("connection_contract_object_idconnection_contract_object"))
-                dataGridView1.Columns["connection_contract_object_idconnection_contract_object"].Visible = false;
-        }
 
         private void button5_Click(object sender, EventArgs e)
         {
@@ -84,6 +147,87 @@ namespace Kursivoy_Konkin
             this.Visible = false;
             f.ShowDialog();
             this.Close();
+        }
+
+        private void FormAdminObject_Load(object sender, EventArgs e)
+        {
+            LoadData();
+            InitializeContextMenu();
+        }
+
+        private void dataGridView1_MouseClick(object sender, MouseEventArgs e)
+        {
+
+            try
+            {
+                if (e.Button == MouseButtons.Right)
+                {
+                    var hitTest = dataGridView1.HitTest(e.X, e.Y);
+
+                    // Открываем меню только если кликнули на строку, не на заголовок
+                    if (hitTest.RowIndex >= 0)
+                    {
+                        // Выделяем строку по которой кликнули
+                        dataGridView1.ClearSelection();
+                        dataGridView1.Rows[hitTest.RowIndex].Selected = true;
+                        dataGridView1.CurrentCell = dataGridView1.Rows[hitTest.RowIndex].Cells[0];
+
+                        contextMenuStrip1.Show(dataGridView1, e.Location);
+                    }
+                }
+            }
+            catch(Exception ex) { }
+        }
+
+        private void добавитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            FormAdminAddObject f = new FormAdminAddObject();
+            this.Visible = false;
+            f.ShowDialog();
+            this.Close();
+        }
+
+        private void редактироватьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void удалитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.SelectedRows.Count > 0)
+            {
+                // Получаем ID объекта из выбранной строки
+                int clientId = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["ID_object"].Value);
+
+                // Подтверждение удаления
+                var result = MessageBox.Show("Вы уверены, что хотите удалить объект?", "Подтверждение", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    try
+                    {
+                        string query = "UPDATE mydb.object SET IsDeleted = 1 WHERE ID_object = @IDobject;";
+                        using (var connection = new MySqlConnection(connect.con))
+                        using (var command = new MySqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("@IDobject", clientId);
+                            connection.Open();
+                            command.ExecuteNonQuery();
+                        }
+
+                        // Обновляем таблицу после удаления объекта
+                        LoadData();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Ошибка при удалении объекта: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Выведите клиента для удаления.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
     }
 }

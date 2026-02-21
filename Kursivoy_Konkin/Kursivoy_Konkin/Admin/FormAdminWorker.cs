@@ -69,12 +69,15 @@ namespace Kursivoy_Konkin
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
-        private void buttonBack_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            // Возврат на предыдущую форму
+           
             FormAdminNavigation adminNavigation = new FormAdminNavigation();
-            adminNavigation.Show();
+            this.Visible = false;
+            adminNavigation.ShowDialog();
             this.Close();
         }
+
+       
     }
 }
