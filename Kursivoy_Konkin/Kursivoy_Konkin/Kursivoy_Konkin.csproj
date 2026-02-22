@@ -33,6 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Interop.Microsoft.Office.Interop.Word">
+      <HintPath>.\Interop.Microsoft.Office.Interop.Word.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="MySql.Data">
       <HintPath>..\..\MySql.Data.dll</HintPath>
     </Reference>
@@ -141,6 +145,12 @@
     <Compile Include="Manager\FormManagerNavigation.Designer.cs">
       <DependentUpon>FormManagerNavigation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Manager\FormManagerViewContract.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Manager\FormManagerViewContract.Designer.cs">
+      <DependentUpon>FormManagerViewContract.cs</DependentUpon>
+    </Compile>
     <Compile Include="Manager\FormPrintContract.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -209,6 +219,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Manager\FormManagerNavigation.resx">
       <DependentUpon>FormManagerNavigation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Manager\FormManagerViewContract.resx">
+      <DependentUpon>FormManagerViewContract.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Manager\FormPrintContract.resx">
       <DependentUpon>FormPrintContract.cs</DependentUpon>

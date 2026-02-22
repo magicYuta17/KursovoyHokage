@@ -229,5 +229,10 @@ namespace Kursivoy_Konkin
                 MessageBox.Show("Выведите клиента для удаления.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }

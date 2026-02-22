@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kursivoy_Konkin.Manager;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -41,9 +42,11 @@ namespace Kursivoy_Konkin
 
         private void button2_Click(object sender, EventArgs e)
         {
-            FormViewContract f = new FormViewContract();
-            f.Show();
-            this.Close();  
+
+            FormManagerViewContract f = new FormManagerViewContract();
+            this.Visible = false;
+            f.ShowDialog();
+            this.Close();
         }
 
         private void button3_Click_1(object sender, EventArgs e)
@@ -56,9 +59,6 @@ namespace Kursivoy_Konkin
 
         private void button4_Click_1(object sender, EventArgs e)
         {
-            FormPrintContract f = new FormPrintContract();
-            f.Show();
-            this.Close();
         }
 
         private void button5_Click(object sender, EventArgs e)
