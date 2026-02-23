@@ -1,9 +1,9 @@
 ﻿using MySql.Data.MySqlClient;
-using MySql.Data.MySqlClient;
 using System;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Kursivoy_Konkin
 {
@@ -237,7 +237,7 @@ private void MenuItemDelete_Click(object sender, EventArgs e)
 
             // Инициализация ComboBox
             comboBox1.Items.AddRange(new[] { "ФИО", "Статус", "LTV" });
-            comboBox3.Items.AddRange(new[] { "Все", "Больше 500 000", "Меньше 1 000 000", "Больше 2 000 000" });
+            comboBox2.Items.AddRange(new[] { "Все", "Больше 500 000", "Меньше 1 000 000", "Больше 2 000 000" });
 
             // Загрузка статусов из базы данных
             LoadStatusesToComboBox3();
@@ -273,6 +273,7 @@ private void MenuItemDelete_Click(object sender, EventArgs e)
             textBox1.TextChanged += (s, e) => ApplyFilters();
             comboBox1.SelectedIndexChanged += (s, e) => ApplyFilters();
             comboBox3.SelectedIndexChanged += (s, e) => ApplyFilters();
+            comboBox2.SelectedIndexChanged += (s, e) => ApplyFilters();
         }
 
         private void ApplyFilters()
@@ -297,10 +298,10 @@ private void MenuItemDelete_Click(object sender, EventArgs e)
                 filteredData = filteredData.Where(row => row["Статус"].ToString() == selectedStatus);
             }
 
-            // Фильтрация по LTV (ComboBox3)
-            if (comboBox3.SelectedItem != null)
+            // Фильтрация по LTV (ComboBox2)
+            if (comboBox2.SelectedItem != null && comboBox2.SelectedItem.ToString() != "Все")
             {
-                switch (comboBox3.SelectedItem.ToString())
+                switch (comboBox2.SelectedItem.ToString())
                 {
                     case "Больше 500 000":
                         filteredData = filteredData.Where(row => Convert.ToDecimal(row["LTV"]) > 500000);
@@ -351,5 +352,9 @@ private void MenuItemDelete_Click(object sender, EventArgs e)
             this.Close();
         }
 
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

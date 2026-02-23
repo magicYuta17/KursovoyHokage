@@ -151,23 +151,11 @@
     <Compile Include="Manager\FormManagerViewContract.Designer.cs">
       <DependentUpon>FormManagerViewContract.cs</DependentUpon>
     </Compile>
-    <Compile Include="Manager\FormPrintContract.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Manager\FormPrintContract.Designer.cs">
-      <DependentUpon>FormPrintContract.cs</DependentUpon>
-    </Compile>
     <Compile Include="Manager\FormViewClients.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Manager\FormViewClients.Designer.cs">
       <DependentUpon>FormViewClients.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Manager\FormViewContract.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Manager\FormViewContract.Designer.cs">
-      <DependentUpon>FormViewContract.cs</DependentUpon>
     </Compile>
     <Compile Include="Manager\FormViewObject.cs">
       <SubType>Form</SubType>
@@ -223,14 +211,8 @@
     <EmbeddedResource Include="Manager\FormManagerViewContract.resx">
       <DependentUpon>FormManagerViewContract.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Manager\FormPrintContract.resx">
-      <DependentUpon>FormPrintContract.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Manager\FormViewClients.resx">
       <DependentUpon>FormViewClients.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Manager\FormViewContract.resx">
-      <DependentUpon>FormViewContract.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Manager\FormViewObject.resx">
       <DependentUpon>FormViewObject.cs</DependentUpon>

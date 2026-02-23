@@ -343,9 +343,6 @@ namespace Kursivoy_Konkin
 
         private void button1_Click(object sender, EventArgs e)
         {
-            FormViewClients formViewClients = new FormViewClients();
-            this.Visible = false; 
-            formViewClients.ShowDialog();
             this.Close();
 
         }
