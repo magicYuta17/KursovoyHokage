@@ -53,6 +53,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Admin\FormAdminEditObject.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Admin\FormAdminEditObject.Designer.cs">
+      <DependentUpon>FormAdminEditObject.cs</DependentUpon>
+    </Compile>
     <Compile Include="Data.cs" />
     <Compile Include="connect.cs" />
     <Compile Include="Admin\FormAdminObject.cs">
@@ -103,11 +109,11 @@
     <Compile Include="FormAutorization.Designer.cs">
       <DependentUpon>FormAutorization.cs</DependentUpon>
     </Compile>
-    <Compile Include="Head\FormHeadContract.cs">
+    <Compile Include="Head\FormHeadViewContract.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Head\FormHeadContract.Designer.cs">
-      <DependentUpon>FormHeadContract.cs</DependentUpon>
+    <Compile Include="Head\FormHeadViewContract.Designer.cs">
+      <DependentUpon>FormHeadViewContract.cs</DependentUpon>
     </Compile>
     <Compile Include="Head\FormHeadNavigation.cs">
       <SubType>Form</SubType>
@@ -169,6 +175,9 @@
     <EmbeddedResource Include="Admin\FormAdminAddObject.resx">
       <DependentUpon>FormAdminAddObject.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Admin\FormAdminEditObject.resx">
+      <DependentUpon>FormAdminEditObject.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Admin\FormAdminNavigation.resx">
       <DependentUpon>FormAdminNavigation.cs</DependentUpon>
     </EmbeddedResource>
@@ -187,8 +196,8 @@
     <EmbeddedResource Include="FormAutorization.resx">
       <DependentUpon>FormAutorization.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Head\FormHeadContract.resx">
-      <DependentUpon>FormHeadContract.cs</DependentUpon>
+    <EmbeddedResource Include="Head\FormHeadViewContract.resx">
+      <DependentUpon>FormHeadViewContract.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Head\FormHeadNavigation.resx">
       <DependentUpon>FormHeadNavigation.cs</DependentUpon>

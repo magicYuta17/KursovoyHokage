@@ -39,13 +39,15 @@
             this.labelspace = new System.Windows.Forms.Label();
             this.txtParkingSpace = new System.Windows.Forms.TextBox();
             this.buttonAddObject = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.txtDateDay = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.buttonAddPhoto = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.button2 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // label7
@@ -143,19 +145,6 @@
             this.buttonAddObject.UseVisualStyleBackColor = false;
             this.buttonAddObject.Click += new System.EventHandler(this.buttonAddObject_Click);
             // 
-            // button2
-            // 
-            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
-            this.button2.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.button2.Location = new System.Drawing.Point(35, 589);
-            this.button2.Margin = new System.Windows.Forms.Padding(4);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(245, 85);
-            this.button2.TabIndex = 53;
-            this.button2.Text = "Назад";
-            this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
             // txtDateDay
             // 
             this.txtDateDay.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
@@ -173,17 +162,6 @@
             this.label4.Size = new System.Drawing.Size(556, 47);
             this.label4.TabIndex = 51;
             this.label4.Text = "Количество дней для постройки";
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::Kursivoy_Konkin.Properties.Resources.picture;
-            this.pictureBox1.InitialImage = global::Kursivoy_Konkin.Properties.Resources.picture;
-            this.pictureBox1.Location = new System.Drawing.Point(699, 43);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(400, 300);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 54;
-            this.pictureBox1.TabStop = false;
             // 
             // buttonAddPhoto
             // 
@@ -211,16 +189,50 @@
             this.button3.UseVisualStyleBackColor = false;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::Kursivoy_Konkin.Properties.Resources.picture;
+            this.pictureBox1.InitialImage = global::Kursivoy_Konkin.Properties.Resources.picture;
+            this.pictureBox1.Location = new System.Drawing.Point(699, 43);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(400, 300);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 54;
+            this.pictureBox1.TabStop = false;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.Location = new System.Drawing.Point(287, 549);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(191, 130);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.TabIndex = 74;
+            this.pictureBox2.TabStop = false;
+            // 
+            // button2
+            // 
+            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
+            this.button2.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
+            this.button2.Location = new System.Drawing.Point(35, 549);
+            this.button2.Margin = new System.Windows.Forms.Padding(4);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(245, 125);
+            this.button2.TabIndex = 73;
+            this.button2.Text = "Назад";
+            this.button2.UseVisualStyleBackColor = false;
+            // 
             // FormAdminAddObject
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1170, 687);
+            this.Controls.Add(this.pictureBox2);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.buttonAddPhoto);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.button2);
             this.Controls.Add(this.buttonAddObject);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.labelspace);
@@ -238,6 +250,7 @@
             this.Name = "FormAdminAddObject";
             this.Text = "Добавление объекта - Админ";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -254,11 +267,12 @@
         private System.Windows.Forms.Label labelspace;
         private System.Windows.Forms.TextBox txtParkingSpace;
         private System.Windows.Forms.Button buttonAddObject;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.TextBox txtDateDay;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button buttonAddPhoto;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.Button button2;
     }
 }

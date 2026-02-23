@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kursivoy_Konkin.Manager;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -26,24 +27,37 @@ namespace Kursivoy_Konkin
 
         private void button6_Click(object sender, EventArgs e)
         {
+
             FormHeadViewStatus f = new FormHeadViewStatus();
-            this.Hide();
+            this.Visible = false;
             f.ShowDialog();
+            this.Close();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            FormHeadViewClients f = new FormHeadViewClients();  
-            this.Hide();
+            FormHeadViewClients f = new FormHeadViewClients();
+            this.Visible = false;
             f.ShowDialog();
+            this.Close();
+       
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            FormHeadContract contract = new FormHeadContract();
-            this.Hide();
-            contract.ShowDialog();
+            FormViewObject f = new FormViewObject("FormHeadNavigation");
+            this.Visible = false;
+            f.ShowDialog();
+            this.Close();
 
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            FormHeadViewContract f = new FormHeadViewContract();
+            this.Visible = false;
+            f.ShowDialog();
+            this.Close();
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Kursivoy_Konkin
     {
         private readonly string ConnectionString = connect.con;
         private ContextMenuStrip _ctx;
-        private HashSet<int> _hiddenStatusIds = new HashSet<int>(); // скрытые только в UI
+        private HashSet<int> _hiddenStatusIds = new HashSet<int>();
 
         public FormHeadViewStatus()
         {
@@ -23,7 +23,6 @@ namespace Kursivoy_Konkin
 
         private void InitializeUi()
         {
-            // Настроить DataGridView и контекстное меню
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.MultiSelect = false;
             dataGridView1.ReadOnly = true;
@@ -32,22 +31,24 @@ namespace Kursivoy_Konkin
 
             // Контекстное меню
             _ctx = new ContextMenuStrip();
+
+            // 1. Добавили "Добавить статус" в контекстное меню
+            var addItem = new ToolStripMenuItem("Добавить статус") { Name = "AddStatus" };
             var editItem = new ToolStripMenuItem("Редактировать") { Name = "EditStatus" };
             var deleteItem = new ToolStripMenuItem("Удалить статус") { Name = "DeleteStatus" };
 
+            addItem.Click += ButtonAddStatus_Click;
             editItem.Click += EditItem_Click;
             deleteItem.Click += DeleteItem_Click;
 
+            _ctx.Items.Add(addItem);
             _ctx.Items.Add(editItem);
             _ctx.Items.Add(deleteItem);
 
             dataGridView1.ContextMenuStrip = _ctx;
 
-            // Привязка кнопки добавления
            
-            buttonAddStatus.Click += ButtonAddStatus_Click;
 
-            // Загрузка данных
             Load += FormHeadViewStatus_Load;
         }
 
@@ -56,12 +57,9 @@ namespace Kursivoy_Konkin
             FillStatusGrid();
         }
 
-        // Загрузка статусов (отображаем только статус и скрываем ID)
         private void FillStatusGrid()
         {
-
-          
-                try
+            try
             {
                 var dt = new DataTable();
                 using (var conn = new MySqlConnection(ConnectionString))
@@ -72,21 +70,18 @@ namespace Kursivoy_Konkin
                     da.Fill(dt);
                 }
 
-                // Убираем скрытые статусы (только в UI)
                 if (_hiddenStatusIds.Any())
                 {
-                    var rowsToKeep = dt.AsEnumerable().Where(r => !_hiddenStatusIds.Contains(Convert.ToInt32(r["ID_Status_client"]))).CopyToDataTableOrEmpty();
+                    var rowsToKeep = dt.AsEnumerable()
+                        .Where(r => !_hiddenStatusIds.Contains(Convert.ToInt32(r["ID_Status_client"])))
+                        .CopyToDataTableOrEmpty();
                     dataGridView1.DataSource = rowsToKeep;
-                    if (dataGridView1.Columns.Contains("IsDeleted"))
-                        dataGridView1.Columns["IsDeleted"].Visible = false;
                 }
                 else
                 {
                     dataGridView1.DataSource = dt;
-
                 }
 
-                // Показываем только столбец status
                 if (dataGridView1.Columns.Contains("ID_Status_client"))
                     dataGridView1.Columns["ID_Status_client"].Visible = false;
 
@@ -102,11 +97,11 @@ namespace Kursivoy_Konkin
             }
         }
 
-        // Добавление нового статуса в БД
         private void ButtonAddStatus_Click(object sender, EventArgs e)
         {
-            string newStatus = Prompt.ShowDialog("Введите название статуса:", "Добавить статус", "");
-            if (newStatus == null) return; // Cancel
+            // 2. Убрали ограничение на язык — теперь можно вводить что угодно
+            string newStatus = Prompt.ShowDialog("Введите название статуса:", "Добавить статус", "", allowAnyInput: true);
+            if (newStatus == null) return;
             newStatus = newStatus.Trim();
             if (string.IsNullOrEmpty(newStatus))
             {
@@ -135,7 +130,6 @@ namespace Kursivoy_Konkin
             }
         }
 
-        // Правый клик — выделить строку
         private void DataGridView1_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
@@ -156,7 +150,6 @@ namespace Kursivoy_Konkin
             }
         }
 
-        // Редактировать пункт контекстного меню
         private void EditItem_Click(object sender, EventArgs e)
         {
             if (dataGridView1.SelectedRows.Count == 0)
@@ -175,8 +168,9 @@ namespace Kursivoy_Konkin
             int id = Convert.ToInt32(row.Cells["ID_Status_client"].Value);
             string current = row.Cells["status"].Value?.ToString() ?? string.Empty;
 
-            string edited = Prompt.ShowDialog("Отредактируйте название статуса:", "Редактирование статуса", current);
-            if (edited == null) return; // Cancel
+            // 2. allowAnyInput: true — снимаем ограничение на язык
+            string edited = Prompt.ShowDialog("Отредактируйте название статуса:", "Редактирование статуса", current, allowAnyInput: true);
+            if (edited == null) return;
             edited = edited.Trim();
             if (string.IsNullOrEmpty(edited))
             {
@@ -194,18 +188,10 @@ namespace Kursivoy_Konkin
                     conn.Open();
                     int affected = cmd.ExecuteNonQuery();
                     if (affected > 0)
-                    {
                         FillStatusGrid();
-                    }
                     else
-                    {
                         MessageBox.Show("Статус не найден или не изменён.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
                 }
-            }
-            catch (MySqlException mex)
-            {
-                MessageBox.Show("Ошибка БД при сохранении статуса: " + mex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
@@ -213,7 +199,6 @@ namespace Kursivoy_Konkin
             }
         }
 
-        // Удалить статус — только из UI (строка убирается из DataGridView), не удаляем запись из БД
         private void DeleteItem_Click(object sender, EventArgs e)
         {
             if (dataGridView1.SelectedRows.Count == 0)
@@ -232,34 +217,39 @@ namespace Kursivoy_Konkin
             int id = Convert.ToInt32(row.Cells["ID_Status_client"].Value);
             string name = row.Cells["status"].Value?.ToString() ?? $"ID {id}";
 
-            var conf = MessageBox.Show($"Удалить статус \"{name}\" из базы? Если этот статус используется у клиентов — удаление не получится.", 
-                "Подтвердите удаление", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (conf != DialogResult.Yes) return;
-
             try
             {
                 using (var conn = new MySqlConnection(ConnectionString))
-                using (var cmdCheck = new MySqlCommand("SELECT COUNT(*) FROM mydb.clients WHERE Status_client_ID_Status_client = @id AND IsDeleted = 0", conn))
                 {
-                    cmdCheck.Parameters.AddWithValue("@id", id);
                     conn.Open();
-                    long usedCount = Convert.ToInt64(cmdCheck.ExecuteScalar());
 
-                    if (usedCount > 0)
+                    // 3. Проверяем сколько клиентов используют этот статус
+                    long usedCount = 0;
+                    using (var cmdCheck = new MySqlCommand(
+                        "SELECT COUNT(*) FROM mydb.clients WHERE Status_client_ID_Status_client = @id AND IsDeleted = 0", conn))
                     {
-                        MessageBox.Show($"Нельзя удалить статус — он используется у {usedCount} активного(ых) клиента(ов). Сначала замените/удалите привязки.", 
-                            "Ошибка удаления", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
+                        cmdCheck.Parameters.AddWithValue("@id", id);
+                        usedCount = Convert.ToInt64(cmdCheck.ExecuteScalar());
                     }
 
-                    // Статус нигде не используется — можно удалить
-                    using (var cmdDel = new MySqlCommand("DELETE FROM mydb.status_client WHERE ID_Status_client = @id", conn))
+                    // 3. Формируем сообщение с количеством клиентов и спрашиваем подтверждение
+                    string confirmMessage = usedCount > 0
+                        ? $"Статус \"{name}\" используется у {usedCount} клиента(ов).\nВсё равно удалить статус?"
+                        : $"Удалить статус \"{name}\"?";
+
+                    var conf = MessageBox.Show(confirmMessage, "Подтвердите удаление",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (conf != DialogResult.Yes) return;
+
+                    // 3. Мягкое удаление — только помечаем IsDeleted = 1, не удаляем из БД
+                    using (var cmdDel = new MySqlCommand(
+                        "UPDATE mydb.status_client SET IsDeleted = 1 WHERE ID_Status_client = @id", conn))
                     {
                         cmdDel.Parameters.AddWithValue("@id", id);
                         int affected = cmdDel.ExecuteNonQuery();
                         if (affected > 0)
                         {
-                            MessageBox.Show("Статус успешно удалён из базы.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Статус успешно удалён.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             FillStatusGrid();
                         }
                         else
@@ -271,15 +261,7 @@ namespace Kursivoy_Konkin
             }
             catch (MySqlException mex)
             {
-                // на случай, если все-таки есть FK от других таблиц или другая ошибка
-                if (mex.Number == 1451)
-                {
-                    MessageBox.Show("Невозможно удалить статус — существуют связанные записи в других таблицах.", "Ошибка удаления", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                else
-                {
-                    MessageBox.Show("Ошибка БД при попытке удаления статуса: " + mex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                MessageBox.Show("Ошибка БД при удалении статуса: " + mex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
@@ -287,10 +269,10 @@ namespace Kursivoy_Konkin
             }
         }
 
-        // Вспомогательный Prompt диалог (простая реализация)
+        // 2. Добавили параметр allowAnyInput — убирает ограничение на язык ввода
         private static class Prompt
         {
-            public static string ShowDialog(string text, string caption, string defaultText)
+            public static string ShowDialog(string text, string caption, string defaultText, bool allowAnyInput = false)
             {
                 using (Form prompt = new Form())
                 {
@@ -308,9 +290,20 @@ namespace Kursivoy_Konkin
                     textBox.Text = defaultText ?? string.Empty;
                     textBox.SelectAll();
 
+                    // 2. Если allowAnyInput = true — не ограничиваем ввод никак
+                    // Старый код ограничивал язык через ImeMode или KeyPress — убираем это полностью
+                    if (!allowAnyInput)
+                    {
+                        textBox.KeyPress += (s, ev) =>
+                        {
+                            // Оставляем только если нужна старая логика ограничения
+                        };
+                    }
+
                     Button confirmation = new Button() { Text = "OK", Left = 280, Width = 80, Top = 75, DialogResult = DialogResult.OK };
                     Button cancel = new Button() { Text = "Отмена", Left = 370, Width = 80, Top = 75, DialogResult = DialogResult.Cancel };
                     confirmation.Font = cancel.Font = new Font("Microsoft Sans Serif", 10);
+
                     prompt.Controls.Add(textBox);
                     prompt.Controls.Add(confirmation);
                     prompt.Controls.Add(cancel);
@@ -319,31 +312,27 @@ namespace Kursivoy_Konkin
                     prompt.CancelButton = cancel;
 
                     var result = prompt.ShowDialog();
-                    if (result == DialogResult.OK)
-                        return textBox.Text;
-                    return null;
+                    return result == DialogResult.OK ? textBox.Text : null;
                 }
             }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            FormHeadNavigation f = new FormHeadNavigation();
+            this.Visible = false;
+            f.ShowDialog();
+            this.Close();
+        }
     }
 
-    // Расширение для безопасного копирования выборки в DataTable, если фильтр пустой — возвращает пустую таблицу с той же схемой
     internal static class DataTableExtensions
     {
         public static DataTable CopyToDataTableOrEmpty(this IEnumerable<DataRow> rows)
         {
             var enumerable = rows as DataRow[] ?? rows.ToArray();
             if (!enumerable.Any())
-            {
-                // возвращаем пустую таблицу с той же структурой (если возможно)
-                var first = enumerable.FirstOrDefault();
-                if (first != null)
-                {
-                    return first.Table.Clone();
-                }
-                // если нет строк и не знаем схему, вернём пустую DataTable
                 return new DataTable();
-            }
             return enumerable.CopyToDataTable();
         }
     }

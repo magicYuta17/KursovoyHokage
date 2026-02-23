@@ -1,17 +1,21 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
 
 namespace Kursivoy_Konkin
 {
     public partial class FormViewObject : Form
     {
-        public FormViewObject()
+        private readonly string _callerFormName;
+        public FormViewObject(string callerFormName = "FormManagerNavigation")
         {
             InitializeComponent();
+            _callerFormName = callerFormName;
             LoadData();
+            this.Load += FormViewObject_Load;
         }
 
         private void LoadData()
@@ -23,13 +27,15 @@ namespace Kursivoy_Konkin
 
                 string query = @"
             SELECT 
+                ID_object,
                 square AS 'Площадь',
                 cost AS 'Стоимость',
                 building_dates AS 'Дата постройки',
-                number_floors AS 'Этажность',
-                parking_space AS 'Парковка',
-                photo AS 'PhotoBlob'
-            FROM object;";
+                number_floors AS 'Количество комнат',
+                parking_space AS 'Площадь парковки',
+                photo
+            FROM object
+            WHERE IsDeleted = 0;";
 
                 using (var connection = new MySqlConnection(connect.con))
                 using (var command = new MySqlCommand(query, connection))
@@ -45,18 +51,18 @@ namespace Kursivoy_Konkin
                         return;
                     }
 
+                    // Привязываем данные к DataGridView
                     dataGridView1.DataSource = table;
 
-                    // Скрываем технический столбец с BLOB
-                    if (dataGridView1.Columns["PhotoBlob"] != null)
-                        dataGridView1.Columns["PhotoBlob"].Visible = false;
+                    // Скрываем столбец ID_object
+                    if (dataGridView1.Columns["ID_object"] != null)
+                        dataGridView1.Columns["ID_object"].Visible = false;
 
-                    // Размеры под фото
-                    dataGridView1.AllowUserToAddRows = false;
-                    dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
-                    dataGridView1.RowTemplate.Height = 80;
+                    // Скрываем колонку photo (raw данные из БД)
+                    if (dataGridView1.Columns["photo"] != null)
+                        dataGridView1.Columns["photo"].Visible = false;
 
-                    // Добавляем колонку-картинку (как в примере)
+                    // Добавляем колонку для отображения фото
                     var imageColumn = new DataGridViewImageColumn
                     {
                         Name = "Фото",
@@ -67,17 +73,21 @@ namespace Kursivoy_Konkin
                     };
                     dataGridView1.Columns.Add(imageColumn);
 
+                    // Путь к папке с фотографиями
+                    string photoDirectory = Path.Combine(Application.StartupPath, "photo_object");
+
                     // Заглушка из ресурсов
                     Image placeholder = Properties.Resources.picture;
 
-                    // Заполняем колонку "Фото" из BLOB
+                    // Заполняем колонку "Фото"
                     foreach (DataGridViewRow row in dataGridView1.Rows)
                     {
                         if (row.IsNewRow) continue;
 
-                        object v = row.Cells["PhotoBlob"].Value;
+                        // Читаем имя файла напрямую из DataTable
+                        object photoFileName = table.Rows[row.Index]["photo"];
 
-                        if (v == null || v == DBNull.Value)
+                        if (photoFileName == null || photoFileName == DBNull.Value || string.IsNullOrWhiteSpace(photoFileName.ToString()))
                         {
                             row.Cells["Фото"].Value = placeholder;
                             continue;
@@ -85,25 +95,34 @@ namespace Kursivoy_Konkin
 
                         try
                         {
-                            byte[] bytes = (byte[])v;
+                            string photoPath = Path.Combine(photoDirectory, photoFileName.ToString());
+                            System.Diagnostics.Debug.WriteLine($"Путь к фото: {photoPath}");
 
-                            // ВАЖНО: делаем копию картинки, чтобы не зависеть от потока
-                            using (var ms = new System.IO.MemoryStream(bytes))
-                            using (var img = Image.FromStream(ms))
+                            if (File.Exists(photoPath))
                             {
-                                row.Cells["Фото"].Value = new Bitmap(img);
+                                using (var img = Image.FromFile(photoPath))
+                                {
+                                    row.Cells["Фото"].Value = new Bitmap(img);
+                                }
+                            }
+                            else
+                            {
+                                System.Diagnostics.Debug.WriteLine($"Файл не найден: {photoPath}");
+                                row.Cells["Фото"].Value = placeholder;
                             }
                         }
-                        catch
+                        catch (Exception ex)
                         {
+                            System.Diagnostics.Debug.WriteLine($"Ошибка загрузки изображения: {ex.Message}");
                             row.Cells["Фото"].Value = placeholder;
                         }
                     }
 
-                    // (как в примере) отключаем сортировку у всех колонок
+                    // Отключаем сортировку у всех колонок
                     foreach (DataGridViewColumn col in dataGridView1.Columns)
                         col.SortMode = DataGridViewColumnSortMode.NotSortable;
 
+                    dataGridView1.RowTemplate.Height = 80;
                     dataGridView1.ClearSelection();
                 }
             }
@@ -117,10 +136,29 @@ namespace Kursivoy_Konkin
 
         private void button1_Click(object sender, EventArgs e)
         {
-            FormManagerNavigation f = new FormManagerNavigation();
-            this.Visible = false;
-            f.ShowDialog();
-            this.Close();
+            Form previousForm = null;
+
+            switch (_callerFormName)
+            {
+                case "FormManagerNavigation":
+                    previousForm = new FormManagerNavigation();
+                    break;
+                case "FormHeadNavigation":
+                    previousForm = new FormHeadNavigation();
+                    break;
+            }
+
+            if (previousForm != null)
+            {
+                this.Visible = false;
+                previousForm.ShowDialog();
+                this.Close();
+            }
+        }
+
+        private void FormViewObject_Load(object sender, EventArgs e)
+        {
+            LoadData();
         }
     }
 }

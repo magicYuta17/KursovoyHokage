@@ -20,8 +20,11 @@ namespace Kursivoy_Konkin
 
         private void button1_Click(object sender, EventArgs e)
         {
+
+
             FormViewClients f = new FormViewClients();
-            f.Show();
+            this.Visible = false;
+            f.ShowDialog();
             this.Close();
         }
 
@@ -51,7 +54,7 @@ namespace Kursivoy_Konkin
 
         private void button3_Click_1(object sender, EventArgs e)
         {
-            FormViewObject f = new FormViewObject();
+            FormViewObject f = new FormViewObject("FormManagerNavigation");
             this.Visible = false;   
             f.ShowDialog();
             this.Close();

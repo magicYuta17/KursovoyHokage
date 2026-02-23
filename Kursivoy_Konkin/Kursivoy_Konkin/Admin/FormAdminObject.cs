@@ -190,7 +190,17 @@ namespace Kursivoy_Konkin
 
         private void редактироватьToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (dataGridView1.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Выберите объект для редактирования.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
+            int selectedId = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["ID_object"].Value);
+            FormAdminEditObject f = new FormAdminEditObject(selectedId);
+            this.Visible = false;
+            f.ShowDialog();
+            this.Close();
         }
 
         private void удалитьToolStripMenuItem_Click(object sender, EventArgs e)

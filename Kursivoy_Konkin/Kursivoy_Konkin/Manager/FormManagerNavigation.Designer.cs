@@ -114,7 +114,7 @@
             this.Controls.Add(this.button1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormManagerNavigation";
-            this.Text = "FormManagerNavigation";
+            this.Text = "Форма навигации - Менеджер";
             this.Load += new System.EventHandler(this.FormManagerNavigation_Load);
             this.ResumeLayout(false);
 
