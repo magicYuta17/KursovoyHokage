@@ -99,7 +99,10 @@ namespace Kursivoy_Konkin.Manager
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            FormHeadNavigation f = new FormHeadNavigation();
+            this.Visible = false;
+            f.ShowDialog();
+            this.Close();
         }
     }
 }

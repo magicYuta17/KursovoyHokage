@@ -20,57 +20,32 @@ namespace Kursivoy_Konkin
 
         private void button1_Click(object sender, EventArgs e)
         {
-
-
             FormViewClients f = new FormViewClients();
             this.Visible = false;
-            f.ShowDialog();
+            f.ShowDialog(); 
             this.Close();
-        }
-
-        private void FormManagerNavigation_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-
             FormManagerViewContract f = new FormManagerViewContract();
             this.Visible = false;
             f.ShowDialog();
             this.Close();
+
         }
 
         private void button3_Click_1(object sender, EventArgs e)
         {
             FormViewObject f = new FormViewObject("FormManagerNavigation");
-            this.Visible = false;   
+            this.Visible = false;
             f.ShowDialog();
             this.Close();
         }
 
-        private void button4_Click_1(object sender, EventArgs e)
-        {
-        }
-
         private void button5_Click(object sender, EventArgs e)
         {
-            FormAutorization f = new FormAutorization();
-            this.Visible = false;
-            f.ShowDialog(); 
-            this.Close();
-
+            this.Close(); // только кнопка назад закрывает навигацию
         }
     }
 }

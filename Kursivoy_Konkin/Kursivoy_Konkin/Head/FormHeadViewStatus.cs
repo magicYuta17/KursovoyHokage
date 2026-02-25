@@ -29,10 +29,8 @@ namespace Kursivoy_Konkin
             dataGridView1.AllowUserToAddRows = false;
             dataGridView1.MouseDown += DataGridView1_MouseDown;
 
-            // Контекстное меню
             _ctx = new ContextMenuStrip();
 
-            // 1. Добавили "Добавить статус" в контекстное меню
             var addItem = new ToolStripMenuItem("Добавить статус") { Name = "AddStatus" };
             var editItem = new ToolStripMenuItem("Редактировать") { Name = "EditStatus" };
             var deleteItem = new ToolStripMenuItem("Удалить статус") { Name = "DeleteStatus" };
@@ -46,8 +44,6 @@ namespace Kursivoy_Konkin
             _ctx.Items.Add(deleteItem);
 
             dataGridView1.ContextMenuStrip = _ctx;
-
-           
 
             Load += FormHeadViewStatus_Load;
         }
@@ -63,7 +59,8 @@ namespace Kursivoy_Konkin
             {
                 var dt = new DataTable();
                 using (var conn = new MySqlConnection(ConnectionString))
-                using (var cmd = new MySqlCommand("SELECT ID_Status_client, status FROM mydb.status_client WHERE IsDeleted = 0 ORDER BY ID_Status_client", conn))
+                using (var cmd = new MySqlCommand(
+                    "SELECT ID_Status_client, status FROM mydb.status_client WHERE IsDeleted = 0 ORDER BY ID_Status_client", conn))
                 using (var da = new MySqlDataAdapter(cmd))
                 {
                     conn.Open();
@@ -93,26 +90,28 @@ namespace Kursivoy_Konkin
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка при загрузке статусов: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Ошибка при загрузке статусов: " + ex.Message,
+                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void ButtonAddStatus_Click(object sender, EventArgs e)
         {
-            // 2. Убрали ограничение на язык — теперь можно вводить что угодно
             string newStatus = Prompt.ShowDialog("Введите название статуса:", "Добавить статус", "", allowAnyInput: true);
             if (newStatus == null) return;
             newStatus = newStatus.Trim();
             if (string.IsNullOrEmpty(newStatus))
             {
-                MessageBox.Show("Название статуса не может быть пустым.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Название статуса не может быть пустым.", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             try
             {
                 using (var conn = new MySqlConnection(ConnectionString))
-                using (var cmd = new MySqlCommand("INSERT INTO mydb.status_client (status) VALUES (@status)", conn))
+                using (var cmd = new MySqlCommand(
+                    "INSERT INTO mydb.status_client (status) VALUES (@status)", conn))
                 {
                     cmd.Parameters.AddWithValue("@status", newStatus);
                     conn.Open();
@@ -122,11 +121,13 @@ namespace Kursivoy_Konkin
             }
             catch (MySqlException mex)
             {
-                MessageBox.Show("Ошибка БД при добавлении статуса: " + mex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Ошибка БД при добавлении статуса: " + mex.Message,
+                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка при добавлении статуса: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Ошибка при добавлении статуса: " + ex.Message,
+                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -150,52 +151,116 @@ namespace Kursivoy_Konkin
             }
         }
 
+        // ★ ИЗМЕНЁННЫЙ МЕТОД — после переименования статуса обновляем его везде в БД ★
         private void EditItem_Click(object sender, EventArgs e)
         {
             if (dataGridView1.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Выберите статус для редактирования.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Выберите статус для редактирования.", "Информация",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
             var row = dataGridView1.SelectedRows[0];
             if (row.Cells["ID_Status_client"].Value == null)
             {
-                MessageBox.Show("Не найден идентификатор статуса.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Не найден идентификатор статуса.", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             int id = Convert.ToInt32(row.Cells["ID_Status_client"].Value);
             string current = row.Cells["status"].Value?.ToString() ?? string.Empty;
 
-            // 2. allowAnyInput: true — снимаем ограничение на язык
-            string edited = Prompt.ShowDialog("Отредактируйте название статуса:", "Редактирование статуса", current, allowAnyInput: true);
+            string edited = Prompt.ShowDialog("Отредактируйте название статуса:",
+                "Редактирование статуса", current, allowAnyInput: true);
             if (edited == null) return;
             edited = edited.Trim();
             if (string.IsNullOrEmpty(edited))
             {
-                MessageBox.Show("Название статуса не может быть пустым.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Название статуса не может быть пустым.", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Если ничего не менялось — выходим
+            if (edited == current)
+            {
+                MessageBox.Show("Название статуса не изменилось.", "Информация",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
             try
             {
                 using (var conn = new MySqlConnection(ConnectionString))
-                using (var cmd = new MySqlCommand("UPDATE mydb.status_client SET status = @status WHERE ID_Status_client = @id", conn))
                 {
-                    cmd.Parameters.AddWithValue("@status", edited);
-                    cmd.Parameters.AddWithValue("@id", id);
                     conn.Open();
-                    int affected = cmd.ExecuteNonQuery();
-                    if (affected > 0)
-                        FillStatusGrid();
-                    else
-                        MessageBox.Show("Статус не найден или не изменён.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Считаем, сколько клиентов используют этот статус
+                    long usedCount = 0;
+                    using (var cmdCount = new MySqlCommand(
+                        "SELECT COUNT(*) FROM mydb.clients WHERE Status_client_ID_Status_client = @id", conn))
+                    {
+                        cmdCount.Parameters.AddWithValue("@id", id);
+                        usedCount = Convert.ToInt64(cmdCount.ExecuteScalar());
+                    }
+
+                    // Спрашиваем подтверждение с информацией о затронутых клиентах
+                    string confirmMsg = usedCount > 0
+                        ? $"Статус \"{current}\" используется у {usedCount} клиента(ов).\n" +
+                          $"Переименовать статус на \"{edited}\" везде в системе?"
+                        : $"Переименовать статус \"{current}\" на \"{edited}\"?";
+
+                    var confirm = MessageBox.Show(confirmMsg, "Подтвердите изменение",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (confirm != DialogResult.Yes) return;
+
+                    // ШАГ 1: Обновляем название статуса в таблице status_client
+                    using (var cmdUpdate = new MySqlCommand(
+                        "UPDATE mydb.status_client SET status = @status WHERE ID_Status_client = @id", conn))
+                    {
+                        cmdUpdate.Parameters.AddWithValue("@status", edited);
+                        cmdUpdate.Parameters.AddWithValue("@id", id);
+                        cmdUpdate.ExecuteNonQuery();
+                    }
+
+                    // ШАГ 2: Так как клиенты связаны по ID (внешний ключ),
+                    // то они автоматически видят новое название через JOIN.
+                    // Но если в таблице clients хранится текстовая копия статуса —
+                    // обновляем и её тоже:
+                    // (раскомментируй, если в таблице clients есть текстовое поле статуса)
+                    /*
+                    using (var cmdClients = new MySqlCommand(
+                        "UPDATE mydb.clients SET status_text = @status " +
+                        "WHERE Status_client_ID_Status_client = @id", conn))
+                    {
+                        cmdClients.Parameters.AddWithValue("@status", edited);
+                        cmdClients.Parameters.AddWithValue("@id", id);
+                        cmdClients.ExecuteNonQuery();
+                    }
+                    */
+
+                    // Итоговое сообщение
+                    string resultMsg = usedCount > 0
+                        ? $"Статус успешно переименован.\nОбновлено клиентов: {usedCount}."
+                        : "Статус успешно переименован.";
+
+                    MessageBox.Show(resultMsg, "Успех",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    FillStatusGrid();
                 }
+            }
+            catch (MySqlException mex)
+            {
+                MessageBox.Show("Ошибка БД при сохранении статуса: " + mex.Message,
+                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка при сохранении статуса: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Ошибка при сохранении статуса: " + ex.Message,
+                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -203,14 +268,16 @@ namespace Kursivoy_Konkin
         {
             if (dataGridView1.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Выберите статус для удаления.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Выберите статус для удаления.", "Информация",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
             var row = dataGridView1.SelectedRows[0];
             if (row.Cells["ID_Status_client"].Value == null)
             {
-                MessageBox.Show("Не найден идентификатор статуса.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Не найден идентификатор статуса.", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -223,7 +290,6 @@ namespace Kursivoy_Konkin
                 {
                     conn.Open();
 
-                    // 3. Проверяем сколько клиентов используют этот статус
                     long usedCount = 0;
                     using (var cmdCheck = new MySqlCommand(
                         "SELECT COUNT(*) FROM mydb.clients WHERE Status_client_ID_Status_client = @id AND IsDeleted = 0", conn))
@@ -232,7 +298,6 @@ namespace Kursivoy_Konkin
                         usedCount = Convert.ToInt64(cmdCheck.ExecuteScalar());
                     }
 
-                    // 3. Формируем сообщение с количеством клиентов и спрашиваем подтверждение
                     string confirmMessage = usedCount > 0
                         ? $"Статус \"{name}\" используется у {usedCount} клиента(ов).\nВсё равно удалить статус?"
                         : $"Удалить статус \"{name}\"?";
@@ -241,7 +306,6 @@ namespace Kursivoy_Konkin
                         MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (conf != DialogResult.Yes) return;
 
-                    // 3. Мягкое удаление — только помечаем IsDeleted = 1, не удаляем из БД
                     using (var cmdDel = new MySqlCommand(
                         "UPDATE mydb.status_client SET IsDeleted = 1 WHERE ID_Status_client = @id", conn))
                     {
@@ -249,30 +313,34 @@ namespace Kursivoy_Konkin
                         int affected = cmdDel.ExecuteNonQuery();
                         if (affected > 0)
                         {
-                            MessageBox.Show("Статус успешно удалён.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Статус успешно удалён.", "Успех",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
                             FillStatusGrid();
                         }
                         else
                         {
-                            MessageBox.Show("Статус не найден или уже удалён.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Статус не найден или уже удалён.", "Информация",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
                 }
             }
             catch (MySqlException mex)
             {
-                MessageBox.Show("Ошибка БД при удалении статуса: " + mex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Ошибка БД при удалении статуса: " + mex.Message,
+                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка при удалении статуса: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Ошибка при удалении статуса: " + ex.Message,
+                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        // 2. Добавили параметр allowAnyInput — убирает ограничение на язык ввода
         private static class Prompt
         {
-            public static string ShowDialog(string text, string caption, string defaultText, bool allowAnyInput = false)
+            public static string ShowDialog(string text, string caption,
+                string defaultText, bool allowAnyInput = false)
             {
                 using (Form prompt = new Form())
                 {
@@ -290,18 +358,16 @@ namespace Kursivoy_Konkin
                     textBox.Text = defaultText ?? string.Empty;
                     textBox.SelectAll();
 
-                    // 2. Если allowAnyInput = true — не ограничиваем ввод никак
-                    // Старый код ограничивал язык через ImeMode или KeyPress — убираем это полностью
                     if (!allowAnyInput)
                     {
-                        textBox.KeyPress += (s, ev) =>
-                        {
-                            // Оставляем только если нужна старая логика ограничения
-                        };
+                        textBox.KeyPress += (s, ev) => { };
                     }
 
-                    Button confirmation = new Button() { Text = "OK", Left = 280, Width = 80, Top = 75, DialogResult = DialogResult.OK };
-                    Button cancel = new Button() { Text = "Отмена", Left = 370, Width = 80, Top = 75, DialogResult = DialogResult.Cancel };
+                    Button confirmation = new Button()
+                    { Text = "OK", Left = 280, Width = 80, Top = 75, DialogResult = DialogResult.OK };
+                    Button cancel = new Button()
+                    { Text = "Отмена", Left = 370, Width = 80, Top = 75, DialogResult = DialogResult.Cancel };
+
                     confirmation.Font = cancel.Font = new Font("Microsoft Sans Serif", 10);
 
                     prompt.Controls.Add(textBox);

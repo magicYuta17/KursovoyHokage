@@ -41,10 +41,10 @@ namespace Kursivoy_Konkin
             // 
             this.button5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
             this.button5.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.button5.Location = new System.Drawing.Point(55, 720);
+            this.button5.Location = new System.Drawing.Point(55, 716);
             this.button5.Margin = new System.Windows.Forms.Padding(4);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(597, 85);
+            this.button5.Size = new System.Drawing.Size(838, 85);
             this.button5.TabIndex = 25;
             this.button5.Text = "Назад";
             this.button5.UseVisualStyleBackColor = false;
@@ -83,7 +83,7 @@ namespace Kursivoy_Konkin
             this.button3.Location = new System.Drawing.Point(55, 319);
             this.button3.Margin = new System.Windows.Forms.Padding(4);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(597, 124);
+            this.button3.Size = new System.Drawing.Size(838, 124);
             this.button3.TabIndex = 27;
             this.button3.Text = "Просмотр, добавление, удаление и редактирование ролей";
             this.button3.UseVisualStyleBackColor = false;
@@ -95,7 +95,7 @@ namespace Kursivoy_Konkin
             this.button4.Location = new System.Drawing.Point(55, 451);
             this.button4.Margin = new System.Windows.Forms.Padding(4);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(597, 176);
+            this.button4.Size = new System.Drawing.Size(838, 176);
             this.button4.TabIndex = 28;
             this.button4.Text = "Восстановление БД,\r\nимпорт и экспорт данных,\r\nрезервное копирование БД\r\n\r\n\r\n\r\n";
             this.button4.UseVisualStyleBackColor = false;
@@ -114,7 +114,7 @@ namespace Kursivoy_Konkin
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormAdminNavigation";
-            this.Text = "FormAdmin";
+            this.Text = "Навигация - Админ";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormAdmin_FormClosing);
             this.ResumeLayout(false);
 

@@ -74,8 +74,8 @@ namespace Kursivoy_Konkin
                 return;
             }
 
-            string fileName = Path.Combine(Application.StartupPath, "doc", "printLTV.docx");
-
+            string projectDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\"));
+            string fileName = Path.Combine(projectDir, "docPrint", "printLTV.docx");
             if (!File.Exists(fileName))
             {
                 MessageBox.Show($"Шаблон не найден:\n{fileName}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -479,7 +479,10 @@ namespace Kursivoy_Konkin
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            FormHeadNavigation f = new FormHeadNavigation();
+            this.Visible = false;
+            f.ShowDialog();
+            this.Close();
         }
     }
 

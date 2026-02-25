@@ -200,6 +200,7 @@ namespace Kursivoy_Konkin
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormAutorization";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Авторизация";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormAutorization_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);

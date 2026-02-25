@@ -166,8 +166,8 @@ namespace Kursivoy_Konkin.Manager
                 }
 
                 // Путь к шаблону Word (положи шаблон в bin\Debug\doc\contract.docx)
-                string fileName = Path.Combine(Application.StartupPath, "doc", "contract.docx");
-
+                string projectDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\"));
+                string fileName = Path.Combine(projectDir, "docPrint", "contract.docx");
                 if (!File.Exists(fileName))
                 {
                     MessageBox.Show($"Шаблон не найден:\n{fileName}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);

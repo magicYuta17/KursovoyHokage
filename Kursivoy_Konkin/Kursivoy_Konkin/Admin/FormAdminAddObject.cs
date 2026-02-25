@@ -194,5 +194,13 @@ namespace Kursivoy_Konkin
 
             }
         }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            FormAdminObject f = new FormAdminObject();
+            this.Visible = false;
+            f.ShowDialog();
+            this.Close();
+        }
     }
 }

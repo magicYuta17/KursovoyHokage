@@ -18,6 +18,7 @@ namespace Kursivoy_Konkin
         {
             InitializeComponent();
             SetupFormConstraints();
+            LoadStatusCombo();
             // Подписки на кнопки
             this.buttonEditClient.Click += buttonEditClient_Click;
         }
