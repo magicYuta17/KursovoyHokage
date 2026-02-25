@@ -139,6 +139,12 @@
     <Compile Include="Manager\FormManagerAddClient.Designer.cs">
       <DependentUpon>FormManagerAddClient.cs</DependentUpon>
     </Compile>
+    <Compile Include="Manager\FormManagerAddContract.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Manager\FormManagerAddContract.Designer.cs">
+      <DependentUpon>FormManagerAddContract.cs</DependentUpon>
+    </Compile>
     <Compile Include="Manager\FormManagerEditClients.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -211,6 +217,9 @@
     <EmbeddedResource Include="Manager\FormManagerAddClient.resx">
       <DependentUpon>FormManagerAddClient.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Manager\FormManagerAddContract.resx">
+      <DependentUpon>FormManagerAddContract.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Manager\FormManagerEditClients.resx">
       <DependentUpon>FormManagerEditClients.cs</DependentUpon>
     </EmbeddedResource>
@@ -261,7 +270,7 @@
     <Content Include="3.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="dumb.sql" />
+    <Content Include="dumb and dll\dumb.sql" />
     <Content Include="img\get-in.png" />
     <Content Include="img\icon.ico" />
     <Content Include="img\icons8-ягуар-48.ico" />
@@ -270,7 +279,7 @@
     <Content Include="img\reset.png" />
     <Content Include="img\save.png" />
     <Content Include="img\setting.png" />
-    <Content Include="MySql.Data.dll" />
+    <Content Include="dumb and dll\MySql.Data.dll" />
     <Content Include="picture.png" />
   </ItemGroup>
   <ItemGroup>

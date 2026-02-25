@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using YourNamespace;
 
 namespace Kursivoy_Konkin.Manager
 {
@@ -41,17 +42,37 @@ namespace Kursivoy_Konkin.Manager
                 dataGridView1.AutoGenerateColumns = true;
 
                 string query = @"
-            SELECT 
-                ID_Contract,
-                Name_contract AS 'Наименование контракта',
-                Cost AS 'Стоимость',
-                date_signing AS 'Дата подписи',
-                Construction_Dates AS 'Сроки строительства',
-                Clients_ID_Client,
-                worker_ID_worker,
-                connection_contract_object_idconnection_contract_object,
-                END_DATE AS 'Дата окончание договора о строительстве'         
-            FROM contract;";
+           SELECT 
+                    c.ID_Contract,
+                    c.Name_contract AS 'Наименование контракта',
+                    o.cost AS 'Стоимость',
+                    c.date_signing AS 'Дата подписи',
+                    o.building_dates AS 'Сроки строительства',
+    
+                    -- Данные клиента
+                    cl.ID_Client AS 'ID Клиента',
+                    cl.FullName_client AS 'ФИО Клиента',
+                    cl.phone AS 'Телефон клиента',
+    
+                    -- Данные работника
+                    w.ID_worker AS 'ID Работника',
+                    w.FIO AS 'ФИО Работника',
+                    w.phone AS 'Телефон работника',
+    
+                    c.connection_contract_object_idconnection_contract_object,
+                    c.END_DATE AS 'Дата окончание договора о строительстве'         
+
+                FROM contract c
+
+                LEFT JOIN object o 
+                    ON o.connection_contract_object_idconnection_contract_object 
+                     = c.connection_contract_object_idconnection_contract_object
+
+                LEFT JOIN clients cl 
+                    ON cl.ID_Client = c.Clients_ID_Client
+
+                LEFT JOIN worker w 
+                    ON w.ID_worker = c.worker_ID_worker;";
 
                 using (var connection = new MySqlConnection(connect.con))
                 using (var command = new MySqlCommand(query, connection))
@@ -73,10 +94,10 @@ namespace Kursivoy_Konkin.Manager
                     // Скрываем столбец ID_object
                     if (dataGridView1.Columns["ID_Contract"] != null)
                         dataGridView1.Columns["ID_Contract"].Visible = false;
-                    if (dataGridView1.Columns["Clients_ID_Client"] != null)
-                        dataGridView1.Columns["Clients_ID_Client"].Visible = false;
-                    if (dataGridView1.Columns["worker_ID_worker"] != null)
-                        dataGridView1.Columns["worker_ID_worker"].Visible = false;
+                    if (dataGridView1.Columns["ID Клиента"] != null)
+                        dataGridView1.Columns["ID Клиента"].Visible = false;
+                    if (dataGridView1.Columns["ID Работника"] != null)
+                        dataGridView1.Columns["ID Работника"].Visible = false;
                     if (dataGridView1.Columns["connection_contract_object_idconnection_contract_object"] != null)
                         dataGridView1.Columns["connection_contract_object_idconnection_contract_object"].Visible = false;
 
@@ -123,8 +144,8 @@ namespace Kursivoy_Konkin.Manager
                 string dateSigning = Convert.ToDateTime(dataRow["Дата подписи"]).ToString("dd.MM.yyyy");
                 string endDate = Convert.ToDateTime(dataRow["Дата окончание договора о строительстве"]).ToString("dd.MM.yyyy");
                 string constrDates = dataRow["Сроки строительства"].ToString();
-                int clientId = Convert.ToInt32(dataRow["Clients_ID_Client"]);
-                int workerId = Convert.ToInt32(dataRow["worker_ID_worker"]);
+                int clientId = Convert.ToInt32(dataRow["ID Клиента"]);
+                int workerId = Convert.ToInt32(dataRow["ID Работника"]);
 
                 // Получаем ФИО клиента из таблицы clients
                 string clientFio = "";
@@ -238,6 +259,14 @@ namespace Kursivoy_Konkin.Manager
                 }
             }
             catch (Exception ex) { }
+        }
+
+        private void добавитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormManagerAddContract f = new FormManagerAddContract();
+            this.Visible = false;
+            f.ShowDialog();
+            this.Close();
         }
     }
 }
