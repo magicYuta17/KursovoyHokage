@@ -16,6 +16,9 @@ namespace Kursivoy_Konkin
         public FormManagerNavigation()
         {
             InitializeComponent();
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = false;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -46,6 +49,13 @@ namespace Kursivoy_Konkin
         private void button5_Click(object sender, EventArgs e)
         {
             this.Close(); // только кнопка назад закрывает навигацию
+        }
+
+        private void FormManagerNavigation_Load(object sender, EventArgs e)
+        {
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = false;
         }
     }
 }

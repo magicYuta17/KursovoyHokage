@@ -16,6 +16,9 @@ namespace Kursivoy_Konkin
         public FormHeadNavigation()
         {
             InitializeComponent();
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = false;
         }
 
         private void button5_Click(object sender, EventArgs e)

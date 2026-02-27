@@ -18,6 +18,9 @@ namespace Kursivoy_Konkin
             InitializeComponent();
             SetupFormConstraints();
             LoadStatusCombo(); // Загрузка статусов при инициализации
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = false;
         }
         // =========================================================
         // 1. НАСТРОЙКА ОГРАНИЧЕНИЙ (ТОЛЬКО РУССКИЙ, ЦИФРЫ И Т.Д.)
@@ -345,6 +348,13 @@ namespace Kursivoy_Konkin
         {
             this.Close();
 
+        }
+
+        private void FormManagerAddClient_Load(object sender, EventArgs e)
+        {
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = false;
         }
     }
 }

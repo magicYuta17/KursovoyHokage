@@ -15,6 +15,9 @@ namespace Kursivoy_Konkin
         public FormAdminEditWorker()
         {
             InitializeComponent();
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = false;
         }
     }
 }

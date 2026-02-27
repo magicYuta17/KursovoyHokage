@@ -103,7 +103,6 @@
             this.MinimizeBox = false;
             this.Name = "FormManagerNavigation";
             this.Text = "Форма навигации - Менеджер";
-            
             this.ResumeLayout(false);
 
         }

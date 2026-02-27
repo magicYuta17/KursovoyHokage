@@ -13,6 +13,9 @@ namespace Kursivoy_Konkin
         {
             InitializeComponent();
             LoadWorkerTable();
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = false;
         }
 
         private void LoadWorkerTable()

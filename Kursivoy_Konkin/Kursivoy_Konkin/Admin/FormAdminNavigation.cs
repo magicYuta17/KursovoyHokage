@@ -15,6 +15,9 @@ namespace Kursivoy_Konkin
         public FormAdminNavigation()
         {
             InitializeComponent();
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = false;
         }
 
         private void FormAdmin_FormClosing(object sender, FormClosingEventArgs e)
@@ -50,6 +53,13 @@ namespace Kursivoy_Konkin
             FormAdminObject formAdminObject = new FormAdminObject();
             formAdminObject.ShowDialog();
             this.Close();
+        }
+
+        private void FormAdminNavigation_Load(object sender, EventArgs e)
+        {
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = false;
         }
     }
 }

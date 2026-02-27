@@ -16,6 +16,9 @@ namespace Kursivoy_Konkin
             InitializeComponent();
             InitializeContextMenu();
             InitializeSearchAndFilter();
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = false;
         }
 
         private void InitializeContextMenu()

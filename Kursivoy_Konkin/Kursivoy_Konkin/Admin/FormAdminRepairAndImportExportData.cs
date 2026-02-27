@@ -15,6 +15,9 @@ namespace Kursivoy_Konkin
         public FormAdminRepairAndImportExportData()
         {
             InitializeComponent();
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = false;
         }
 
         private void button2_Click(object sender, EventArgs e)

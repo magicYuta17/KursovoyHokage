@@ -18,6 +18,9 @@ namespace Kursivoy_Konkin
         public FormAutorization()
         {
             InitializeComponent();
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = false;
 
 
             captchaIMG.Visible = false;
@@ -28,6 +31,8 @@ namespace Kursivoy_Konkin
 
 
             this.Width = 600;
+
+            
         }
 
         private int lastCaptchaID = 0;
@@ -44,7 +49,9 @@ namespace Kursivoy_Konkin
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = false;
         }
 
         private void button2_Click(object sender, EventArgs e)

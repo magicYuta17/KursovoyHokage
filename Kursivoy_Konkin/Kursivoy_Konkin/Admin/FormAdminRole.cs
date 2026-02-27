@@ -15,6 +15,9 @@ namespace Kursivoy_Konkin
         public FormAdminRole()
         {
             InitializeComponent();
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = false;
         }
 
         private void button5_Click(object sender, EventArgs e)

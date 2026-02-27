@@ -19,6 +19,9 @@ namespace Kursivoy_Konkin
             objectId = id;
             SetupFormConstraints();
             LoadObjectData();
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = false;
         }
 
         private void SetupFormConstraints()

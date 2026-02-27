@@ -20,6 +20,9 @@ namespace Kursivoy_Konkin
         {
             InitializeComponent();
             SetupFormConstraints();
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = false;
 
         }
 
@@ -201,6 +204,13 @@ namespace Kursivoy_Konkin
             this.Visible = false;
             f.ShowDialog();
             this.Close();
+        }
+
+        private void FormAdminAddObject_Load(object sender, EventArgs e)
+        {
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = false;
         }
     }
 }

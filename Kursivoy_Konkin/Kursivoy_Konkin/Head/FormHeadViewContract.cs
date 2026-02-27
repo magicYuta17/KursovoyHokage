@@ -18,6 +18,9 @@ namespace Kursivoy_Konkin.Manager
         {
             InitializeComponent();
             this.Load += FormHeadViewContract_Load;
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = false;
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -93,6 +96,9 @@ namespace Kursivoy_Konkin.Manager
 
         private void FormHeadViewContract_Load(object sender, EventArgs e)
         {
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = false;
             LoadData();
             
         }

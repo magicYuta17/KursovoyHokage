@@ -21,6 +21,9 @@ namespace Kursivoy_Konkin
             LoadStatusCombo();
             // Подписки на кнопки
             this.buttonEditClient.Click += buttonEditClient_Click;
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = false;
         }
 
         // Загружаем список статусов в comboBox (можно вызывать перед LoadClientById)

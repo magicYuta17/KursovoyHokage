@@ -22,6 +22,9 @@ namespace Kursivoy_Konkin
             InitializeComponent();
             InitializeContextMenu();
             InitializeSearchAndFilter();
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = false;
 
         }
 
@@ -355,7 +358,10 @@ namespace Kursivoy_Konkin
 
         private void FormHeadViewClients_Load(object sender, EventArgs e)
         {
-            
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = false;
+
             FillTableData();
 
             // Обновляем данные о возрасте клиентов

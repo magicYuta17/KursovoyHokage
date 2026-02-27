@@ -19,6 +19,9 @@ namespace Kursivoy_Konkin
         {
             InitializeComponent();
             InitializeUi();
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = false;
         }
 
         private void InitializeUi()
@@ -50,6 +53,10 @@ namespace Kursivoy_Konkin
 
         private void FormHeadViewStatus_Load(object sender, EventArgs e)
         {
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = false;
+
             FillStatusGrid();
         }
 

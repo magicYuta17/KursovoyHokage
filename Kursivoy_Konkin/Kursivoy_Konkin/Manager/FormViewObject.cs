@@ -16,6 +16,9 @@ namespace Kursivoy_Konkin
             _callerFormName = callerFormName;
             LoadData();
             this.Load += FormViewObject_Load;
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = false;
         }
 
         private void LoadData()
@@ -158,6 +161,9 @@ namespace Kursivoy_Konkin
 
         private void FormViewObject_Load(object sender, EventArgs e)
         {
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = false;
             LoadData();
         }
     }
