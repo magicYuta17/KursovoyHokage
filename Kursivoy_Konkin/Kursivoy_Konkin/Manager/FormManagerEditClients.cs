@@ -54,7 +54,7 @@ namespace Kursivoy_Konkin
         {
             _clientId = clientId; // запоминаем id для дальнейшего обновления
 
-            string query = @"SELECT FullName_client, phone, Age, Status_client_ID_Status_client, Qualified_lead, LTV
+            string query = @"SELECT FullName_client, phone, Age, Status_client_ID_Status_client, LTV
                              FROM mydb.clients WHERE ID_Client = @id LIMIT 1;";
 
             try
@@ -75,7 +75,6 @@ namespace Kursivoy_Konkin
                         txtFullName_client.Text = reader["FullName_client"] == DBNull.Value ? string.Empty : reader["FullName_client"].ToString();
                         maskedTextBox1.Text = reader["phone"] == DBNull.Value ? string.Empty : reader["phone"].ToString();
                         txtAge.Text = reader["Age"] == DBNull.Value ? string.Empty : reader["Age"].ToString();
-                        txtQualified_lead.Text = reader["Qualified_lead"] == DBNull.Value ? string.Empty : reader["Qualified_lead"].ToString();
                         txtLTV.Text = reader["LTV"] == DBNull.Value ? string.Empty : reader["LTV"].ToString();
 
                         int statusId = reader["Status_client_ID_Status_client"] == DBNull.Value ? 0 : Convert.ToInt32(reader["Status_client_ID_Status_client"]);
@@ -174,7 +173,6 @@ namespace Kursivoy_Konkin
                     phone = @Phone,
                     Age = @Age,
                     Status_client_ID_Status_client = @IDStatus,
-                    Qualified_lead = @QLead,
                     LTV = @LTV,
                     photo_clients = @Photo
                 WHERE ID_Client = @IDClient;";
@@ -188,7 +186,6 @@ namespace Kursivoy_Konkin
                     cmd.Parameters.Add("@Phone", MySqlDbType.VarChar, 50).Value = maskedTextBox1.Text.Trim();
                     cmd.Parameters.Add("@Age", MySqlDbType.Int32).Value = age;
                     cmd.Parameters.Add("@IDStatus", MySqlDbType.Int32).Value = statusId;
-                    cmd.Parameters.Add("@QLead", MySqlDbType.VarChar, 50).Value = txtQualified_lead.Text.Trim();
                     cmd.Parameters.Add("@LTV", MySqlDbType.Decimal).Value = ltv;
 
                     cmd.Parameters.Add("@Photo", MySqlDbType.VarChar).Value = DBNull.Value; // Удаляем использование _selectedImagePath

@@ -34,7 +34,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.txtAge = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.txtLTV = new System.Windows.Forms.TextBox();
@@ -42,11 +41,10 @@
             this.comboBoxStatus = new System.Windows.Forms.ComboBox();
             this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
             this.buttonAdd = new System.Windows.Forms.Button();
-            this.comboBoxQualified_lead = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
@@ -93,16 +91,6 @@
             this.txtAge.Size = new System.Drawing.Size(283, 55);
             this.txtAge.TabIndex = 24;
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.label3.Location = new System.Drawing.Point(366, 147);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(98, 47);
-            this.label3.TabIndex = 27;
-            this.label3.Text = "Квал";
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -117,7 +105,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.label6.Location = new System.Drawing.Point(366, 279);
+            this.label6.Location = new System.Drawing.Point(366, 147);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(84, 47);
             this.label6.TabIndex = 31;
@@ -126,7 +114,7 @@
             // txtLTV
             // 
             this.txtLTV.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.txtLTV.Location = new System.Drawing.Point(374, 329);
+            this.txtLTV.Location = new System.Drawing.Point(374, 197);
             this.txtLTV.Name = "txtLTV";
             this.txtLTV.Size = new System.Drawing.Size(283, 55);
             this.txtLTV.TabIndex = 30;
@@ -173,19 +161,6 @@
             this.buttonAdd.UseVisualStyleBackColor = false;
             this.buttonAdd.Click += new System.EventHandler(this.buttonAdd_Click);
             // 
-            // comboBoxQualified_lead
-            // 
-            this.comboBoxQualified_lead.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxQualified_lead.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.comboBoxQualified_lead.FormattingEnabled = true;
-            this.comboBoxQualified_lead.Items.AddRange(new object[] {
-            "Да",
-            "Нет"});
-            this.comboBoxQualified_lead.Location = new System.Drawing.Point(374, 197);
-            this.comboBoxQualified_lead.Name = "comboBoxQualified_lead";
-            this.comboBoxQualified_lead.Size = new System.Drawing.Size(283, 55);
-            this.comboBoxQualified_lead.TabIndex = 43;
-            // 
             // label8
             // 
             this.label8.AutoSize = true;
@@ -204,16 +179,6 @@
             this.dateTimePicker1.Size = new System.Drawing.Size(354, 55);
             this.dateTimePicker1.TabIndex = 46;
             // 
-            // pictureBox2
-            // 
-            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(435, 483);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(328, 261);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.TabIndex = 47;
-            this.pictureBox2.TabStop = false;
-            // 
             // button1
             // 
             this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
@@ -227,6 +192,16 @@
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.Location = new System.Drawing.Point(435, 483);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(328, 261);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.TabIndex = 47;
+            this.pictureBox2.TabStop = false;
+            // 
             // FormManagerAddClient
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -237,7 +212,6 @@
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.dateTimePicker1);
             this.Controls.Add(this.label8);
-            this.Controls.Add(this.comboBoxQualified_lead);
             this.Controls.Add(this.buttonAdd);
             this.Controls.Add(this.maskedTextBox1);
             this.Controls.Add(this.comboBoxStatus);
@@ -245,7 +219,6 @@
             this.Controls.Add(this.label6);
             this.Controls.Add(this.txtLTV);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtAge);
             this.Controls.Add(this.label1);
@@ -267,7 +240,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtAge;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox txtLTV;
@@ -275,7 +247,6 @@
         private System.Windows.Forms.ComboBox comboBoxStatus;
         private System.Windows.Forms.MaskedTextBox maskedTextBox1;
         private System.Windows.Forms.Button buttonAdd;
-        private System.Windows.Forms.ComboBox comboBoxQualified_lead;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
         private System.Windows.Forms.PictureBox pictureBox2;

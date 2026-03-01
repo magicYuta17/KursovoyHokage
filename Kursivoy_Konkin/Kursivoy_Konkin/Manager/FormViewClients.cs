@@ -133,7 +133,6 @@ private void MenuItemDelete_Click(object sender, EventArgs e)
                         c.Birthday AS 'Дата рождения',
                         TIMESTAMPDIFF(YEAR, c.Birthday, CURDATE()) AS 'Возраст',
                         s.status AS 'Статус',
-                        c.Qualified_lead AS 'Квал лид',
                         c.LTV AS 'LTV'
                     FROM mydb.clients c
                     LEFT JOIN mydb.status_client s ON c.Status_client_ID_Status_client = s.ID_Status_client
@@ -162,7 +161,6 @@ private void MenuItemDelete_Click(object sender, EventArgs e)
                     SetHeader("Дата рождения", "Дата рождения");
                     SetHeader("Возраст", "Возраст");
                     SetHeader("Статус", "Статус");
-                    SetHeader("Квал лид", "Квалифицированный лид");
                     SetHeader("LTV", "LTV");
 
                     // Скрываем ненужные столбцы

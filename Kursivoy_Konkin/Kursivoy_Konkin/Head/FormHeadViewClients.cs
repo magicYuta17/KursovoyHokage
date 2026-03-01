@@ -96,7 +96,7 @@ namespace Kursivoy_Konkin
                 ReplaceWordStub("{Дата}", DateTime.Now.ToString("dd.MM.yyyy"), wordDocument);
 
                 // Берём только видимые столбцы
-                var excludedColumns = new[] { "Телефон", "Квалифицированный лид", "Дата рождения", };
+                var excludedColumns = new[] { "Телефон","Дата рождения", };
 
                 var visibleColumns = dataGridView1.Columns
                     .Cast<DataGridViewColumn>()
@@ -256,7 +256,6 @@ namespace Kursivoy_Konkin
                         c.Birthday AS 'Дата рождения',
                         TIMESTAMPDIFF(YEAR, c.Birthday, CURDATE()) AS 'Возраст',
                         s.status AS 'Статус',
-                        c.Qualified_lead AS 'Квал лид',
                         c.LTV AS 'LTV',
                         w.FIO AS 'ФИО сотрудника'
                     FROM mydb.clients c
@@ -287,7 +286,6 @@ namespace Kursivoy_Konkin
                     SetHeader("Дата рождения", "Дата рождения");
                     SetHeader("Возраст", "Возраст");
                     SetHeader("Статус", "Статус");
-                    SetHeader("Квал лид", "Квалифицированный лид");
                     SetHeader("LTV", "LTV");
                     SetHeader("Сотрудник", "Сотрудник");
 
@@ -358,9 +356,7 @@ namespace Kursivoy_Konkin
 
         private void FormHeadViewClients_Load(object sender, EventArgs e)
         {
-            this.MinimizeBox = false;
-            this.MaximizeBox = false;
-            this.ControlBox = false;
+            
 
             FillTableData();
 

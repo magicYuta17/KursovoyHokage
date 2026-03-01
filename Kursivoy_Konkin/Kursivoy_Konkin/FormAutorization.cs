@@ -83,11 +83,11 @@ namespace Kursivoy_Konkin
                 }
 
                 MessageBox.Show("Вход выполнен!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                FormAdminNavigation f = new FormAdminNavigation();
+                FormAdminNavigation Admingenav = new FormAdminNavigation();
 
-                this.Hide();
-                f.ShowDialog();
-                this.Show();
+                this.Visible = false;
+                Admingenav.ShowDialog();
+                this.Close();
 
                 authAtt = 0;
                 captchaTrue = false;
@@ -106,11 +106,10 @@ namespace Kursivoy_Konkin
                     }
                 }
                 MessageBox.Show("Вход выполнен!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                FormManagerNavigation f = new FormManagerNavigation();
-
-                this.Hide();
-                f.ShowDialog();
-                this.Show();
+                FormManagerNavigation managnav = new FormManagerNavigation();
+                this.Visible = false;
+                managnav.ShowDialog();
+                this.Close();
                 authAtt = 0;
                 captchaTrue = false;
                 textBoxCaptcha.Clear();
@@ -128,11 +127,10 @@ namespace Kursivoy_Konkin
                     }
                 }
                 MessageBox.Show("Вход выполнен!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                FormHeadNavigation f = new FormHeadNavigation();
-
-                this.Hide();
-                f.ShowDialog();
-                this.Show();
+                FormHeadNavigation headnav = new FormHeadNavigation();
+                this.Visible = false;
+                headnav.ShowDialog();
+                this.Close();
                 authAtt = 0;
                 captchaTrue = false;
                 textBoxCaptcha.Clear();
@@ -306,14 +304,37 @@ namespace Kursivoy_Konkin
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            DialogResult dialogResult = MessageBox.Show("Вы действительно хотите выйти?", "Предупреждение", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (dialogResult == DialogResult.Yes)
+            {
+                try
+                {
+
+                    Environment.Exit(0);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            Application.Exit();
-        }
+            DialogResult dialogResult = MessageBox.Show("Вы действительно хотите выйти?", "Предупреждение", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (dialogResult == DialogResult.Yes)
+            {
+                try
+                {
 
+                    Environment.Exit(0);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
         private void buttonCheckCaptcha2_Click(object sender, EventArgs e)
         {
             GenerateCaptcha();

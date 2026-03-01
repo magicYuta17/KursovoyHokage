@@ -23,7 +23,8 @@ namespace Kursivoy_Konkin
         private void button5_Click(object sender, EventArgs e)
         {
             FormAdminNavigation f = new FormAdminNavigation();
-            f.Show();
+            this.Visible = false;
+            f.ShowDialog();
             this.Close();
         }
     }

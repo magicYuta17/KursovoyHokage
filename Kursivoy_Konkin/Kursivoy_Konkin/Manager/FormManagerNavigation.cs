@@ -48,7 +48,10 @@ namespace Kursivoy_Konkin
 
         private void button5_Click(object sender, EventArgs e)
         {
-            this.Close(); // только кнопка назад закрывает навигацию
+            FormAutorization f = new FormAutorization();
+            this.Visible = false;
+            f.ShowDialog();
+            this.Close();
         }
 
         private void FormManagerNavigation_Load(object sender, EventArgs e)

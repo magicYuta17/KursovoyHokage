@@ -37,6 +37,9 @@ namespace Kursivoy_Konkin
 
         private void button5_Click(object sender, EventArgs e)
         {
+            FormAutorization formauto = new FormAutorization();
+            this.Visible = false;
+            formauto.ShowDialog();
             this.Close();
         }
 

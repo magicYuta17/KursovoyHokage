@@ -124,7 +124,7 @@ namespace Kursivoy_Konkin
         {
             string query = @"
                 INSERT INTO Clients 
-                (FullName_client, phone, Age, Status_client_ID_Status_client, Qualified_lead, LTV, Birthday) 
+                (FullName_client, phone, Age, Status_client_ID_Status_client,LTV, Birthday) 
                 VALUES 
                 (@FullName, @Phone, @Age, @IDStatus, @QLead, @LTV, @Birthday)";
 
@@ -162,7 +162,6 @@ namespace Kursivoy_Konkin
                         cmd.Parameters.Add("@Phone", MySqlDbType.VarChar, 50).Value = maskedTextBox1.Text.Trim();
                         cmd.Parameters.Add("@Age", MySqlDbType.Int32).Value = age;
                         cmd.Parameters.Add("@IDStatus", MySqlDbType.Int32).Value = statusId;
-                        cmd.Parameters.Add("@QLead", MySqlDbType.VarChar, 50).Value = comboBoxQualified_lead.Text.Trim();
                         cmd.Parameters.Add("@LTV", MySqlDbType.Decimal).Value = ltv;
                         cmd.Parameters.Add("@Birthday", MySqlDbType.Date).Value = birthday;
 
@@ -257,7 +256,6 @@ namespace Kursivoy_Konkin
                 string.IsNullOrWhiteSpace(maskedTextBox1.Text) ||
                 string.IsNullOrWhiteSpace(txtAge.Text) ||
                 string.IsNullOrWhiteSpace(comboBoxStatus.Text) ||
-                string.IsNullOrWhiteSpace(comboBoxQualified_lead.Text) ||
                 string.IsNullOrWhiteSpace(txtLTV.Text))
             {
                 MessageBox.Show("Заполните все поля!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);

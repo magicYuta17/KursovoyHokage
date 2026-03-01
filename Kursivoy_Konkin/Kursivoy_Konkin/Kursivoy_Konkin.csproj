@@ -59,6 +59,18 @@
     <Compile Include="Admin\FormAdminEditObject.Designer.cs">
       <DependentUpon>FormAdminEditObject.cs</DependentUpon>
     </Compile>
+    <Compile Include="Admin\FormAdminWorkerAdd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Admin\FormAdminWorkerAdd.Designer.cs">
+      <DependentUpon>FormAdminWorkerAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\FormAdminWorkerEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Admin\FormAdminWorkerEdit.Designer.cs">
+      <DependentUpon>FormAdminWorkerEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Data.cs" />
     <Compile Include="connect.cs" />
     <Compile Include="Admin\FormAdminObject.cs">
@@ -198,6 +210,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Admin\FormAdminWorker.resx">
       <DependentUpon>FormAdminWorker.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\FormAdminWorkerAdd.resx">
+      <DependentUpon>FormAdminWorkerAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\FormAdminWorkerEdit.resx">
+      <DependentUpon>FormAdminWorkerEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormAutorization.resx">
       <DependentUpon>FormAutorization.cs</DependentUpon>
