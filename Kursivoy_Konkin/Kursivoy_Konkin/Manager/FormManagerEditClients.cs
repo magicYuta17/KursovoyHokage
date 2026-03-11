@@ -140,6 +140,7 @@ namespace Kursivoy_Konkin
             }
 
             int statusId;
+            
             try
             {
                 statusId = Convert.ToInt32(comboBoxStatus.SelectedValue);
@@ -154,18 +155,19 @@ namespace Kursivoy_Konkin
                 MessageBox.Show("Не удалось определить ID статуса. Проверьте привязку ComboBox.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-
-            UpdateClientInDb(age, ltv, statusId);
+            DateTime birthday = dateTimePicker1.Value;
+            UpdateClientInDb(age, ltv, statusId, birthday);
 
             // Возвращаемся на предыдущую форму
             if (Owner != null)
             {
-                Owner.Show(); // Показываем предыдущую форму
+                Owner.ShowDialog(); // Показываем предыдущую форму
             }
+            this.Visible = false;
             this.Close(); // Закрываем текущую форму
         }
 
-        private void UpdateClientInDb(int age, decimal ltv, int statusId)
+        private void UpdateClientInDb(int age, decimal ltv, int statusId, DateTime birthday)
         {
             string updateQuery = @"
                 UPDATE mydb.clients
@@ -174,7 +176,7 @@ namespace Kursivoy_Konkin
                     Age = @Age,
                     Status_client_ID_Status_client = @IDStatus,
                     LTV = @LTV,
-                    photo_clients = @Photo
+                    Birthday = @Birthday
                 WHERE ID_Client = @IDClient;";
 
             try
@@ -187,8 +189,8 @@ namespace Kursivoy_Konkin
                     cmd.Parameters.Add("@Age", MySqlDbType.Int32).Value = age;
                     cmd.Parameters.Add("@IDStatus", MySqlDbType.Int32).Value = statusId;
                     cmd.Parameters.Add("@LTV", MySqlDbType.Decimal).Value = ltv;
+                    cmd.Parameters.Add("@Birthday", MySqlDbType.Date).Value = birthday;
 
-                    cmd.Parameters.Add("@Photo", MySqlDbType.VarChar).Value = DBNull.Value; // Удаляем использование _selectedImagePath
 
                     cmd.Parameters.Add("@IDClient", MySqlDbType.Int32).Value = _clientId;
 
@@ -239,8 +241,7 @@ namespace Kursivoy_Konkin
             TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtLTV);
 
             TextBoxFilters.InputValidators.ApplyNotEmptyValidation(comboBoxStatus);
-            TextBoxFilters.InputValidators.ApplyRussianLettersOnly(txtQualified_lead);
-            TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtQualified_lead);
+
 
             // Устанавливаем ограничения для dateTimePicker1
             dateTimePicker1.MaxDate = DateTime.Now.AddDays(-1).AddYears(-18); // Вчерашняя дата - 18 лет
@@ -258,6 +259,11 @@ namespace Kursivoy_Konkin
             this.Visible = false; 
             formViewClients.ShowDialog();
             this.Close();
+        }
+
+        private void FormManagerEditClients_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

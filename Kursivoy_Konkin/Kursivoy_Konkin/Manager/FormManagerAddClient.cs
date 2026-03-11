@@ -126,7 +126,7 @@ namespace Kursivoy_Konkin
                 INSERT INTO Clients 
                 (FullName_client, phone, Age, Status_client_ID_Status_client,LTV, Birthday) 
                 VALUES 
-                (@FullName, @Phone, @Age, @IDStatus, @QLead, @LTV, @Birthday)";
+                (@FullName, @Phone, @Age, @IDStatus, @LTV, @Birthday)";
 
             // Проверим выбранный статус и получим int ID
             if (comboBoxStatus.SelectedValue == null)
@@ -354,6 +354,8 @@ namespace Kursivoy_Konkin
             this.MaximizeBox = false;
             this.ControlBox = false;
         }
+
+       
     }
 }
 
