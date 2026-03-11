@@ -62,10 +62,9 @@
             // 
             this.btnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
             this.btnCancel.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.btnCancel.Location = new System.Drawing.Point(1474, 688);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
+            this.btnCancel.Location = new System.Drawing.Point(1106, 559);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(246, 64);
+            this.btnCancel.Size = new System.Drawing.Size(184, 52);
             this.btnCancel.TabIndex = 31;
             this.btnCancel.Text = "Назад";
             this.btnCancel.UseVisualStyleBackColor = false;
@@ -78,7 +77,8 @@
             this.dgvClients.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvClients.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgvClients.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvClients.Location = new System.Drawing.Point(26, 111);
+            this.dgvClients.Location = new System.Drawing.Point(20, 90);
+            this.dgvClients.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dgvClients.Name = "dgvClients";
             this.dgvClients.ReadOnly = true;
             this.dgvClients.RowHeadersVisible = false;
@@ -86,46 +86,42 @@
             this.dgvClients.RowTemplate.Height = 24;
             this.dgvClients.RowTemplate.ReadOnly = true;
             this.dgvClients.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvClients.Size = new System.Drawing.Size(969, 192);
+            this.dgvClients.Size = new System.Drawing.Size(727, 156);
             this.dgvClients.TabIndex = 30;
             // 
             // lblClient
             // 
             this.lblClient.AutoSize = true;
             this.lblClient.Font = new System.Drawing.Font("Comic Sans MS", 15.25F);
-            this.lblClient.Location = new System.Drawing.Point(20, 9);
-            this.lblClient.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblClient.Location = new System.Drawing.Point(15, 7);
             this.lblClient.Name = "lblClient";
-            this.lblClient.Size = new System.Drawing.Size(161, 36);
+            this.lblClient.Size = new System.Drawing.Size(131, 29);
             this.lblClient.TabIndex = 32;
             this.lblClient.Text = "👤 КЛИЕНТ";
             // 
             // txtSearchClient
             // 
             this.txtSearchClient.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.txtSearchClient.Location = new System.Drawing.Point(26, 49);
-            this.txtSearchClient.Margin = new System.Windows.Forms.Padding(4);
+            this.txtSearchClient.Location = new System.Drawing.Point(20, 40);
             this.txtSearchClient.Name = "txtSearchClient";
-            this.txtSearchClient.Size = new System.Drawing.Size(969, 55);
+            this.txtSearchClient.Size = new System.Drawing.Size(728, 45);
             this.txtSearchClient.TabIndex = 33;
             // 
             // txtSearchWorker
             // 
             this.txtSearchWorker.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.txtSearchWorker.Location = new System.Drawing.Point(26, 354);
-            this.txtSearchWorker.Margin = new System.Windows.Forms.Padding(4);
+            this.txtSearchWorker.Location = new System.Drawing.Point(20, 288);
             this.txtSearchWorker.Name = "txtSearchWorker";
-            this.txtSearchWorker.Size = new System.Drawing.Size(969, 55);
+            this.txtSearchWorker.Size = new System.Drawing.Size(728, 45);
             this.txtSearchWorker.TabIndex = 36;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Comic Sans MS", 15.25F);
-            this.label1.Location = new System.Drawing.Point(20, 314);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(15, 255);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(214, 36);
+            this.label1.Size = new System.Drawing.Size(172, 29);
             this.label1.TabIndex = 35;
             this.label1.Text = "👷 СОТРУДНИК";
             // 
@@ -136,7 +132,8 @@
             this.dgvWorkers.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvWorkers.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgvWorkers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvWorkers.Location = new System.Drawing.Point(26, 416);
+            this.dgvWorkers.Location = new System.Drawing.Point(20, 338);
+            this.dgvWorkers.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dgvWorkers.Name = "dgvWorkers";
             this.dgvWorkers.ReadOnly = true;
             this.dgvWorkers.RowHeadersVisible = false;
@@ -144,7 +141,7 @@
             this.dgvWorkers.RowTemplate.Height = 24;
             this.dgvWorkers.RowTemplate.ReadOnly = true;
             this.dgvWorkers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvWorkers.Size = new System.Drawing.Size(969, 187);
+            this.dgvWorkers.Size = new System.Drawing.Size(727, 152);
             this.dgvWorkers.TabIndex = 37;
             // 
             // dgvObjects
@@ -154,7 +151,8 @@
             this.dgvObjects.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvObjects.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgvObjects.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvObjects.Location = new System.Drawing.Point(26, 711);
+            this.dgvObjects.Location = new System.Drawing.Point(20, 578);
+            this.dgvObjects.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dgvObjects.Name = "dgvObjects";
             this.dgvObjects.ReadOnly = true;
             this.dgvObjects.RowHeadersVisible = false;
@@ -162,26 +160,24 @@
             this.dgvObjects.RowTemplate.Height = 24;
             this.dgvObjects.RowTemplate.ReadOnly = true;
             this.dgvObjects.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvObjects.Size = new System.Drawing.Size(969, 267);
+            this.dgvObjects.Size = new System.Drawing.Size(727, 217);
             this.dgvObjects.TabIndex = 40;
             // 
             // txtSearchObject
             // 
             this.txtSearchObject.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.txtSearchObject.Location = new System.Drawing.Point(26, 649);
-            this.txtSearchObject.Margin = new System.Windows.Forms.Padding(4);
+            this.txtSearchObject.Location = new System.Drawing.Point(20, 527);
             this.txtSearchObject.Name = "txtSearchObject";
-            this.txtSearchObject.Size = new System.Drawing.Size(969, 55);
+            this.txtSearchObject.Size = new System.Drawing.Size(728, 45);
             this.txtSearchObject.TabIndex = 39;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Comic Sans MS", 15.25F);
-            this.label2.Location = new System.Drawing.Point(20, 609);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(15, 495);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(166, 36);
+            this.label2.Size = new System.Drawing.Size(134, 29);
             this.label2.TabIndex = 38;
             this.label2.Text = "🏗️ ОБЪЕКТ";
             // 
@@ -189,10 +185,9 @@
             // 
             this.lblContractInfo.AutoSize = true;
             this.lblContractInfo.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.lblContractInfo.Location = new System.Drawing.Point(1020, 9);
-            this.lblContractInfo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblContractInfo.Location = new System.Drawing.Point(765, 7);
             this.lblContractInfo.Name = "lblContractInfo";
-            this.lblContractInfo.Size = new System.Drawing.Size(399, 47);
+            this.lblContractInfo.Size = new System.Drawing.Size(321, 38);
             this.lblContractInfo.TabIndex = 41;
             this.lblContractInfo.Text = "ДАННЫЕ КОНТРАКТА";
             // 
@@ -200,10 +195,9 @@
             // 
             this.lblSelectedClient.AutoSize = true;
             this.lblSelectedClient.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.lblSelectedClient.Location = new System.Drawing.Point(1020, 70);
-            this.lblSelectedClient.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblSelectedClient.Location = new System.Drawing.Point(765, 57);
             this.lblSelectedClient.Name = "lblSelectedClient";
-            this.lblSelectedClient.Size = new System.Drawing.Size(150, 47);
+            this.lblSelectedClient.Size = new System.Drawing.Size(119, 38);
             this.lblSelectedClient.TabIndex = 42;
             this.lblSelectedClient.Text = "Клиент:";
             // 
@@ -211,10 +205,9 @@
             // 
             this.lblClientValue.AutoSize = true;
             this.lblClientValue.Font = new System.Drawing.Font("Comic Sans MS", 15.25F);
-            this.lblClientValue.Location = new System.Drawing.Point(1178, 80);
-            this.lblClientValue.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblClientValue.Location = new System.Drawing.Point(884, 65);
             this.lblClientValue.Name = "lblClientValue";
-            this.lblClientValue.Size = new System.Drawing.Size(191, 36);
+            this.lblClientValue.Size = new System.Drawing.Size(154, 29);
             this.lblClientValue.TabIndex = 43;
             this.lblClientValue.Text = "Не выбран ❌";
             // 
@@ -222,10 +215,9 @@
             // 
             this.lblWorkerValue.AutoSize = true;
             this.lblWorkerValue.Font = new System.Drawing.Font("Comic Sans MS", 15.25F);
-            this.lblWorkerValue.Location = new System.Drawing.Point(1228, 157);
-            this.lblWorkerValue.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblWorkerValue.Location = new System.Drawing.Point(921, 128);
             this.lblWorkerValue.Name = "lblWorkerValue";
-            this.lblWorkerValue.Size = new System.Drawing.Size(191, 36);
+            this.lblWorkerValue.Size = new System.Drawing.Size(154, 29);
             this.lblWorkerValue.TabIndex = 45;
             this.lblWorkerValue.Text = "Не выбран ❌";
             // 
@@ -233,10 +225,9 @@
             // 
             this.lblSelectedWorker.AutoSize = true;
             this.lblSelectedWorker.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.lblSelectedWorker.Location = new System.Drawing.Point(1020, 146);
-            this.lblSelectedWorker.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblSelectedWorker.Location = new System.Drawing.Point(765, 119);
             this.lblSelectedWorker.Name = "lblSelectedWorker";
-            this.lblSelectedWorker.Size = new System.Drawing.Size(200, 47);
+            this.lblSelectedWorker.Size = new System.Drawing.Size(159, 38);
             this.lblSelectedWorker.TabIndex = 44;
             this.lblSelectedWorker.Text = "Сотрудник:";
             // 
@@ -244,10 +235,9 @@
             // 
             this.lblObjectValue.AutoSize = true;
             this.lblObjectValue.Font = new System.Drawing.Font("Comic Sans MS", 15.25F);
-            this.lblObjectValue.Location = new System.Drawing.Point(1178, 231);
-            this.lblObjectValue.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblObjectValue.Location = new System.Drawing.Point(884, 188);
             this.lblObjectValue.Name = "lblObjectValue";
-            this.lblObjectValue.Size = new System.Drawing.Size(191, 36);
+            this.lblObjectValue.Size = new System.Drawing.Size(154, 29);
             this.lblObjectValue.TabIndex = 47;
             this.lblObjectValue.Text = "Не выбран ❌";
             // 
@@ -255,10 +245,9 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.label4.Location = new System.Drawing.Point(1020, 220);
-            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Location = new System.Drawing.Point(765, 179);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(148, 47);
+            this.label4.Size = new System.Drawing.Size(119, 38);
             this.label4.TabIndex = 46;
             this.label4.Text = "Объект:";
             // 
@@ -266,10 +255,9 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.label3.Location = new System.Drawing.Point(1020, 309);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Location = new System.Drawing.Point(765, 251);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(349, 47);
+            this.label3.Size = new System.Drawing.Size(280, 38);
             this.label3.TabIndex = 48;
             this.label3.Text = "Название контракта:";
             // 
@@ -277,37 +265,37 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.label5.Location = new System.Drawing.Point(1020, 426);
-            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label5.Location = new System.Drawing.Point(765, 346);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(314, 47);
+            this.label5.Size = new System.Drawing.Size(252, 38);
             this.label5.TabIndex = 50;
             this.label5.Text = "Дата подписания:";
             // 
             // dtpDateSigning
             // 
             this.dtpDateSigning.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.dtpDateSigning.Location = new System.Drawing.Point(1028, 476);
+            this.dtpDateSigning.Location = new System.Drawing.Point(771, 387);
+            this.dtpDateSigning.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dtpDateSigning.Name = "dtpDateSigning";
-            this.dtpDateSigning.Size = new System.Drawing.Size(356, 55);
+            this.dtpDateSigning.Size = new System.Drawing.Size(268, 45);
             this.dtpDateSigning.TabIndex = 51;
             // 
             // dtpEndDate
             // 
             this.dtpEndDate.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.dtpEndDate.Location = new System.Drawing.Point(1028, 586);
+            this.dtpEndDate.Location = new System.Drawing.Point(771, 476);
+            this.dtpEndDate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dtpEndDate.Name = "dtpEndDate";
-            this.dtpEndDate.Size = new System.Drawing.Size(356, 55);
+            this.dtpEndDate.Size = new System.Drawing.Size(268, 45);
             this.dtpEndDate.TabIndex = 53;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.label6.Location = new System.Drawing.Point(1020, 536);
-            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label6.Location = new System.Drawing.Point(765, 436);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(285, 47);
+            this.label6.Size = new System.Drawing.Size(229, 38);
             this.label6.TabIndex = 52;
             this.label6.Text = "Дата окончания:";
             // 
@@ -315,10 +303,9 @@
             // 
             this.btnAddContract.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
             this.btnAddContract.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.btnAddContract.Location = new System.Drawing.Point(1028, 688);
-            this.btnAddContract.Margin = new System.Windows.Forms.Padding(4);
+            this.btnAddContract.Location = new System.Drawing.Point(771, 559);
             this.btnAddContract.Name = "btnAddContract";
-            this.btnAddContract.Size = new System.Drawing.Size(424, 64);
+            this.btnAddContract.Size = new System.Drawing.Size(318, 52);
             this.btnAddContract.TabIndex = 54;
             this.btnAddContract.Text = "Добавить контракт";
             this.btnAddContract.UseVisualStyleBackColor = false;
@@ -326,17 +313,17 @@
             // txtContractName
             // 
             this.txtContractName.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.txtContractName.Location = new System.Drawing.Point(1028, 367);
-            this.txtContractName.Margin = new System.Windows.Forms.Padding(4);
+            this.txtContractName.Location = new System.Drawing.Point(771, 298);
             this.txtContractName.Name = "txtContractName";
-            this.txtContractName.Size = new System.Drawing.Size(692, 55);
+            this.txtContractName.Size = new System.Drawing.Size(520, 45);
             this.txtContractName.TabIndex = 56;
             // 
             // FormManagerAddContract
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1924, 1055);
+            this.BackColor = System.Drawing.Color.White;
+            this.ClientSize = new System.Drawing.Size(1443, 857);
             this.Controls.Add(this.txtContractName);
             this.Controls.Add(this.btnAddContract);
             this.Controls.Add(this.dtpEndDate);
@@ -362,6 +349,7 @@
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.dgvClients);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "FormManagerAddContract";
             this.Text = "Добавление контракта - Менеджер";
             ((System.ComponentModel.ISupportInitialize)(this.dgvClients)).EndInit();

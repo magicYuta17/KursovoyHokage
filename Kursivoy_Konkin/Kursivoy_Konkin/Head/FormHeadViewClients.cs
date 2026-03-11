@@ -33,25 +33,11 @@ namespace Kursivoy_Konkin
             // Создаем контекстное меню
             contextMenuStrip1 = new ContextMenuStrip();
 
-            // Добавляем элемент "Добавить клиента"
-            var menuItemAdd = new ToolStripMenuItem("Добавить клиента");
-            menuItemAdd.Click += MenuItemAdd_Click;
-            contextMenuStrip1.Items.Add(menuItemAdd);
-
-            // Добавляем элемент "Редактировать"
-            var menuItemEdit = new ToolStripMenuItem("Редактировать");
-            menuItemEdit.Click += MenuItemEdit_Click;
-            contextMenuStrip1.Items.Add(menuItemEdit);
-
-            // Добавляем элемент "Редактировать"
+            
             var menuItemPrint = new ToolStripMenuItem("Печать отчета по LTV");
             menuItemPrint.Click += MenuItemPrint_Click;
             contextMenuStrip1.Items.Add(menuItemPrint);
 
-            // Добавляем элемент "Удалить"
-            var menuItemDelete = new ToolStripMenuItem("Удалить");
-            menuItemDelete.Click += MenuItemDelete_Click;
-            contextMenuStrip1.Items.Add(menuItemDelete);
 
             // Привязываем контекстное меню к dataGridView1
             dataGridView1.ContextMenuStrip = contextMenuStrip1;

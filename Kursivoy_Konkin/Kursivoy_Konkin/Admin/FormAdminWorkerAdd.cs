@@ -256,6 +256,13 @@ namespace Kursivoy_Konkin
                 }
             }
         }
-    
+
+        private void btnCancel_Click_1(object sender, EventArgs e)
+        {
+            FormAdminWorker f = new FormAdminWorker();
+            this.Visible = false;
+            f.ShowDialog();
+            this.Close();
+        }
     }
 }

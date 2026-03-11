@@ -55,10 +55,9 @@
             // 
             this.buttonDeletePhoto.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
             this.buttonDeletePhoto.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.buttonDeletePhoto.Location = new System.Drawing.Point(838, 477);
-            this.buttonDeletePhoto.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonDeletePhoto.Location = new System.Drawing.Point(628, 388);
             this.buttonDeletePhoto.Name = "buttonDeletePhoto";
-            this.buttonDeletePhoto.Size = new System.Drawing.Size(504, 105);
+            this.buttonDeletePhoto.Size = new System.Drawing.Size(378, 85);
             this.buttonDeletePhoto.TabIndex = 86;
             this.buttonDeletePhoto.Text = "Удалить фото";
             this.buttonDeletePhoto.UseVisualStyleBackColor = false;
@@ -68,10 +67,9 @@
             // 
             this.buttonAddPhoto.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
             this.buttonAddPhoto.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.buttonAddPhoto.Location = new System.Drawing.Point(838, 365);
-            this.buttonAddPhoto.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonAddPhoto.Location = new System.Drawing.Point(628, 297);
             this.buttonAddPhoto.Name = "buttonAddPhoto";
-            this.buttonAddPhoto.Size = new System.Drawing.Size(504, 105);
+            this.buttonAddPhoto.Size = new System.Drawing.Size(378, 85);
             this.buttonAddPhoto.TabIndex = 85;
             this.buttonAddPhoto.Text = "Добавить фото";
             this.buttonAddPhoto.UseVisualStyleBackColor = false;
@@ -81,9 +79,10 @@
             // 
             this.pictureBox1.Image = global::Kursivoy_Konkin.Properties.Resources.picture;
             this.pictureBox1.InitialImage = global::Kursivoy_Konkin.Properties.Resources.picture;
-            this.pictureBox1.Location = new System.Drawing.Point(517, 364);
+            this.pictureBox1.Location = new System.Drawing.Point(388, 296);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(302, 218);
+            this.pictureBox1.Size = new System.Drawing.Size(226, 177);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 84;
             this.pictureBox1.TabStop = false;
@@ -92,20 +91,21 @@
             // 
             this.btnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
             this.btnCancel.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.btnCancel.Location = new System.Drawing.Point(21, 618);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
+            this.btnCancel.Location = new System.Drawing.Point(16, 502);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(386, 70);
+            this.btnCancel.Size = new System.Drawing.Size(290, 57);
             this.btnCancel.TabIndex = 83;
             this.btnCancel.Text = "Назад";
             this.btnCancel.UseVisualStyleBackColor = false;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click_1);
             // 
             // pictureBox2
             // 
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(1151, 589);
+            this.pictureBox2.Location = new System.Drawing.Point(863, 479);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(191, 128);
+            this.pictureBox2.Size = new System.Drawing.Size(143, 104);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox2.TabIndex = 82;
             this.pictureBox2.TabStop = false;
@@ -114,10 +114,9 @@
             // 
             this.btnSave.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
             this.btnSave.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.btnSave.Location = new System.Drawing.Point(21, 477);
-            this.btnSave.Margin = new System.Windows.Forms.Padding(4);
+            this.btnSave.Location = new System.Drawing.Point(16, 388);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(386, 133);
+            this.btnSave.Size = new System.Drawing.Size(290, 108);
             this.btnSave.TabIndex = 81;
             this.btnSave.Text = "Сохранить";
             this.btnSave.UseVisualStyleBackColor = false;
@@ -135,31 +134,34 @@
             this.dgvClients.BackgroundColor = System.Drawing.Color.AntiqueWhite;
             this.dgvClients.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvClients.EnableHeadersVisualStyles = false;
-            this.dgvClients.Location = new System.Drawing.Point(517, 134);
+            this.dgvClients.Location = new System.Drawing.Point(388, 109);
+            this.dgvClients.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dgvClients.Name = "dgvClients";
             this.dgvClients.ReadOnly = true;
             this.dgvClients.RowHeadersVisible = false;
             this.dgvClients.RowHeadersWidth = 51;
             this.dgvClients.RowTemplate.Height = 24;
             this.dgvClients.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvClients.Size = new System.Drawing.Size(825, 224);
+            this.dgvClients.Size = new System.Drawing.Size(619, 182);
             this.dgvClients.TabIndex = 80;
             // 
             // tbClientSearch
             // 
             this.tbClientSearch.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.tbClientSearch.Location = new System.Drawing.Point(517, 57);
+            this.tbClientSearch.Location = new System.Drawing.Point(388, 46);
+            this.tbClientSearch.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tbClientSearch.Name = "tbClientSearch";
-            this.tbClientSearch.Size = new System.Drawing.Size(825, 55);
+            this.tbClientSearch.Size = new System.Drawing.Size(620, 45);
             this.tbClientSearch.TabIndex = 79;
             // 
             // lblClient
             // 
             this.lblClient.AutoSize = true;
             this.lblClient.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.lblClient.Location = new System.Drawing.Point(509, 7);
+            this.lblClient.Location = new System.Drawing.Point(382, 6);
+            this.lblClient.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblClient.Name = "lblClient";
-            this.lblClient.Size = new System.Drawing.Size(269, 47);
+            this.lblClient.Size = new System.Drawing.Size(214, 38);
             this.lblClient.TabIndex = 78;
             this.lblClient.Text = "Поиск клиента";
             // 
@@ -171,82 +173,90 @@
             this.cbRole.Items.AddRange(new object[] {
             "Да",
             "Нет"});
-            this.cbRole.Location = new System.Drawing.Point(21, 398);
+            this.cbRole.Location = new System.Drawing.Point(16, 323);
+            this.cbRole.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cbRole.Name = "cbRole";
-            this.cbRole.Size = new System.Drawing.Size(386, 55);
+            this.cbRole.Size = new System.Drawing.Size(290, 46);
             this.cbRole.TabIndex = 77;
             // 
             // lblRole
             // 
             this.lblRole.AutoSize = true;
             this.lblRole.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.lblRole.Location = new System.Drawing.Point(13, 348);
+            this.lblRole.Location = new System.Drawing.Point(10, 283);
+            this.lblRole.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblRole.Name = "lblRole";
-            this.lblRole.Size = new System.Drawing.Size(97, 47);
+            this.lblRole.Size = new System.Drawing.Size(77, 38);
             this.lblRole.TabIndex = 76;
             this.lblRole.Text = "Роль";
             // 
             // tbAge
             // 
             this.tbAge.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.tbAge.Location = new System.Drawing.Point(21, 290);
+            this.tbAge.Location = new System.Drawing.Point(16, 236);
+            this.tbAge.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tbAge.Name = "tbAge";
-            this.tbAge.Size = new System.Drawing.Size(386, 55);
+            this.tbAge.Size = new System.Drawing.Size(290, 45);
             this.tbAge.TabIndex = 75;
             // 
             // lblAge
             // 
             this.lblAge.AutoSize = true;
             this.lblAge.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.lblAge.Location = new System.Drawing.Point(13, 240);
+            this.lblAge.Location = new System.Drawing.Point(10, 195);
+            this.lblAge.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblAge.Name = "lblAge";
-            this.lblAge.Size = new System.Drawing.Size(141, 47);
+            this.lblAge.Size = new System.Drawing.Size(115, 38);
             this.lblAge.TabIndex = 74;
             this.lblAge.Text = "Вазраст";
             // 
             // mtbPhone
             // 
             this.mtbPhone.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.mtbPhone.Location = new System.Drawing.Point(21, 169);
+            this.mtbPhone.Location = new System.Drawing.Point(16, 137);
+            this.mtbPhone.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.mtbPhone.Mask = "+7 (000) 000-00-00";
             this.mtbPhone.Name = "mtbPhone";
-            this.mtbPhone.Size = new System.Drawing.Size(386, 55);
+            this.mtbPhone.Size = new System.Drawing.Size(290, 45);
             this.mtbPhone.TabIndex = 73;
             // 
             // lblPhone
             // 
             this.lblPhone.AutoSize = true;
             this.lblPhone.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.lblPhone.Location = new System.Drawing.Point(13, 119);
+            this.lblPhone.Location = new System.Drawing.Point(10, 97);
+            this.lblPhone.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblPhone.Name = "lblPhone";
-            this.lblPhone.Size = new System.Drawing.Size(170, 47);
+            this.lblPhone.Size = new System.Drawing.Size(135, 38);
             this.lblPhone.TabIndex = 72;
             this.lblPhone.Text = "Телефон";
             // 
             // tbFIO
             // 
             this.tbFIO.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.tbFIO.Location = new System.Drawing.Point(21, 57);
+            this.tbFIO.Location = new System.Drawing.Point(16, 46);
+            this.tbFIO.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tbFIO.Name = "tbFIO";
-            this.tbFIO.Size = new System.Drawing.Size(386, 55);
+            this.tbFIO.Size = new System.Drawing.Size(290, 45);
             this.tbFIO.TabIndex = 71;
             // 
             // lblFIO
             // 
             this.lblFIO.AutoSize = true;
             this.lblFIO.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.lblFIO.Location = new System.Drawing.Point(13, 7);
+            this.lblFIO.Location = new System.Drawing.Point(10, 6);
+            this.lblFIO.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblFIO.Name = "lblFIO";
-            this.lblFIO.Size = new System.Drawing.Size(288, 47);
+            this.lblFIO.Size = new System.Drawing.Size(230, 38);
             this.lblFIO.TabIndex = 70;
             this.lblFIO.Text = "ФИО сотрудника";
             // 
             // FormAdminWorkerAdd
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1354, 725);
+            this.ClientSize = new System.Drawing.Size(1016, 589);
             this.Controls.Add(this.buttonDeletePhoto);
             this.Controls.Add(this.buttonAddPhoto);
             this.Controls.Add(this.pictureBox1);
@@ -265,6 +275,7 @@
             this.Controls.Add(this.tbFIO);
             this.Controls.Add(this.lblFIO);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "FormAdminWorkerAdd";
             this.Text = "Добавление сотрудника - Админ";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

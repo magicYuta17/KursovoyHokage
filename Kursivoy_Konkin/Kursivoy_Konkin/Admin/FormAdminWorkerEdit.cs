@@ -341,6 +341,13 @@ namespace Kursivoy_Konkin
             fileName = null;
             currentPhoto = null; // при сохранении запишется NULL в БД
         }
-    
+
+        private void btnCancel_Click_1(object sender, EventArgs e)
+        {
+            FormAdminWorker f = new FormAdminWorker();
+            this.Visible = false;
+            f.ShowDialog();
+            this.Close();
+        }
     }
 }
