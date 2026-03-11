@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,32 +14,37 @@ using YourNamespace;
 
 namespace Kursivoy_Konkin
 {
+    // Форма для просмотра контрактов (доступна руководителю)
     public partial class FormHeadViewContract : Form
     {
+        // Конструктор формы
         public FormHeadViewContract()
         {
-            InitializeComponent();
-            this.Load += FormHeadViewContract_Load;
-            this.MinimizeBox = false;
-            this.MaximizeBox = false;
-            this.ControlBox = false;
+            InitializeComponent(); // Инициализация компонентов дизайнера
+            this.Load += FormHeadViewContract_Load; // Подписка на событие загрузки формы
+            this.MinimizeBox = false; // Запрет на сворачивание
+            this.MaximizeBox = false; // Запрет на разворачивание
+            this.ControlBox = false; // Скрытие системных кнопок
         }
 
+        // Обработчик кнопки "Назад" (для навигации)
         private void button5_Click(object sender, EventArgs e)
         {
-            FormManagerNavigation f = new FormManagerNavigation();
-            this.Visible = false;
-            f.ShowDialog();
-            this.Close();
+            FormManagerNavigation f = new FormManagerNavigation(); // Создаем форму навигации менеджера
+            this.Visible = false; // Скрываем текущую форму
+            f.ShowDialog(); // Показываем форму навигации
+            this.Close(); // Закрываем текущую форму
         }
-       
+
+        // Метод для загрузки данных контрактов из БД
         private void LoadData()
         {
             try
             {
-                dataGridView1.Columns.Clear();
-                dataGridView1.AutoGenerateColumns = true;
+                dataGridView1.Columns.Clear(); // Очищаем колонки таблицы
+                dataGridView1.AutoGenerateColumns = true; // Автоматическая генерация колонок
 
+                // Сложный SQL-запрос с объединением нескольких таблиц (contract, object, clients, worker)
                 string query = @"
            SELECT 
                     c.ID_Contract,
@@ -72,15 +78,15 @@ namespace Kursivoy_Konkin
                 LEFT JOIN worker w 
                     ON w.ID_worker = c.worker_ID_worker;";
 
-                using (var connection = new MySqlConnection(connect.con))
-                using (var command = new MySqlCommand(query, connection))
-                using (var adapter = new MySqlDataAdapter(command))
+                using (var connection = new MySqlConnection(connect.con)) // Создаем подключение к БД
+                using (var command = new MySqlCommand(query, connection)) // Создаем команду с запросом
+                using (var adapter = new MySqlDataAdapter(command)) // Создаем адаптер для заполнения DataTable
                 {
-                    var table = new DataTable();
-                    connection.Open();
-                    adapter.Fill(table);
+                    var table = new DataTable(); // Создаем таблицу данных
+                    connection.Open(); // Открываем соединение
+                    adapter.Fill(table); // Заполняем таблицу данными из БД
 
-                    if (table.Rows.Count == 0)
+                    if (table.Rows.Count == 0) // Если данные не найдены
                     {
                         MessageBox.Show("Данные не найдены.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return;
@@ -89,7 +95,7 @@ namespace Kursivoy_Konkin
                     // Привязываем данные к DataGridView
                     dataGridView1.DataSource = table;
 
-                    // Скрываем столбец ID_object
+                    // Скрываем служебные столбцы (ID и connection-поля), которые не должны отображаться пользователю
                     if (dataGridView1.Columns["ID_Contract"] != null)
                         dataGridView1.Columns["ID_Contract"].Visible = false;
                     if (dataGridView1.Columns["ID Клиента"] != null)
@@ -99,34 +105,35 @@ namespace Kursivoy_Konkin
                     if (dataGridView1.Columns["connection_contract_object_idconnection_contract_object"] != null)
                         dataGridView1.Columns["connection_contract_object_idconnection_contract_object"].Visible = false;
 
-
-
                     // Отключаем сортировку у всех колонок
                     foreach (DataGridViewColumn col in dataGridView1.Columns)
                         col.SortMode = DataGridViewColumnSortMode.NotSortable;
 
-                    dataGridView1.RowTemplate.Height = 80;
-                    dataGridView1.ClearSelection();
+                    dataGridView1.RowTemplate.Height = 80; // Устанавливаем высоту строк
+                    dataGridView1.ClearSelection(); // Снимаем выделение
                 }
             }
             catch (Exception ex)
             {
+                // Показываем сообщение об ошибке при загрузке
                 MessageBox.Show($"Ошибка при загрузке данных: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
+        // Обработчик загрузки формы (версия для FormManagerViewContract - возможно, устаревшая)
         private void FormManagerViewContract_Load(object sender, EventArgs e)
         {
             this.MinimizeBox = false;
             this.MaximizeBox = false;
             this.ControlBox = false;
 
-            LoadData();
-  
+            LoadData(); // Загружаем данные
         }
 
+        // Обработчик пункта меню "Печать"
         private void печатьToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // Проверяем, выбрана ли строка
             if (dataGridView1.SelectedRows.Count == 0)
             {
                 MessageBox.Show("Выберите контракт для печати.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -135,76 +142,78 @@ namespace Kursivoy_Konkin
 
             try
             {
-                var selectedRow = dataGridView1.SelectedRows[0];
-                var table = (DataTable)dataGridView1.DataSource;
-                DataRow dataRow = table.Rows[selectedRow.Index];
+                var selectedRow = dataGridView1.SelectedRows[0]; // Получаем выбранную строку
+                var table = (DataTable)dataGridView1.DataSource; // Получаем исходную таблицу данных
+                DataRow dataRow = table.Rows[selectedRow.Index]; // Получаем строку данных из DataTable
 
                 // Получаем данные из выбранной строки
                 int contractId = Convert.ToInt32(dataRow["ID_Contract"]);
                 string namContract = dataRow["Наименование контракта"].ToString();
                 string cost = dataRow["Стоимость"].ToString();
-                string dateSigning = Convert.ToDateTime(dataRow["Дата подписи"]).ToString("dd.MM.yyyy");
+                string dateSigning = Convert.ToDateTime(dataRow["Дата подписи"]).ToString("dd.MM.yyyy"); // Форматируем дату
                 string endDate = Convert.ToDateTime(dataRow["Дата окончание договора о строительстве"]).ToString("dd.MM.yyyy");
                 string constrDates = dataRow["Сроки строительства"].ToString();
                 int clientId = Convert.ToInt32(dataRow["ID Клиента"]);
                 int workerId = Convert.ToInt32(dataRow["ID Работника"]);
 
-                // Получаем ФИО клиента из таблицы clients
+                // Переменные для хранения ФИО клиента и работника
                 string clientFio = "";
                 string workerFio = "";
 
+                // Дополнительные запросы для получения полных данных о клиенте и работнике
                 using (var connection = new MySqlConnection(connect.con))
                 {
                     connection.Open();
 
-                    // Запрос клиента (замени поля на актуальные названия в твоей БД)
+                    // Запрос клиента по ID
                     string cmdClient = "SELECT * FROM clients WHERE ID_Client = @id";
                     using (var cmd = new MySqlCommand(cmdClient, connection))
                     {
                         cmd.Parameters.AddWithValue("@id", clientId);
                         using (var reader = cmd.ExecuteReader())
                         {
-                            if (reader.Read())
+                            if (reader.Read()) // Если клиент найден
                             {
-                                // Замени на реальные названия колонок ФИО в таблице clients
+                                // Получаем ФИО клиента
                                 clientFio = $"{reader["FullName_client"]}";
                             }
                         }
                     }
 
-                    // Запрос менеджера (замени поля на актуальные названия в твоей БД)
+                    // Запрос работника (менеджера) по ID
                     string cmdWorker = "SELECT * FROM worker WHERE ID_worker = @id";
                     using (var cmd = new MySqlCommand(cmdWorker, connection))
                     {
                         cmd.Parameters.AddWithValue("@id", workerId);
                         using (var reader = cmd.ExecuteReader())
                         {
-                            if (reader.Read())
+                            if (reader.Read()) // Если работник найден
                             {
-                                // Замени на реальные названия колонок ФИО в таблице worker
+                                // Получаем ФИО работника
                                 workerFio = $"{reader["FIO"]}";
                             }
                         }
                     }
                 }
 
-                // Путь к шаблону Word (положи шаблон в bin\Debug\doc\contract.docx)
-                string projectDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\"));
-                string fileName = Path.Combine(projectDir, "docPrint", "contract.docx");
-                if (!File.Exists(fileName))
+                // Путь к шаблону Word (шаблон должен лежать в папке docPrint проекта)
+                string projectDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\")); // Путь к корню проекта
+                string fileName = Path.Combine(projectDir, "docPrint", "contract.docx"); // Полный путь к файлу шаблона
+                if (!File.Exists(fileName)) // Проверяем, существует ли файл
                 {
                     MessageBox.Show($"Шаблон не найден:\n{fileName}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
+                // Создаем экземпляр приложения Word
                 var word = new Microsoft.Office.Interop.Word.Application();
-                word.Visible = false;
+                word.Visible = false; // Запускаем Word в фоновом режиме
 
                 try
                 {
-                    var wordDocument = word.Documents.Add(fileName);
+                    var wordDocument = word.Documents.Add(fileName); // Открываем шаблон документа
 
-                    // Заменяем заглушки в документе
+                    // Заменяем заглушки в документе на реальные данные
                     ReplaceWordStub("{date_signing}", dateSigning, wordDocument);
                     ReplaceWordStub("{END_DATE}", endDate, wordDocument);
                     ReplaceWordStub("{Clients_ID_Client}", clientFio, wordDocument);
@@ -213,11 +222,11 @@ namespace Kursivoy_Konkin
                     ReplaceWordStub("{Cost}", cost, wordDocument);
                     ReplaceWordStub("{Construction_Dates}", constrDates, wordDocument);
 
-                    word.Visible = true;
+                    word.Visible = true; // Делаем Word видимым, чтобы пользователь увидел результат
                 }
                 catch (Exception ex)
                 {
-                    word.Quit();
+                    word.Quit(); // Закрываем Word в случае ошибки
                     MessageBox.Show($"Ошибка при заполнении документа: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -227,26 +236,26 @@ namespace Kursivoy_Konkin
             }
         }
 
-        // Вспомогательный метод замены заглушек (как у подруги)
+        // Вспомогательный метод замены заглушек в документе Word
         private void ReplaceWordStub(string stubToReplace, string text, Microsoft.Office.Interop.Word.Document wordDocument)
         {
-            var range = wordDocument.Content;
-            range.Find.ClearFormatting();
+            var range = wordDocument.Content; // Получаем весь контент документа
+            range.Find.ClearFormatting(); // Очищаем настройки поиска
             range.Find.Execute(
-                FindText: stubToReplace,
-                ReplaceWith: text,
-                Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll
+                FindText: stubToReplace, // Что ищем
+                ReplaceWith: text, // На что заменяем
+                Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll // Заменяем все вхождения
             );
         }
 
+        // Обработчик клика мышью по DataGridView (для контекстного меню)
         private void dataGridView1_MouseClick(object sender, MouseEventArgs e)
         {
-
             try
             {
-                if (e.Button == MouseButtons.Right)
+                if (e.Button == MouseButtons.Right) // Если нажата правая кнопка мыши
                 {
-                    var hitTest = dataGridView1.HitTest(e.X, e.Y);
+                    var hitTest = dataGridView1.HitTest(e.X, e.Y); // Определяем, куда кликнули
 
                     // Открываем меню только если кликнули на строку, не на заголовок
                     if (hitTest.RowIndex >= 0)
@@ -255,33 +264,34 @@ namespace Kursivoy_Konkin
                         dataGridView1.ClearSelection();
                         dataGridView1.Rows[hitTest.RowIndex].Selected = true;
                         dataGridView1.CurrentCell = dataGridView1.Rows[hitTest.RowIndex].Cells[0];
-
-               
                     }
                 }
             }
-            catch (Exception ex) { }
+            catch (Exception ex) { } // Игнорируем ошибки (пустой catch)
         }
 
+        // Обработчик пункта меню "Добавить" - открывает форму добавления контракта
         private void добавитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormManagerAddContract f = new FormManagerAddContract();
-            this.Visible = false;
-            f.ShowDialog();
-            this.Close();
+            FormManagerAddContract f = new FormManagerAddContract(); // Создаем форму добавления контракта
+            this.Visible = false; // Скрываем текущую форму
+            f.ShowDialog(); // Показываем форму добавления
+            this.Close(); // Закрываем текущую форму
         }
 
+        // Обработчик загрузки формы (основной)
         private void FormHeadViewContract_Load(object sender, EventArgs e)
         {
-            LoadData();
+            LoadData(); // Загружаем данные при загрузке формы
         }
 
+        // Обработчик кнопки "Назад" (альтернативный)
         private void button1_Click(object sender, EventArgs e)
         {
-            FormHeadNavigation f = new FormHeadNavigation();
-            this.Visible = false;
-            f.ShowDialog();
-            this.Close();
+            FormHeadNavigation f = new FormHeadNavigation(); // Создаем форму навигации для руководителя
+            this.Visible = false; // Скрываем текущую форму
+            f.ShowDialog(); // Показываем форму навигации
+            this.Close(); // Закрываем текущую форму
         }
     }
 }

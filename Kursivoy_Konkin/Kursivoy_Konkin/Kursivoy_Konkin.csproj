@@ -86,29 +86,11 @@
     <Compile Include="Admin\FormAdminNavigation.Designer.cs">
       <DependentUpon>FormAdminNavigation.cs</DependentUpon>
     </Compile>
-    <Compile Include="Admin\FormAdminRepairAndImportExportData.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Admin\FormAdminRepairAndImportExportData.Designer.cs">
-      <DependentUpon>FormAdminRepairAndImportExportData.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Admin\FormAdminRole.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Admin\FormAdminRole.Designer.cs">
-      <DependentUpon>FormAdminRole.cs</DependentUpon>
-    </Compile>
     <Compile Include="Admin\FormAdminWorker.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Admin\FormAdminWorker.Designer.cs">
       <DependentUpon>FormAdminWorker.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Admin\FormAdminEditWorker.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Admin\FormAdminEditWorker.Designer.cs">
-      <DependentUpon>FormAdminEditWorker.cs</DependentUpon>
     </Compile>
     <Compile Include="Admin\FormAdminAddObject.cs">
       <SubType>Form</SubType>
@@ -202,12 +184,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Admin\FormAdminObject.resx">
       <DependentUpon>FormAdminObject.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Admin\FormAdminRepairAndImportExportData.resx">
-      <DependentUpon>FormAdminRepairAndImportExportData.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Admin\FormAdminRole.resx">
-      <DependentUpon>FormAdminRole.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Admin\FormAdminWorker.resx">
       <DependentUpon>FormAdminWorker.cs</DependentUpon>

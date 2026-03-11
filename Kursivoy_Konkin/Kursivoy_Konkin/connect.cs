@@ -6,9 +6,14 @@ using System.Threading.Tasks;
 
 namespace Kursivoy_Konkin
 {
+    // Класс для хранения строки подключения к базе данных MySQL
     internal class connect
     {
-        public static string con = $"host={Properties.Settings.Default.host};uid={Properties.Settings.Default.uid};pwd={Properties.Settings.Default.pwd};database={Properties.Settings.Default.database}";
-
+        // Статическая строка соединения, собирается из настроек проекта
+        public static string con = $"host={Properties.Settings.Default.host};" +
+                                   $"uid={Properties.Settings.Default.uid};" +
+                                   $"pwd={Properties.Settings.Default.pwd};" +
+                                   $"database={Properties.Settings.Default.database}";
+        // Эта строка подключается к базе по параметрам, заданным в настройках проекта
     }
 }

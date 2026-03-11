@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Data;
 using MySql.Data.MySqlClient;
 using System.Windows.Forms;
@@ -10,101 +11,109 @@ namespace YourNamespace
 {
     public partial class FormManagerAddContract : Form
     {
-        // Строка подключения к БД
+        // Строка подключения к БД, берется из внешнего источника (connect.con)
         private string connectionString = connect.con;
 
-        // Переменные для хранения выбранных ID
+        // Переменные для хранения ID выбранных элементов (клиент, сотрудник, объект).
+        // int? означает, что они могут быть null (ничего не выбрано)
         private int? selectedClientId = null;
         private int? selectedWorkerId = null;
         private int? selectedObjectId = null;
 
+        // Конструктор формы. Вызывается при создании нового экземпляра
         public FormManagerAddContract()
         {
-            InitializeComponent();
-            SetupForm();
-            this.MinimizeBox = false;
-            this.MaximizeBox = false;
-            this.ControlBox = false;
+            InitializeComponent(); // Инициализация компонентов дизайнера
+            SetupForm(); // Вызов пользовательского метода для настройки формы
+            this.MinimizeBox = false; // Запрет на сворачивание окна
+            this.MaximizeBox = false; // Запрет на разворачивание окна
+            this.ControlBox = false; // Скрытие системных кнопок (свернуть/развернуть/закрыть)
         }
 
         #region Инициализация формы
 
+        // Метод для первичной настройки элементов управления на форме
         private void SetupForm()
         {
 
-
+            // Разворачивает форму на весь экран при запуске
             this.WindowState = FormWindowState.Maximized;
-            // this.Size = new System.Drawing.Size(2000, 842);
+            // this.Size = new System.Drawing.Size(2000, 842); // Закомментированный код для ручной установки размера
 
             // Открывать по центру экрана
             this.StartPosition = FormStartPosition.CenterScreen;
 
+            // Настройка календаря для даты подписания: минимальная дата - 1900 год, максимальная - сегодня
             dtpDateSigning.MinDate = new DateTime(1900, 1, 1); // или любая ранняя дата
             dtpDateSigning.MaxDate = DateTime.Today; // нельзя выбрать будущее
-            dtpDateSigning.Value = DateTime.Today;
+            dtpDateSigning.Value = DateTime.Today; // Установка текущей даты по умолчанию
 
+            // Настройка календаря для даты окончания
             dtpEndDate.MinDate = DateTime.Today; // по умолчанию, пока объект не выбран
-            dtpEndDate.MaxDate = new DateTime(2100, 1, 1);
-            dtpEndDate.Value = DateTime.Today;
+            dtpEndDate.MaxDate = new DateTime(2100, 1, 1); // Максимальная дата - 2100 год
+            dtpEndDate.Value = DateTime.Today; // Установка текущей даты по умолчанию
 
-            // Настройка DataGridView
+            // Настройка DataGridView (таблиц)
             SetupDataGridViews();
 
-            // Загрузка данных
+            // Загрузка данных в таблицы
             LoadClients();
             LoadWorkers();
             LoadObjects();
 
-            // Подписка на события поиска
+            // Подписка на события поиска: при изменении текста в поисковой строке вызывается метод загрузки с фильтром
             txtSearchClient.TextChanged += (s, e) => LoadClients(txtSearchClient.Text);
             txtSearchWorker.TextChanged += (s, e) => LoadWorkers(txtSearchWorker.Text);
             txtSearchObject.TextChanged += (s, e) => LoadObjects(txtSearchObject.Text);
 
-            // Подписка на события выбора в таблицах
+            // Подписка на события выбора строки в таблицах
             dgvClients.SelectionChanged += DgvClients_SelectionChanged;
             dgvWorkers.SelectionChanged += DgvWorkers_SelectionChanged;
             dgvObjects.SelectionChanged += DgvObjects_SelectionChanged;
 
-            // Ограничение ввода текста
+            // Ограничение ввода текста (только русские буквы и цифры)
             txtSearchClient.KeyPress += RussianAndDigitsOnly_KeyPress;
             txtSearchWorker.KeyPress += RussianAndDigitsOnly_KeyPress;
             txtSearchObject.KeyPress += RussianAndDigitsOnly_KeyPress;
             txtContractName.KeyPress += RussianAndDigitsOnly_KeyPress;
 
-            // Дата окончания не раньше даты подписания
+            // Логика: дата окончания не может быть раньше даты подписания
             dtpDateSigning.ValueChanged += DtpDateSigning_ValueChanged;
 
+            // Подписка на события кнопок
             this.btnAddContract.Click += new EventHandler(this.btnAddContract_Click);
             this.btnCancel.Click += new EventHandler(this.btnCancel_Click);
         }
 
+        // Метод для настройки внешнего вида и поведения всех таблиц (DataGridView)
         private void SetupDataGridViews()
         {
-            // Общие настройки для всех DataGridView
+            // Цикл по массиву из трех таблиц
             foreach (DataGridView dgv in new[] { dgvClients, dgvWorkers, dgvObjects })
             {
-                dgv.ReadOnly = true;
-                dgv.MultiSelect = false;
-                dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                dgv.AllowUserToAddRows = false;
-                dgv.AllowUserToDeleteRows = false;
-                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                dgv.RowHeadersVisible = false;
-                dgv.BackgroundColor = System.Drawing.Color.White;
+                dgv.ReadOnly = true; // Запрет на редактирование ячеек
+                dgv.MultiSelect = false; // Запрет на выделение нескольких строк
+                dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect; // Выделение строки целиком
+                dgv.AllowUserToAddRows = false; // Убрать строку для добавления новой записи
+                dgv.AllowUserToDeleteRows = false; // Запретить удаление строк пользователем
+                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill; // Автоматическая ширина колонок
+                dgv.RowHeadersVisible = false; // Скрыть заголовки строк (левый серый столбец)
+                dgv.BackgroundColor = System.Drawing.Color.White; // Установить белый фон
             }
         }
         #endregion
 
         #region Загрузка данных из БД
 
-        // Загрузка клиентов
+        // Загрузка списка клиентов из базы данных с возможностью поиска
         private void LoadClients(string search = "")
         {
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    conn.Open();
+                    conn.Open(); // Открытие соединения
+                    // SQL-запрос для выборки активных клиентов (IsDeleted = 0) с фильтром по ФИО или телефону
                     string query = @"SELECT 
                                         ID_Client AS 'ID',
                                         FullName_client AS 'ФИО',
@@ -115,13 +124,13 @@ namespace YourNamespace
                                         OR phone LIKE @search)";
 
                     MySqlCommand cmd = new MySqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@search", $"%{search}%");
+                    cmd.Parameters.AddWithValue("@search", $"%{search}%"); // Добавление параметра поиска с маской
 
-                    MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                    MySqlDataAdapter adapter = new MySqlDataAdapter(cmd); // Адаптер для заполнения DataTable
                     DataTable dt = new DataTable();
-                    adapter.Fill(dt);
+                    adapter.Fill(dt); // Заполнение таблицы данными
 
-                    dgvClients.DataSource = dt;
+                    dgvClients.DataSource = dt; // Установка источника данных для DataGridView
 
                     // Скрываем колонку ID (она нужна нам, но не показываем)
                     dgvClients.Columns["ID"].Visible = false;
@@ -129,12 +138,13 @@ namespace YourNamespace
             }
             catch (Exception ex)
             {
+                // Показ сообщения об ошибке в случае исключения
                 MessageBox.Show($"Ошибка загрузки клиентов: {ex.Message}",
                     "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        // Загрузка сотрудников
+        // Загрузка сотрудников (аналогично LoadClients)
         private void LoadWorkers(string search = "")
         {
             try
@@ -142,6 +152,7 @@ namespace YourNamespace
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
+                    // Запрос на выборку активных сотрудников
                     string query = @"SELECT 
                                         w.ID_worker AS 'ID',
                                         w.FIO AS 'ФИО',
@@ -159,7 +170,7 @@ namespace YourNamespace
                     adapter.Fill(dt);
 
                     dgvWorkers.DataSource = dt;
-                    dgvWorkers.Columns["ID"].Visible = false;
+                    dgvWorkers.Columns["ID"].Visible = false; // Скрываем ID
                 }
             }
             catch (Exception ex)
@@ -169,7 +180,7 @@ namespace YourNamespace
             }
         }
 
-        // Загрузка объектов
+        // Загрузка объектов недвижимости
         private void LoadObjects(string search = "")
         {
             try
@@ -177,6 +188,7 @@ namespace YourNamespace
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
+                    // Запрос на выборку активных объектов с множеством характеристик
                     string query = @"SELECT 
                                 ID_object           AS 'ID',
                                 name_object         AS 'Название объекта',
@@ -199,7 +211,7 @@ namespace YourNamespace
                     adapter.Fill(dt);
 
                     dgvObjects.DataSource = dt;
-                    dgvObjects.Columns["ID"].Visible = false;
+                    dgvObjects.Columns["ID"].Visible = false; // Скрываем ID
                 }
             }
             catch (Exception ex)
@@ -212,48 +224,54 @@ namespace YourNamespace
 
         #region События выбора в DataGridView
 
+        // Обработчик выбора строки в таблице клиентов
         private void DgvClients_SelectionChanged(object sender, EventArgs e)
         {
-            if (dgvClients.CurrentRow != null)
+            if (dgvClients.CurrentRow != null) // Если есть выбранная строка
             {
-                selectedClientId = Convert.ToInt32(dgvClients.CurrentRow.Cells["ID"].Value);
-                string fio = dgvClients.CurrentRow.Cells["ФИО"].Value?.ToString();
+                selectedClientId = Convert.ToInt32(dgvClients.CurrentRow.Cells["ID"].Value); // Сохраняем ID клиента
+                string fio = dgvClients.CurrentRow.Cells["ФИО"].Value?.ToString(); // Получаем ФИО
 
-                // Обновляем правую панель
+                // Обновляем правую панель с отображением выбранного клиента
                 lblClientValue.Text = $"{fio} ✅";
-                lblClientValue.ForeColor = System.Drawing.Color.Green;
+                lblClientValue.ForeColor = System.Drawing.Color.Green; // Меняем цвет текста на зеленый
             }
         }
 
+        // Обработчик выбора строки в таблице сотрудников
         private void DgvWorkers_SelectionChanged(object sender, EventArgs e)
         {
             if (dgvWorkers.CurrentRow != null)
             {
-                selectedWorkerId = Convert.ToInt32(dgvWorkers.CurrentRow.Cells["ID"].Value);
-                string fio = dgvWorkers.CurrentRow.Cells["ФИО"].Value?.ToString();
+                selectedWorkerId = Convert.ToInt32(dgvWorkers.CurrentRow.Cells["ID"].Value); // Сохраняем ID сотрудника
+                string fio = dgvWorkers.CurrentRow.Cells["ФИО"].Value?.ToString(); // Получаем ФИО
 
+                // Обновляем метку
                 lblWorkerValue.Text = $"{fio} ✅";
                 lblWorkerValue.ForeColor = System.Drawing.Color.Green;
             }
         }
 
+        // Обработчик выбора строки в таблице объектов
         private void DgvObjects_SelectionChanged(object sender, EventArgs e)
         {
             if (dgvObjects.CurrentRow != null)
             {
-                selectedObjectId = Convert.ToInt32(dgvObjects.CurrentRow.Cells["ID"].Value);
-                string name = dgvObjects.CurrentRow.Cells["Название объекта"].Value?.ToString();
+                selectedObjectId = Convert.ToInt32(dgvObjects.CurrentRow.Cells["ID"].Value); // Сохраняем ID объекта
+                string name = dgvObjects.CurrentRow.Cells["Название объекта"].Value?.ToString(); // Получаем название
 
+                // Обновляем метку
                 lblObjectValue.Text = $"{name} ✅";
                 lblObjectValue.ForeColor = System.Drawing.Color.Green;
 
-                // Автоматически считаем дату окончания из building_dates
+                // Автоматически считаем дату окончания из поля building_dates (срок строительства)
                 UpdateEndDateMin();
             }
         }
         #endregion
 
         #region Валидация
+        // Метод для обновления минимальной даты окончания контракта на основе срока строительства объекта
         private void UpdateEndDateMin()
         {
             try
@@ -261,21 +279,22 @@ namespace YourNamespace
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
                     conn.Open();
+                    // Запрос на получение срока строительства выбранного объекта
                     string query = "SELECT building_dates FROM object WHERE ID_object = @id";
                     MySqlCommand cmd = new MySqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@id", selectedObjectId);
+                    cmd.Parameters.AddWithValue("@id", selectedObjectId); // Передаем ID объекта
 
-                    object result = cmd.ExecuteScalar();
+                    object result = cmd.ExecuteScalar(); // Выполняем запрос и получаем одно значение
 
-                    if (result != null)
+                    if (result != null) // Если значение получено
                     {
-                        int buildingDays = Convert.ToInt32(result);
+                        int buildingDays = Convert.ToInt32(result); // Преобразуем в число (количество дней)
 
                         // Минимальная дата окончания = дата подписания + срок строительства
                         DateTime minEndDate = dtpDateSigning.Value.AddDays(buildingDays);
 
-                        dtpEndDate.MinDate = minEndDate;
-                        dtpEndDate.Value = minEndDate;
+                        dtpEndDate.MinDate = minEndDate; // Устанавливаем минимальную дату в календаре
+                        dtpEndDate.Value = minEndDate; // Устанавливаем значение по умолчанию
                     }
                 }
             }
@@ -286,7 +305,7 @@ namespace YourNamespace
             }
         }
 
-        // Только русские буквы, цифры и пробел
+        // Метод для ограничения ввода: только русские буквы, цифры и пробел
         private void RussianAndDigitsOnly_KeyPress(object sender, KeyPressEventArgs e)
         {
             // Разрешаем: русские буквы, цифры, пробел, backspace
@@ -295,24 +314,26 @@ namespace YourNamespace
                               e.KeyChar == 'ё' || e.KeyChar == 'Ё';
             bool isDigit = char.IsDigit(e.KeyChar);
             bool isSpace = e.KeyChar == ' ';
-            bool isBackspace = e.KeyChar == '\b';
+            bool isBackspace = e.KeyChar == '\b'; // Клавиша удаления
 
+            // Если символ не подходит ни под одно разрешение
             if (!isRussian && !isDigit && !isSpace && !isBackspace)
             {
-                e.Handled = true; // Блокируем ввод
+                e.Handled = true; // Блокируем ввод (символ не будет добавлен)
             }
         }
 
-        // Дата окончания не раньше даты подписания
+        // Обработчик изменения даты подписания
         private void DtpDateSigning_ValueChanged(object sender, EventArgs e)
         {
-            dtpEndDate.MinDate = dtpDateSigning.Value;
+            dtpEndDate.MinDate = dtpDateSigning.Value; // Минимальная дата окончания = дата подписания
 
+            // Если дата окончания стала меньше даты подписания, исправляем это
             if (dtpEndDate.Value < dtpDateSigning.Value)
                 dtpEndDate.Value = dtpDateSigning.Value;
         }
 
-        // Проверка заполненности формы
+        // Проверка заполненности формы перед сохранением
         private bool ValidateForm()
         {
             if (selectedClientId == null)
@@ -345,22 +366,23 @@ namespace YourNamespace
                     "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
-            return true;
+            return true; // Если все проверки пройдены, возвращаем true
         }
         #endregion
 
         #region Кнопки
 
-        // Кнопка "Добавить контракт"
+        // Обработчик кнопки "Добавить контракт"
         private void btnAddContract_Click(object sender, EventArgs e)
         {
-            if (!ValidateForm()) return;
+            if (!ValidateForm()) return; // Если валидация не пройдена, выходим из метода
 
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    conn.Open();
+                    conn.Open(); // Открываем соединение
+                    // SQL-запрос для вставки нового контракта в таблицу
                     string query = @"INSERT INTO contract 
                                     (Name_contract, date_signing, END_DATE, 
                                      Clients_ID_Client, worker_ID_worker, 
@@ -370,19 +392,21 @@ namespace YourNamespace
                                      @clientId, @workerId, @objectId)";
 
                     MySqlCommand cmd = new MySqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@name", txtContractName.Text.Trim());
-                    cmd.Parameters.AddWithValue("@dateSigning", dtpDateSigning.Value.Date);
+                    // Добавляем параметры со значениями из полей формы
+                    cmd.Parameters.AddWithValue("@name", txtContractName.Text.Trim()); // Название контракта
+                    cmd.Parameters.AddWithValue("@dateSigning", dtpDateSigning.Value.Date); // Только дата (без времени)
                     cmd.Parameters.AddWithValue("@endDate", dtpEndDate.Value.Date);
-                    cmd.Parameters.AddWithValue("@clientId", selectedClientId);
-                    cmd.Parameters.AddWithValue("@workerId", selectedWorkerId);
-                    cmd.Parameters.AddWithValue("@objectId", selectedObjectId);
+                    cmd.Parameters.AddWithValue("@clientId", selectedClientId); // ID клиента
+                    cmd.Parameters.AddWithValue("@workerId", selectedWorkerId); // ID сотрудника
+                    cmd.Parameters.AddWithValue("@objectId", selectedObjectId); // ID объекта
 
-                    cmd.ExecuteNonQuery();
+                    cmd.ExecuteNonQuery(); // Выполняем запрос на вставку
 
+                    // Показываем сообщение об успехе
                     MessageBox.Show("✅ Контракт успешно добавлен!", "Успех",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    this.Close();
+                    this.Close(); // Закрываем текущую форму
                 }
             }
             catch (Exception ex)
@@ -392,20 +416,17 @@ namespace YourNamespace
             }
         }
 
-        // Кнопка "Назад"
+        // Обработчик кнопки "Назад" (Отмена)
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            FormManagerViewContract f = new FormManagerViewContract();
-            this.Visible = false;
-            f.ShowDialog();
-            this.Close();
+            FormManagerViewContract f = new FormManagerViewContract(); // Создаем форму просмотра контрактов
+            this.Visible = false; // Скрываем текущую форму
+            f.ShowDialog(); // Открываем новую форму в модальном режиме
+            this.Close(); // Закрываем текущую форму
         }
-
-
-
 
         #endregion
 
-        
+
     }
 }
