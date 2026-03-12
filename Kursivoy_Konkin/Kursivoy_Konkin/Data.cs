@@ -41,6 +41,17 @@ namespace Kursivoy_Konkin
             return roleId; // Возвращаем полученное значение
         }
 
+        public static void GetBackup(string file)
+        {
+            MySqlConnection connection = new MySqlConnection(connect.con);
+            connection.Open();
+            MySqlCommand command = new MySqlCommand();
+            command.Connection = connection;
+            MySqlBackup backup = new MySqlBackup(command);
+            backup.ExportToFile(file);
+            connection.Close();
+        }
+
         // Хеширует пароль с помощью SHA-256
         public static string GetHashPass(string password)
         {

@@ -41,6 +41,9 @@
     <Reference Include="MySql.Data">
       <HintPath>..\..\MySql.Data.dll</HintPath>
     </Reference>
+    <Reference Include="MySqlBackup">
+      <HintPath>dumb and dll\MySqlBackup.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -59,6 +62,12 @@
     </Compile>
     <Compile Include="Admin\FormAdminEditObject.Designer.cs">
       <DependentUpon>FormAdminEditObject.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\FormAdminLocal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Admin\FormAdminLocal.Designer.cs">
+      <DependentUpon>FormAdminLocal.cs</DependentUpon>
     </Compile>
     <Compile Include="Admin\FormAdminWorkerAdd.cs">
       <SubType>Form</SubType>
@@ -178,6 +187,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Admin\FormAdminEditObject.resx">
       <DependentUpon>FormAdminEditObject.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\FormAdminLocal.resx">
+      <DependentUpon>FormAdminLocal.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Admin\FormAdminNavigation.resx">
       <DependentUpon>FormAdminNavigation.cs</DependentUpon>
