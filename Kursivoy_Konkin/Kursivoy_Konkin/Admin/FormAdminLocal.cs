@@ -20,11 +20,9 @@ namespace Kursivoy_Konkin.Admin
         }
         private void DbExists()
         {
-            MySqlConnection connection = new MySqlConnection($@"host={Properties.Settings.Default["host"]};
-                                                                uid={Properties.Settings.Default["uid"]};
-                                                                pwd={Properties.Settings.Default["pwd"]}");
+            MySqlConnection connection = new MySqlConnection(connect.con);
             connection.Open();
-            MySqlCommand command = new MySqlCommand("CREATE DATABASE  IF NOT EXISTS optics", connection);
+            MySqlCommand command = new MySqlCommand("CREATE DATABASE  IF NOT EXISTS mydb", connection);
             command.ExecuteNonQuery();
             connection.Close();
         }
@@ -41,25 +39,9 @@ namespace Kursivoy_Konkin.Admin
             connection.Close();
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            DialogResult dialogResult = MessageBox.Show("Вы действительно хотите выйти?", "Предупреждение", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (dialogResult == DialogResult.Yes)
-            {
-                FormAutorization authorizationForm = new FormAutorization();
-                this.Visible = false;
-                authorizationForm.ShowDialog();
-                this.Close();
-            }
-        }
+        
 
-        private void LocalAdminForm_Load(object sender, EventArgs e)
-        {
-            DbExists();
-            FillTables();
-            button1.Enabled = false;
-            button4.Enabled = false;
-        }
+       
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -67,44 +49,7 @@ namespace Kursivoy_Konkin.Admin
             button4.Enabled = true;
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (comboBox1.SelectedIndex == -1)
-                {
-                    MessageBox.Show("Пожалуйста, заполните все поля!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                else
-                {
-                    OpenFileDialog openFileDialog1 = new OpenFileDialog();
-                    openFileDialog1.Filter = "CSV files (*.csv)|*.csv";
-                    if (openFileDialog1.ShowDialog() == DialogResult.OK)
-                    {
-                        MySqlConnection mySqlConnection = new MySqlConnection(connect.con);
-                        mySqlConnection.Open();
-
-                        string filePath = openFileDialog1.FileName;
-                        string tableName = comboBox1.SelectedItem.ToString();
-
-                        int importRows = ImportCSV(filePath, tableName, mySqlConnection);
-                        if (importRows != 0)
-                        {
-                            MessageBox.Show($"Успешно импортировано {importRows} записей в таблицу {tableName}!", "Сообщение пользователю", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                        mySqlConnection.Close();
-
-                        button1.Enabled = false;
-                        button4.Enabled = false;
-                        comboBox1.SelectedIndex = -1;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+       
 
         private int ImportCSV(string csvFilePath, string tableName, MySqlConnection connection)
         {
@@ -166,28 +111,40 @@ namespace Kursivoy_Konkin.Admin
             return res;
         }
 
-        private void button3_Click(object sender, EventArgs e)
+      
+
+
+       
+
+        private void FormAdminLocal_Load(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Вы уверены, что хотите восстановить базу данных?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (result == DialogResult.Yes)
+            DbExists();
+            FillTables();
+            button1.Enabled = false;
+            button4.Enabled = false;
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show("Вы действительно хотите создать резервную копию?", "Предупреждение", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (dialogResult == DialogResult.Yes)
             {
-                MySqlConnection mySqlConnection = new MySqlConnection(connect.con);
-                mySqlConnection.Open();
-
-                string pathFile = Directory.GetCurrentDirectory() + @"\db\optics.sql";
-                string textFile = File.ReadAllText(pathFile);
-                MySqlCommand mySqlCommand = new MySqlCommand(textFile, mySqlConnection);
-                mySqlCommand.ExecuteNonQuery();
-
-                mySqlConnection.Close();
-
-                MessageBox.Show("База данных успешно восстановлена!", "Сообщение пользователю", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                comboBox1.Items.Clear();
-                FillTables();
+                string backup = "backup optics " + DateTime.Now + ".sql";
+                backup = backup.Replace(":", "-");
+                string file = Directory.GetCurrentDirectory() + "\\backup\\" + backup;
+                try
+                {
+                    Data.GetBackup(file);
+                    MessageBox.Show($"Резервная копия успешно создана по пути: {file}", "Сообщение пользователю", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void button4_Click_1(object sender, EventArgs e)
         {
             try
             {
@@ -249,23 +206,75 @@ namespace Kursivoy_Konkin.Admin
             }
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void button3_Click_1(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show("Вы действительно хотите создать резервную копию?", "Предупреждение", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            DialogResult result = MessageBox.Show("Вы уверены, что хотите восстановить базу данных?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (result == DialogResult.Yes)
+            {
+                MySqlConnection mySqlConnection = new MySqlConnection(connect.con);
+                mySqlConnection.Open();
+
+                string pathFile = Directory.GetCurrentDirectory() + @"\dumb and dll\last.sql";
+                string textFile = File.ReadAllText(pathFile);
+                MySqlCommand mySqlCommand = new MySqlCommand(textFile, mySqlConnection);
+                mySqlCommand.ExecuteNonQuery();
+
+                mySqlConnection.Close();
+
+                MessageBox.Show("База данных успешно восстановлена!", "Сообщение пользователю", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                comboBox1.Items.Clear();
+                FillTables();
+            }
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            try
+            {
+                if (comboBox1.SelectedIndex == -1)
+                {
+                    MessageBox.Show("Пожалуйста, заполните все поля!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    OpenFileDialog openFileDialog1 = new OpenFileDialog();
+                    openFileDialog1.Filter = "CSV files (*.csv)|*.csv";
+                    if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                    {
+                        MySqlConnection mySqlConnection = new MySqlConnection(connect.con);
+                        mySqlConnection.Open();
+
+                        string filePath = openFileDialog1.FileName;
+                        string tableName = comboBox1.SelectedItem.ToString();
+
+                        int importRows = ImportCSV(filePath, tableName, mySqlConnection);
+                        if (importRows != 0)
+                        {
+                            MessageBox.Show($"Успешно импортировано {importRows} записей в таблицу {tableName}!", "Сообщение пользователю", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        mySqlConnection.Close();
+
+                        button1.Enabled = false;
+                        button4.Enabled = false;
+                        comboBox1.SelectedIndex = -1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show("Вы действительно хотите выйти?", "Предупреждение", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (dialogResult == DialogResult.Yes)
             {
-                string backup = "backup optics " + DateTime.Now + ".sql";
-                backup = backup.Replace(":", "-");
-                string file = Directory.GetCurrentDirectory() + "\\backup\\" + backup;
-                try
-                {
-                    Data.GetBackup(file);
-                    MessageBox.Show($"Резервная копия успешно создана по пути: {file}", "Сообщение пользователю", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                FormAutorization authorizationForm = new FormAutorization();
+                this.Visible = false;
+                authorizationForm.ShowDialog();
+                this.Close();
             }
         }
     }

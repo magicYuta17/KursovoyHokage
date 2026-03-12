@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using Kursivoy_Konkin.Admin;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -134,7 +135,7 @@ namespace Kursivoy_Konkin
                 switch (role)
                 {
                     case "1":
-                        FormAdminNavigation adminForm = new FormAdminNavigation();
+                        FormAdminLocal adminForm = new FormAdminLocal();
                         this.Visible = false;
                         adminForm.ShowDialog();
                         this.Close();

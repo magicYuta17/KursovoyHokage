@@ -85,6 +85,7 @@ namespace Kursivoy_Konkin.Admin
             this.button5.TabIndex = 78;
             this.button5.Text = "Резервное копирование";
             this.button5.UseVisualStyleBackColor = false;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // button4
             // 
@@ -99,6 +100,7 @@ namespace Kursivoy_Konkin.Admin
             this.button4.TabIndex = 77;
             this.button4.Text = "Экспорт";
             this.button4.UseVisualStyleBackColor = false;
+            this.button4.Click += new System.EventHandler(this.button4_Click_1);
             // 
             // button1
             // 
@@ -113,6 +115,7 @@ namespace Kursivoy_Konkin.Admin
             this.button1.TabIndex = 76;
             this.button1.Text = "Импорт";
             this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // button3
             // 
@@ -127,6 +130,7 @@ namespace Kursivoy_Konkin.Admin
             this.button3.TabIndex = 75;
             this.button3.Text = "Восстановить БД";
             this.button3.UseVisualStyleBackColor = false;
+            this.button3.Click += new System.EventHandler(this.button3_Click_1);
             // 
             // button2
             // 
@@ -141,6 +145,7 @@ namespace Kursivoy_Konkin.Admin
             this.button2.TabIndex = 74;
             this.button2.Text = "Выйти из аккаунта";
             this.button2.UseVisualStyleBackColor = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // FormAdminLocal
             // 
@@ -159,6 +164,7 @@ namespace Kursivoy_Konkin.Admin
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormAdminLocal";
             this.Text = "Локальный администратор";
+            this.Load += new System.EventHandler(this.FormAdminLocal_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
