@@ -20,23 +20,38 @@ namespace Kursivoy_Konkin.Admin
         }
         private void DbExists()
         {
-            MySqlConnection connection = new MySqlConnection(connect.con);
-            connection.Open();
-            MySqlCommand command = new MySqlCommand("CREATE DATABASE  IF NOT EXISTS mydb", connection);
-            command.ExecuteNonQuery();
-            connection.Close();
+            try
+            {
+                // Подключаемся БЕЗ базы данных
+                MySqlConnection connection = new MySqlConnection(connect.conNoDb);
+                connection.Open();
+                MySqlCommand command = new MySqlCommand("CREATE DATABASE IF NOT EXISTS mydb", connection);
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
         private void FillTables()
         {
-            MySqlConnection connection = new MySqlConnection(connect.con);
-            connection.Open();
-            MySqlCommand command = new MySqlCommand("SHOW TABLES", connection);
-            MySqlDataReader reader = command.ExecuteReader();
-            while (reader.Read())
+            try
             {
-                comboBox1.Items.Add(reader.GetValue(0).ToString());
+                MySqlConnection connection = new MySqlConnection(connect.con);
+                connection.Open();
+                MySqlCommand command = new MySqlCommand("SHOW TABLES", connection);
+                MySqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    comboBox1.Items.Add(reader.GetValue(0).ToString());
+                }
+                connection.Close();
             }
-            connection.Close();
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
 
         
@@ -129,7 +144,7 @@ namespace Kursivoy_Konkin.Admin
             DialogResult dialogResult = MessageBox.Show("Вы действительно хотите создать резервную копию?", "Предупреждение", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (dialogResult == DialogResult.Yes)
             {
-                string backup = "backup optics " + DateTime.Now + ".sql";
+                string backup = "backup build " + DateTime.Now + ".sql";
                 backup = backup.Replace(":", "-");
                 string file = Directory.GetCurrentDirectory() + "\\backup\\" + backup;
                 try
@@ -208,24 +223,53 @@ namespace Kursivoy_Konkin.Admin
 
         private void button3_Click_1(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Вы уверены, что хотите восстановить базу данных?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (result == DialogResult.Yes)
+            try
             {
-                MySqlConnection mySqlConnection = new MySqlConnection(connect.con);
-                mySqlConnection.Open();
+                DialogResult result = MessageBox.Show("Вы уверены, что хотите восстановить базу данных?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (result == DialogResult.Yes)
+                {
+                    // Правильное формирование пути
+                    string pathFile = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\dumb and dll\db.sql"));
 
-                string pathFile = Directory.GetCurrentDirectory() + @"\dumb and dll\last.sql";
-                string textFile = File.ReadAllText(pathFile);
-                MySqlCommand mySqlCommand = new MySqlCommand(textFile, mySqlConnection);
-                mySqlCommand.ExecuteNonQuery();
+                    // Проверяем существование файла
+                    if (!File.Exists(pathFile))
+                    {
+                        MessageBox.Show($"Файл не найден:\n{pathFile}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
 
-                mySqlConnection.Close();
+                    string textFile = File.ReadAllText(pathFile);
 
-                MessageBox.Show("База данных успешно восстановлена!", "Сообщение пользователю", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                comboBox1.Items.Clear();
-                FillTables();
+                    // Подключаемся БЕЗ базы данных
+                    
+                    MySqlConnection mySqlConnection = new MySqlConnection(connect.conNoDb);
+                    mySqlConnection.Open();
+
+                    // Создаем базу
+                    MySqlCommand createDbCommand = new MySqlCommand("CREATE DATABASE IF NOT EXISTS mydb", mySqlConnection);
+                    createDbCommand.ExecuteNonQuery();
+
+                    // Выбираем базу
+                    MySqlCommand useDbCommand = new MySqlCommand("USE mydb", mySqlConnection);
+                    useDbCommand.ExecuteNonQuery();
+
+                    // Выполняем скрипт
+                    MySqlCommand mySqlCommand = new MySqlCommand(textFile, mySqlConnection);
+                    mySqlCommand.ExecuteNonQuery();
+
+                    mySqlConnection.Close();
+
+                    MessageBox.Show("База данных успешно восстановлена!", "Сообщение пользователю", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    comboBox1.Items.Clear();
+                    FillTables();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private void button1_Click_1(object sender, EventArgs e)
         {

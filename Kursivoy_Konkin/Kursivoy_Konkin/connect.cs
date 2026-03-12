@@ -15,5 +15,7 @@ namespace Kursivoy_Konkin
                                    $"pwd={Properties.Settings.Default.pwd};" +
                                    $"database={Properties.Settings.Default.database}";
         // Эта строка подключается к базе по параметрам, заданным в настройках проекта
+
+        public static string conNoDb = "server=localhost;user=root;password=root;port=3306;";
     }
 }
