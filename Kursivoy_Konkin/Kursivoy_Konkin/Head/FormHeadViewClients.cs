@@ -71,8 +71,8 @@ namespace Kursivoy_Konkin
             }
 
             // Формируем путь к шаблону Word для отчета
-            string projectDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\"));
-            string fileName = Path.Combine(projectDir, "docPrint", "printLTV.docx");
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            string fileName = Path.Combine(baseDir, "docPrint", "printLTV.docx");
             if (!File.Exists(fileName)) // Проверяем существование файла
             {
                 MessageBox.Show($"Шаблон не найден:\n{fileName}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);

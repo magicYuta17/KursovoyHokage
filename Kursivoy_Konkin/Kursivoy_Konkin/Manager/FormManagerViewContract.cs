@@ -133,7 +133,6 @@ namespace Kursivoy_Konkin.Manager
         // Обработка клика по пункту печати контракта
         private void печатьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // Проверка, выбран ли контракт
             if (dataGridView1.SelectedRows.Count == 0)
             {
                 MessageBox.Show("Выберите контракт для печати.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -142,11 +141,10 @@ namespace Kursivoy_Konkin.Manager
 
             try
             {
-                var selectedRow = dataGridView1.SelectedRows[0]; // Выбираем строку
+                var selectedRow = dataGridView1.SelectedRows[0];
                 var table = (DataTable)dataGridView1.DataSource;
-                DataRow dataRow = table.Rows[selectedRow.Index]; // Получаем данные строки
+                DataRow dataRow = table.Rows[selectedRow.Index];
 
-                // Извлечение данных из строки
                 int contractId = Convert.ToInt32(dataRow["ID_Contract"]);
                 string namContract = dataRow["Наименование контракта"].ToString();
                 string cost = dataRow["Стоимость"].ToString();
@@ -156,65 +154,61 @@ namespace Kursivoy_Konkin.Manager
                 int clientId = Convert.ToInt32(dataRow["ID Клиента"]);
                 int workerId = Convert.ToInt32(dataRow["ID Работника"]);
 
-                // Инициализация переменных для ФИО клиента и работника
                 string clientFio = "";
                 string workerFio = "";
 
-                // Создание соединения для получения данных о клиентах и работниках
                 using (var connection = new MySqlConnection(connect.con))
                 {
                     connection.Open();
 
-                    // Запрос данных клиента по ID
                     string cmdClient = "SELECT * FROM clients WHERE ID_Client = @id";
                     using (var cmd = new MySqlCommand(cmdClient, connection))
                     {
-                        cmd.Parameters.AddWithValue("@id", clientId); // Передача параметра
+                        cmd.Parameters.AddWithValue("@id", clientId);
                         using (var reader = cmd.ExecuteReader())
                         {
                             if (reader.Read())
                             {
-                                // Получение ФИО клиента
                                 clientFio = $"{reader["FullName_client"]}";
                             }
                         }
                     }
 
-                    // Запрос данных работника по ID
                     string cmdWorker = "SELECT * FROM worker WHERE ID_worker = @id";
                     using (var cmd = new MySqlCommand(cmdWorker, connection))
                     {
-                        cmd.Parameters.AddWithValue("@id", workerId); // Передача параметра
+                        cmd.Parameters.AddWithValue("@id", workerId);
                         using (var reader = cmd.ExecuteReader())
                         {
                             if (reader.Read())
                             {
-                                // Получение ФИО работника
                                 workerFio = $"{reader["FIO"]}";
                             }
                         }
                     }
                 }
 
-                // Путь к шаблону Word (размести шаблон в папке bin\Debug\doc\contract.docx)
-                string projectDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\")); // Получение базового каталога проекта
-                string fileName = Path.Combine(projectDir, "docPrint", "contract.docx");
+                // 🔧 ИСПРАВЛЕННЫЙ ПУТЬ: относительно папки с .exe
+                string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+                string fileName = Path.Combine(baseDir, "docPrint", "contract.docx");
+
+                // Для отладки: раскомментируйте, чтобы увидеть путь
+                // MessageBox.Show($"Поиск шаблона: {fileName}");
+
                 if (!File.Exists(fileName))
                 {
-                    MessageBox.Show($"Шаблон не найден:\n{fileName}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Шаблон не найден:\n{fileName}\n\nУбедитесь, что папка 'docPrint' с файлом 'contract.docx' находится в папке с программой.",
+                        "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
-                // Создание объекта Word для автоматизации
                 var word = new Microsoft.Office.Interop.Word.Application();
-                word.Visible = false; // Не показывать Word сразу
+                word.Visible = false;
 
                 try
                 {
-                    // Открываем шаблон документа
                     var wordDocument = word.Documents.Add(fileName);
 
-                    // Замена заглушек в шаблоне документе
                     ReplaceWordStub("{date_signing}", dateSigning, wordDocument);
                     ReplaceWordStub("{END_DATE}", endDate, wordDocument);
                     ReplaceWordStub("{Clients_ID_Client}", clientFio, wordDocument);
@@ -223,11 +217,11 @@ namespace Kursivoy_Konkin.Manager
                     ReplaceWordStub("{Cost}", cost, wordDocument);
                     ReplaceWordStub("{Construction_Dates}", constrDates, wordDocument);
 
-                    word.Visible = true; // Сделать видимым, чтобы пользователь мог сохранить или распечатать
+                    word.Visible = true;
                 }
                 catch (Exception ex)
                 {
-                    word.Quit(); // Закрываем Word при ошибке
+                    word.Quit();
                     MessageBox.Show($"Ошибка при заполнении документа: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
