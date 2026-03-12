@@ -188,6 +188,7 @@ namespace Kursivoy_Konkin
             if (authAtt == 1)
             {
                 MessageBox.Show("Логин или пароль введены неверно! Требуется ввод CAPTCHA.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Width = 1050;
                 ShowCaptcha();
             }
             else // authAtt > 1
@@ -264,7 +265,7 @@ namespace Kursivoy_Konkin
             {
                 case 1:
                     imgPath = "1.png";
-                    cptAnswer = "$9874";
+                    cptAnswer = "9874";
                     break;
 
                 case 2:

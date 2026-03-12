@@ -51,43 +51,38 @@ namespace Kursivoy_Konkin
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.label1.Location = new System.Drawing.Point(366, 33);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(274, 27);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(122, 47);
+            this.label1.Size = new System.Drawing.Size(98, 38);
             this.label1.TabIndex = 0;
             this.label1.Text = "Логин";
-
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.label2.Location = new System.Drawing.Point(366, 177);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(274, 144);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(145, 47);
+            this.label2.Size = new System.Drawing.Size(116, 38);
             this.label2.TabIndex = 1;
             this.label2.Text = "Пароль";
             // 
             // textBox2
             // 
             this.textBox2.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.textBox2.Location = new System.Drawing.Point(375, 99);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(4);
+            this.textBox2.Location = new System.Drawing.Point(281, 80);
             this.textBox2.MaxLength = 50;
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(331, 55);
+            this.textBox2.Size = new System.Drawing.Size(249, 45);
             this.textBox2.TabIndex = 2;
             // 
             // textBox1
             // 
             this.textBox1.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.textBox1.Location = new System.Drawing.Point(375, 241);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.textBox1.Location = new System.Drawing.Point(281, 196);
             this.textBox1.MaxLength = 50;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(331, 55);
+            this.textBox1.Size = new System.Drawing.Size(249, 45);
             this.textBox1.TabIndex = 3;
             this.textBox1.UseSystemPasswordChar = true;
             // 
@@ -95,10 +90,9 @@ namespace Kursivoy_Konkin
             // 
             this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
             this.button2.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.button2.Location = new System.Drawing.Point(375, 349);
-            this.button2.Margin = new System.Windows.Forms.Padding(4);
+            this.button2.Location = new System.Drawing.Point(281, 284);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(332, 70);
+            this.button2.Size = new System.Drawing.Size(249, 57);
             this.button2.TabIndex = 4;
             this.button2.Text = "Войти";
             this.button2.UseVisualStyleBackColor = false;
@@ -108,10 +102,9 @@ namespace Kursivoy_Konkin
             // 
             this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
             this.button1.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.button1.Location = new System.Drawing.Point(375, 442);
-            this.button1.Margin = new System.Windows.Forms.Padding(4);
+            this.button1.Location = new System.Drawing.Point(281, 359);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(332, 70);
+            this.button1.Size = new System.Drawing.Size(249, 57);
             this.button1.TabIndex = 5;
             this.button1.Text = "Выход";
             this.button1.UseVisualStyleBackColor = false;
@@ -119,10 +112,9 @@ namespace Kursivoy_Konkin
             // 
             // captchaIMG
             // 
-            this.captchaIMG.Location = new System.Drawing.Point(745, 99);
-            this.captchaIMG.Margin = new System.Windows.Forms.Padding(4);
+            this.captchaIMG.Location = new System.Drawing.Point(559, 80);
             this.captchaIMG.Name = "captchaIMG";
-            this.captchaIMG.Size = new System.Drawing.Size(499, 197);
+            this.captchaIMG.Size = new System.Drawing.Size(491, 160);
             this.captchaIMG.TabIndex = 6;
             this.captchaIMG.TabStop = false;
             // 
@@ -130,10 +122,9 @@ namespace Kursivoy_Konkin
             // 
             this.buttonCheckCaptcha2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
             this.buttonCheckCaptcha2.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.buttonCheckCaptcha2.Location = new System.Drawing.Point(745, 442);
-            this.buttonCheckCaptcha2.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonCheckCaptcha2.Location = new System.Drawing.Point(559, 359);
             this.buttonCheckCaptcha2.Name = "buttonCheckCaptcha2";
-            this.buttonCheckCaptcha2.Size = new System.Drawing.Size(332, 70);
+            this.buttonCheckCaptcha2.Size = new System.Drawing.Size(249, 57);
             this.buttonCheckCaptcha2.TabIndex = 12;
             this.buttonCheckCaptcha2.Text = "Обновить";
             this.buttonCheckCaptcha2.UseVisualStyleBackColor = false;
@@ -142,30 +133,29 @@ namespace Kursivoy_Konkin
             // textBoxCaptcha
             // 
             this.textBoxCaptcha.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.textBoxCaptcha.Location = new System.Drawing.Point(745, 364);
-            this.textBoxCaptcha.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxCaptcha.Location = new System.Drawing.Point(559, 296);
             this.textBoxCaptcha.MaxLength = 20;
             this.textBoxCaptcha.Name = "textBoxCaptcha";
-            this.textBoxCaptcha.Size = new System.Drawing.Size(331, 55);
+            this.textBoxCaptcha.Size = new System.Drawing.Size(249, 45);
             this.textBoxCaptcha.TabIndex = 11;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.label3.Location = new System.Drawing.Point(735, 313);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Location = new System.Drawing.Point(551, 254);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(272, 47);
+            this.label3.Size = new System.Drawing.Size(217, 38);
             this.label3.TabIndex = 10;
             this.label3.Text = "Введите каптчу";
             // 
             // pictureBox1
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(495, 33);
+            this.pictureBox1.Location = new System.Drawing.Point(371, 27);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(48, 48);
+            this.pictureBox1.Size = new System.Drawing.Size(36, 39);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 13;
             this.pictureBox1.TabStop = false;
@@ -173,19 +163,20 @@ namespace Kursivoy_Konkin
             // pictureBox2
             // 
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(-25, 83);
+            this.pictureBox2.Location = new System.Drawing.Point(-19, 67);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(393, 336);
+            this.pictureBox2.Size = new System.Drawing.Size(295, 273);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox2.TabIndex = 14;
             this.pictureBox2.TabStop = false;
             // 
             // FormAutorization
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1273, 574);
+            this.ClientSize = new System.Drawing.Size(1153, 466);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.buttonCheckCaptcha2);
@@ -199,7 +190,6 @@ namespace Kursivoy_Konkin
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormAutorization";
