@@ -80,6 +80,7 @@
             this.buttonEditClient.TabIndex = 50;
             this.buttonEditClient.Text = "Сохранить редактирование";
             this.buttonEditClient.UseVisualStyleBackColor = false;
+ 
             // 
             // label6
             // 

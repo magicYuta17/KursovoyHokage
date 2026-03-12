@@ -69,7 +69,7 @@ namespace Kursivoy_Konkin
             if (textBox1.Text == "admin" && textBox2.Text == "admin")
             {
                 isValid = true;
-                role = "1";   // роль администратора
+                role = "4";   // роль администратора
             }
             else if (textBox1.Text == "manager" && textBox2.Text == "manager")
             {
@@ -135,7 +135,7 @@ namespace Kursivoy_Konkin
                 switch (role)
                 {
                     case "1":
-                        FormAdminLocal adminForm = new FormAdminLocal();
+                        FormAdminNavigation adminForm = new FormAdminNavigation();
                         this.Visible = false;
                         adminForm.ShowDialog();
                         this.Close();
@@ -150,6 +150,13 @@ namespace Kursivoy_Konkin
                         FormHeadNavigation headForm = new FormHeadNavigation();
                         this.Visible = false;
                         headForm.ShowDialog();
+                        this.Close();
+
+                        break;
+                    case "4":
+                        FormAdminLocal adminFormLocal = new FormAdminLocal();
+                        this.Visible = false;
+                        adminFormLocal.ShowDialog();
                         this.Close();
                         break;
                     default:

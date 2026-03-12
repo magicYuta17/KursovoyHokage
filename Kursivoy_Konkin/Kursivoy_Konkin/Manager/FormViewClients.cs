@@ -302,6 +302,10 @@ namespace Kursivoy_Konkin
         // Применяет фильтры к данным по текущим настройкам
         private void ApplyFilters()
         {
+            try
+            {
+
+           
             if (originalDataTable == null) return;
 
             var filteredData = originalDataTable.AsEnumerable();
@@ -354,6 +358,11 @@ namespace Kursivoy_Konkin
 
             // Обновляем DataGridView данными
             dataGridView1.DataSource = filteredData.CopyToDataTable();
+            }
+            catch (Exception ex)
+            {
+                
+            }
         }
 
         private void FormViewClients_FormClosing(object sender, FormClosingEventArgs e)

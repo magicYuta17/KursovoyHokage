@@ -226,13 +226,12 @@ namespace Kursivoy_Konkin
             DateTime birthday = dateTimePicker1.Value;
             UpdateClientInDb(age, ltv, statusId, birthday);
 
-            // Возвращаемся на предыдущую форму
-            if (Owner != null)
-            {
-                Owner.ShowDialog(); // Показываем предыдущую форму
-            }
+
+
+            FormViewClients formViewClients = new FormViewClients();
             this.Visible = false;
-            this.Close(); // Закрываем текущую форму
+            formViewClients.ShowDialog();
+            this.Close();
         }
 
         // Метод обновления данных клиента в базе данных
@@ -345,5 +344,7 @@ namespace Kursivoy_Konkin
                 e.Cancel = true; //отменяем закрытие формы
             }
         }
+
+        
     }
 }

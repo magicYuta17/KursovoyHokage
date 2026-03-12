@@ -39,6 +39,7 @@ namespace Kursivoy_Konkin
                 string query = @"
             SELECT 
                 ID_object,
+                name_object AS `Наименование объекта`,
                 square AS 'Площадь',
                 cost AS 'Стоимость',
                 building_dates AS 'Дата постройки',
