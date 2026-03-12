@@ -15,6 +15,7 @@ namespace Kursivoy_Konkin
 {
     public partial class FormAutorization : Form
     {
+        private string connectionString = connect.con;
         public FormAutorization()
         {
             InitializeComponent();
@@ -42,10 +43,7 @@ namespace Kursivoy_Konkin
 
         private string cptAnswer = "";
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
+       
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -56,122 +54,118 @@ namespace Kursivoy_Konkin
 
         private void button2_Click(object sender, EventArgs e)
         {
-
-
-
             if (textBox1.Text.Length < 3 || textBox2.Text.Length < 3)
             {
-                MessageBox.Show("Логин или пароль слишком короткие", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Логин или пароль слишком короткие", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            bool credentialsValid = (textBox1.Text == "admin" && textBox2.Text == "admin");
-            bool credentialsValidManager = (textBox1.Text == "manager" && textBox2.Text == "manager");
-            bool credentialsValidHead= (textBox1.Text == "head" && textBox2.Text == "head");
+            string role = null;
+            bool isValid = false;
 
-            if (credentialsValid)
+            // 1. Проверка жёстко заданных учётных записей
+            if (textBox1.Text == "admin" && textBox2.Text == "admin")
             {
-                if (authAtt >= 1)
-                {
-                    if (!CheckCaptcha())
-                    {
-                        MessageBox.Show("Неверная капча! Форма заблокирована на 10 секунд", "Ошибка",
-                                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        BlockSystem();
-                        return;
-                    }
-                }
-
-                MessageBox.Show("Вход выполнен!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                FormAdminNavigation Admingenav = new FormAdminNavigation();
-
-                this.Visible = false;
-                Admingenav.ShowDialog();
-                this.Close();
-
-                authAtt = 0;
-                captchaTrue = false;
-                textBoxCaptcha.Clear();
-
-            }else if (credentialsValidManager)
-            {
-                if (authAtt >= 1)
-                {
-                    if (!CheckCaptcha())
-                    {
-                        MessageBox.Show("Неверная капча! Форма заблокирована на 10 секунд", "Ошибка",
-                                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        BlockSystem();
-                        return;
-                    }
-                }
-                MessageBox.Show("Вход выполнен!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                FormManagerNavigation managnav = new FormManagerNavigation();
-                this.Visible = false;
-                managnav.ShowDialog();
-                this.Close();
-                authAtt = 0;
-                captchaTrue = false;
-                textBoxCaptcha.Clear();
+                isValid = true;
+                role = "1";   // роль администратора
             }
-            else if (credentialsValidHead)
+            else if (textBox1.Text == "manager" && textBox2.Text == "manager")
             {
+                isValid = true;
+                role = "2";   // роль менеджера
+            }
+            else if (textBox1.Text == "head" && textBox2.Text == "head")
+            {
+                isValid = true;
+                role = "3";   // роль руководителя
+            }
+            else
+            {
+                // 2. Проверка в таблице worker (логин и пароль из БД)
+                try
+                {
+                    using (MySqlConnection conn = new MySqlConnection(connectionString))
+                    {
+                        conn.Open();
+                        // Предполагаем, что в таблице worker есть поля FIO, password, role (тип INT)
+                        string query = "SELECT Role_worker_ID_Role FROM worker WHERE FIO = @login AND password = @password";
+                        using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@login", textBox2.Text);   // логин
+                            cmd.Parameters.AddWithValue("@password", textBox1.Text); // пароль
+
+                            object result = cmd.ExecuteScalar(); // получаем значение role
+                            if (result != null)
+                            {
+                                isValid = true;
+                                role = result.ToString(); // роль как строка ("1", "2", "3")
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Ошибка подключения к базе данных: " + ex.Message,
+                        "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+
+            // 3. Обработка результата проверки
+            if (isValid)
+            {
+                // Если были неудачные попытки, проверяем капчу
                 if (authAtt >= 1)
                 {
                     if (!CheckCaptcha())
                     {
-                        MessageBox.Show("Неверная капча! Форма заблокирована на 10 секунд", "Ошибка",
-                                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Неверная капча! Форма заблокирована на 10 секунд",
+                            "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         BlockSystem();
                         return;
                     }
                 }
-                MessageBox.Show("Вход выполнен!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                FormHeadNavigation headnav = new FormHeadNavigation();
-                this.Visible = false;
-                headnav.ShowDialog();
-                this.Close();
+
+                MessageBox.Show("Вход выполнен!", "Успех",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // Открытие соответствующей формы в зависимости от роли
+                switch (role)
+                {
+                    case "1":
+                        FormAdminNavigation adminForm = new FormAdminNavigation();
+                        this.Visible = false;
+                        adminForm.ShowDialog();
+                        this.Close();
+                        break;
+                    case "2":
+                        FormManagerNavigation managerForm = new FormManagerNavigation();
+                        this.Visible = false;
+                        managerForm.ShowDialog();
+                        this.Close();
+                        break;
+                    case "3":
+                        FormHeadNavigation headForm = new FormHeadNavigation();
+                        this.Visible = false;
+                        headForm.ShowDialog();
+                        this.Close();
+                        break;
+                    default:
+                        MessageBox.Show("Неизвестная роль пользователя", "Ошибка",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        break;
+                }
+
+                // Сброс счётчика попыток и капчи
                 authAtt = 0;
                 captchaTrue = false;
                 textBoxCaptcha.Clear();
             }
             else
             {
-
-
-                if (authAtt >= 1)
-                {
-
-                    if (!CheckCaptcha())
-                    {
-                        MessageBox.Show("Неверная капча! Форма заблокирована на 10 секунд", "Ошибка",
-                                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        BlockSystem();
-                        return;
-                    }
-                    else
-                    {
-
-                        MessageBox.Show("Неверный логин или пароль! Форма заблокирована на 10 секунд", "Ошибка",
-                                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        BlockSystem();
-                        return;
-                    }
-                }
-                else
-                {
-
-                    authAtt++;
-                    MessageBox.Show("Неверный логин или пароль! Введите капчу!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    captchaIMG.Visible = true;
-
-                    label3.Visible = true;
-                    textBoxCaptcha.Visible = true;
-
-                    buttonCheckCaptcha2.Visible = true;
-                    this.Width = 1000;
-                    GenerateCaptcha();
-                }
+                // Неудачная попытка – вызываем метод обработки
+                HandleFailedLogin();
             }
         }
         private bool CheckCaptcha()
@@ -190,14 +184,13 @@ namespace Kursivoy_Konkin
 
         private void HandleFailedLogin()
         {
-            this.Width = 1000;
             authAtt++;
             if (authAtt == 1)
             {
                 MessageBox.Show("Логин или пароль введены неверно! Требуется ввод CAPTCHA.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 ShowCaptcha();
             }
-            else if (authAtt > 1)
+            else // authAtt > 1
             {
                 MessageBox.Show("Логин или пароль были введены неверно! \nСистема будет заблокирована на 10 секунд!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 textBoxCaptcha.Text = "";
