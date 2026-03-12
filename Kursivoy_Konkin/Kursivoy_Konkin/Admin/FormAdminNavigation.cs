@@ -19,22 +19,16 @@ namespace Kursivoy_Konkin
             InitializeComponent(); // Инициализация компонентов дизайнера
             this.MinimizeBox = false; // Запрет на сворачивание окна
             this.MaximizeBox = false; // Запрет на разворачивание окна
-            this.ControlBox = false; // Скрытие системных кнопок (свернуть/развернуть/закрыть)
         }
 
         // Обработчик события закрытия формы
         private void FormAdmin_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // Показываем диалоговое окно с подтверждением выхода
-            var result = MessageBox.Show(
-                "Вы действительно хотите выйти?",
-                "Подтверждение выхода",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question);
 
-            if (result == DialogResult.No) // Если пользователь выбрал "Нет"
+
+            if (e.CloseReason == CloseReason.UserClosing)
             {
-                e.Cancel = true; // Отменяем закрытие формы
+                e.Cancel = true; //отменяем закрытие формы
             }
         }
 
@@ -60,6 +54,7 @@ namespace Kursivoy_Konkin
         private void buttonViewObject_Click(object sender, EventArgs e)
         {
             FormAdminObject formAdminObject = new FormAdminObject(); // Создаем форму управления объектами
+            this.Visible = false; // Скрываем текущую форму
             formAdminObject.ShowDialog(); // Показываем форму объектов
             this.Close(); // Закрываем текущую форму
         }
@@ -70,7 +65,7 @@ namespace Kursivoy_Konkin
             // Дублирование настроек окна (на всякий случай, если они не применились в конструкторе)
             this.MinimizeBox = false; // Запрет на сворачивание
             this.MaximizeBox = false; // Запрет на разворачивание
-            this.ControlBox = false; // Скрытие системных кнопок
+
         }
     }
 }

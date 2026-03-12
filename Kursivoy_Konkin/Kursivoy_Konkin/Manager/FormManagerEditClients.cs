@@ -29,9 +29,60 @@ namespace Kursivoy_Konkin
             // Отключаем системные кнопки управления окном (свернуть, развернуть, закрыть)
             this.MinimizeBox = false;
             this.MaximizeBox = false;
-            this.ControlBox = false;
-        }
+            txtFullName_client.TextChanged += txtFullName_client_TextChanged;
 
+        }
+        // =========================================================
+        // 4. АВТОМАТИЧЕСКОЕ ФОРМАТИРОВАНИЕ ФИО (Заглавные буквы)
+        // =========================================================
+
+        /// <summary>
+        /// Обработчик TextChanged: форматирует ФИО — каждое слово с заглавной буквы
+        /// </summary>
+        private void txtFullName_client_TextChanged(object sender, EventArgs e)
+        {
+            // Временная отписка от события, чтобы избежать рекурсии при программном изменении текста
+            txtFullName_client.TextChanged -= txtFullName_client_TextChanged;
+
+            try
+            {
+                // Сохраняем позицию курсора до форматирования
+                int cursorPosition = txtFullName_client.SelectionStart;
+                string text = txtFullName_client.Text;
+
+                if (!string.IsNullOrEmpty(text))
+                {
+                    // Разбиваем текст на слова по пробелам
+                    string[] words = text.Split(' ');
+
+                    for (int i = 0; i < words.Length; i++)
+                    {
+                        if (words[i].Length > 0)
+                        {
+                            // Первая буква — заглавная, остальные — строчные
+                            words[i] = char.ToUpper(words[i][0]) +
+                                      (words[i].Length > 1 ? words[i].Substring(1).ToLower() : "");
+                        }
+                    }
+
+                    // Собираем отформатированную строку
+                    string formattedText = string.Join(" ", words);
+
+                    // Обновляем текст только если он изменился
+                    if (txtFullName_client.Text != formattedText)
+                    {
+                        txtFullName_client.Text = formattedText;
+                        // Восстанавливаем позицию курсора (с защитой от выхода за границы)
+                        txtFullName_client.SelectionStart = Math.Min(cursorPosition, formattedText.Length);
+                    }
+                }
+            }
+            finally
+            {
+                // Возвращаем подписку на событие
+                txtFullName_client.TextChanged += txtFullName_client_TextChanged;
+            }
+        }
         // Загружает список статусов в comboBox (можно вызывать перед LoadClientById)
         public void LoadStatusCombo()
         {
@@ -285,9 +336,14 @@ namespace Kursivoy_Konkin
         }
 
         // Пустой обработчик загрузки формы (можно удалить, если не используется)
-        private void FormManagerEditClients_Load(object sender, EventArgs e)
-        {
+      
 
+        private void FormManagerEditClients_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true; //отменяем закрытие формы
+            }
         }
     }
 }

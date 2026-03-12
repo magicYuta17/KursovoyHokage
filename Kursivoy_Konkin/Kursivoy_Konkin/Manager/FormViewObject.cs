@@ -185,10 +185,18 @@ namespace Kursivoy_Konkin
             // Установка свойств формы
             this.MinimizeBox = false;
             this.MaximizeBox = false;
-            this.ControlBox = false;
+            
 
             // Загружаем данные ещё раз (на всякий случай при загрузке)
             LoadData();
+        }
+
+        private void FormViewObject_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true; //отменяем закрытие формы
+            }
         }
     }
 }

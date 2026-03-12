@@ -165,7 +165,7 @@
             this.button1.TabIndex = 15;
             this.button1.Text = "Назад";
             this.button1.UseVisualStyleBackColor = false;
-
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // contextMenuStrip1
             // 
@@ -210,7 +210,6 @@
             this.label4.TabIndex = 22;
             this.label4.Text = "Фильтрация по LTV";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-
             // 
             // comboBox2
             // 
@@ -243,6 +242,7 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FormViewClients";
             this.Text = "Просмотр клиентов";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormViewClients_FormClosing);
             this.Load += new System.EventHandler(this.FormViewClients_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();

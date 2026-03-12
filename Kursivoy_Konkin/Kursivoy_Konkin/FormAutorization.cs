@@ -20,7 +20,7 @@ namespace Kursivoy_Konkin
             InitializeComponent();
             this.MinimizeBox = false;
             this.MaximizeBox = false;
-            this.ControlBox = false;
+            
 
 
             captchaIMG.Visible = false;
@@ -51,7 +51,7 @@ namespace Kursivoy_Konkin
         {
             this.MinimizeBox = false;
             this.MaximizeBox = false;
-            this.ControlBox = false;
+            
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -352,6 +352,11 @@ namespace Kursivoy_Konkin
             {
                 
                 e.Cancel = true;
+            }
+
+            if(e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true; //отменяем закрытие формы
             }
         }
     }

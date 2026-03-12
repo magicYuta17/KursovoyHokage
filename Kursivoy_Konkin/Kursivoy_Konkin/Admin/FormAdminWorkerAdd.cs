@@ -19,7 +19,6 @@ namespace Kursivoy_Konkin
             InitializeComponent(); // Инициализация компонентов дизайнера
             this.MinimizeBox = false; // Запрет на сворачивание
             this.MaximizeBox = false; // Запрет на разворачивание
-            this.ControlBox = false; // Скрытие системных кнопок
             SetupConstraints(); // Настройка ограничений ввода
             LoadRoles(); // Загрузка списка ролей
             LoadClients(); // Загрузка списка клиентов
@@ -282,6 +281,14 @@ namespace Kursivoy_Konkin
             this.Visible = false; // Скрываем текущую форму
             f.ShowDialog(); // Показываем форму списка
             this.Close(); // Закрываем текущую форму
+        }
+
+        private void FormAdminWorkerAdd_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true; //отменяем закрытие формы
+            }
         }
     }
 }

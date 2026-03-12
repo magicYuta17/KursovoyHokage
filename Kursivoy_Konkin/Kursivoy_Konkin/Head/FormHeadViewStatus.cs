@@ -27,7 +27,7 @@ namespace Kursivoy_Konkin
             InitializeUi(); // Дополнительная инициализация интерфейса
             this.MinimizeBox = false; // Запрет на сворачивание
             this.MaximizeBox = false; // Запрет на разворачивание
-            this.ControlBox = false; // Скрытие системных кнопок
+          
         }
 
         // Метод для настройки пользовательского интерфейса
@@ -71,7 +71,7 @@ namespace Kursivoy_Konkin
             // Дублирование настроек окна (на всякий случай)
             this.MinimizeBox = false;
             this.MaximizeBox = false;
-            this.ControlBox = false;
+           
 
             // Заполнение таблицы статусов
             FillStatusGrid();
@@ -432,6 +432,14 @@ namespace Kursivoy_Konkin
             this.Visible = false; // Скрываем текущую форму
             f.ShowDialog(); // Показываем форму навигации
             this.Close(); // Закрываем текущую форму
+        }
+
+        private void FormHeadViewStatus_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true; //отменяем закрытие формы
+            }
         }
     }
 

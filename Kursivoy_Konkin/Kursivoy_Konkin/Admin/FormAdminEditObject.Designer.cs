@@ -126,6 +126,7 @@
             // 
             this.txtParkingSpace.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
             this.txtParkingSpace.Location = new System.Drawing.Point(21, 351);
+            this.txtParkingSpace.MaxLength = 4;
             this.txtParkingSpace.Name = "txtParkingSpace";
             this.txtParkingSpace.Size = new System.Drawing.Size(379, 55);
             this.txtParkingSpace.TabIndex = 64;
@@ -145,6 +146,7 @@
             // 
             this.txt_float.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
             this.txt_float.Location = new System.Drawing.Point(21, 175);
+            this.txt_float.MaxLength = 3;
             this.txt_float.Name = "txt_float";
             this.txt_float.Size = new System.Drawing.Size(329, 55);
             this.txt_float.TabIndex = 62;
@@ -153,6 +155,7 @@
             // 
             this.txtDateDay.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
             this.txtDateDay.Location = new System.Drawing.Point(21, 459);
+            this.txtDateDay.MaxLength = 3;
             this.txtDateDay.Name = "txtDateDay";
             this.txtDateDay.Size = new System.Drawing.Size(538, 55);
             this.txtDateDay.TabIndex = 61;
@@ -182,6 +185,7 @@
             // 
             this.txtCost.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
             this.txtCost.Location = new System.Drawing.Point(243, 66);
+            this.txtCost.MaxLength = 10;
             this.txtCost.Name = "txtCost";
             this.txtCost.Size = new System.Drawing.Size(205, 55);
             this.txtCost.TabIndex = 58;
@@ -190,6 +194,7 @@
             // 
             this.txt_Square.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
             this.txt_Square.Location = new System.Drawing.Point(21, 66);
+            this.txt_Square.MaxLength = 4;
             this.txt_Square.Name = "txt_Square";
             this.txt_Square.Size = new System.Drawing.Size(177, 55);
             this.txt_Square.TabIndex = 57;
@@ -240,6 +245,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormAdminEditObject";
             this.Text = "Редактирование объекта - Админ";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormAdminEditObject_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);

@@ -275,7 +275,6 @@
     <Content Include="img\save.png" />
     <Content Include="img\setting.png" />
     <Content Include="dumb and dll\MySql.Data.dll" />
-    <Content Include="picture.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="photo_object\" />

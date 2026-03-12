@@ -24,7 +24,7 @@ namespace Kursivoy_Konkin
             this.Load += FormHeadViewContract_Load; // Подписка на событие загрузки формы
             this.MinimizeBox = false; // Запрет на сворачивание
             this.MaximizeBox = false; // Запрет на разворачивание
-            this.ControlBox = false; // Скрытие системных кнопок
+           
         }
 
         // Обработчик кнопки "Назад" (для навигации)
@@ -125,7 +125,7 @@ namespace Kursivoy_Konkin
         {
             this.MinimizeBox = false;
             this.MaximizeBox = false;
-            this.ControlBox = false;
+       
 
             LoadData(); // Загружаем данные
         }
@@ -292,6 +292,14 @@ namespace Kursivoy_Konkin
             this.Visible = false; // Скрываем текущую форму
             f.ShowDialog(); // Показываем форму навигации
             this.Close(); // Закрываем текущую форму
+        }
+
+        private void FormHeadViewContract_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true; //отменяем закрытие формы
+            }
         }
     }
 }

@@ -18,7 +18,6 @@ namespace Kursivoy_Konkin
             this.Load += FormAdminObject_Load; // Подписка на событие загрузки формы
             this.MinimizeBox = false; // Запрет на сворачивание
             this.MaximizeBox = false; // Запрет на разворачивание
-            this.ControlBox = false; // Скрытие системных кнопок
         }
 
         // Метод для инициализации контекстного меню
@@ -258,6 +257,14 @@ namespace Kursivoy_Konkin
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             // Метод оставлен пустым, так как требуется дизайнером формы
+        }
+
+        private void FormAdminObject_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true; //отменяем закрытие формы
+            }
         }
     }
 }

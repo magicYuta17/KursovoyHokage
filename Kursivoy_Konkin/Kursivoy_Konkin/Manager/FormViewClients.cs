@@ -18,7 +18,7 @@ namespace Kursivoy_Konkin
             InitializeSearchAndFilter(); // Установка поиска и фильтрации
             this.MinimizeBox = false; // Запрет сворачивания
             this.MaximizeBox = false; // Запрет разворачивания
-            this.ControlBox = false; // Отключение стандартных кнопок окна
+            
         }
 
         private void InitializeContextMenu()
@@ -51,6 +51,7 @@ namespace Kursivoy_Konkin
             // Открываем форму добавления клиента
             using (var addClientForm = new FormManagerAddClient())
             {
+                this.Visible = false; // Скрываем текущую форму
                 if (addClientForm.ShowDialog() == DialogResult.OK)
                 {
                     // Обновляем таблицу после добавления нового клиента
@@ -70,6 +71,7 @@ namespace Kursivoy_Konkin
                 // Открываем форму редактирования клиента
                 using (var editClientForm = new FormManagerEditClients())
                 {
+                    this.Visible = false; // Скрываем текущую форму
                     // Загружаем данные клиента по ID
                     editClientForm.LoadClientById(clientId);
                     if (editClientForm.ShowDialog() == DialogResult.OK)
@@ -352,6 +354,23 @@ namespace Kursivoy_Konkin
 
             // Обновляем DataGridView данными
             dataGridView1.DataSource = filteredData.CopyToDataTable();
+        }
+
+        private void FormViewClients_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true; //отменяем закрытие формы
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            // Создаем форму 
+            FormManagerNavigation f = new FormManagerNavigation();
+            this.Visible = false; // Скрываем текущую
+            f.ShowDialog(); // Открываем как модальную
+            this.Close(); // Закрываем текущую форму после выхода
         }
     }
 }

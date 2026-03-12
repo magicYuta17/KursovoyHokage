@@ -23,7 +23,7 @@ namespace Kursivoy_Konkin
             // Запрет свертывания, развертывания и закрытия окна через стандартные кнопки
             this.MinimizeBox = false;
             this.MaximizeBox = false;
-            this.ControlBox = false;
+           
         }
 
         // Обработчик кнопки перехода к форме просмотра клиентов
@@ -72,7 +72,15 @@ namespace Kursivoy_Konkin
             // Отключение окна от минимизации, максимизации и стандартного закрытия
             this.MinimizeBox = false;
             this.MaximizeBox = false;
-            this.ControlBox = false;
+            
+        }
+
+        private void FormManagerNavigation_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true; //отменяем закрытие формы
+            }
         }
     }
 }

@@ -117,6 +117,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormAdminObject";
             this.Text = "Объекты - Админ";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormAdminObject_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);

@@ -24,7 +24,6 @@ namespace Kursivoy_Konkin
             LoadObjectData(); // Загрузка данных объекта
             this.MinimizeBox = false; // Запрет на сворачивание
             this.MaximizeBox = false; // Запрет на разворачивание
-            this.ControlBox = false; // Скрытие системных кнопок
         }
 
         // Метод для настройки ограничений ввода в полях
@@ -282,6 +281,14 @@ namespace Kursivoy_Konkin
         private void buttonAddObject_Click(object sender, EventArgs e)
         {
             UpdateObject(); // Вызываем метод обновления
+        }
+
+        private void FormAdminEditObject_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true; //отменяем закрытие формы
+            }
         }
     }
 }

@@ -115,6 +115,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormHeadNavigation";
             this.Text = "Навигация - РОП";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormHeadNavigation_FormClosing);
             this.ResumeLayout(false);
 
         }

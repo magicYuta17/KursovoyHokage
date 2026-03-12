@@ -33,15 +33,13 @@ namespace Kursivoy_Konkin
             this.button5 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.buttonViewObject = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button5
             // 
             this.button5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
             this.button5.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.button5.Location = new System.Drawing.Point(55, 716);
+            this.button5.Location = new System.Drawing.Point(55, 371);
             this.button5.Margin = new System.Windows.Forms.Padding(4);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(838, 85);
@@ -76,38 +74,12 @@ namespace Kursivoy_Konkin
             this.buttonViewObject.UseVisualStyleBackColor = false;
             this.buttonViewObject.Click += new System.EventHandler(this.buttonViewObject_Click);
             // 
-            // button3
-            // 
-            this.button3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
-            this.button3.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.button3.Location = new System.Drawing.Point(55, 319);
-            this.button3.Margin = new System.Windows.Forms.Padding(4);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(838, 124);
-            this.button3.TabIndex = 27;
-            this.button3.Text = "Просмотр, добавление, удаление и редактирование ролей";
-            this.button3.UseVisualStyleBackColor = false;
-            // 
-            // button4
-            // 
-            this.button4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
-            this.button4.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.button4.Location = new System.Drawing.Point(55, 451);
-            this.button4.Margin = new System.Windows.Forms.Padding(4);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(838, 176);
-            this.button4.TabIndex = 28;
-            this.button4.Text = "Восстановление БД,\r\nимпорт и экспорт данных,\r\nрезервное копирование БД\r\n\r\n\r\n\r\n";
-            this.button4.UseVisualStyleBackColor = false;
-            // 
             // FormAdminNavigation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(922, 833);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
+            this.ClientSize = new System.Drawing.Size(922, 534);
             this.Controls.Add(this.buttonViewObject);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button1);
@@ -125,7 +97,5 @@ namespace Kursivoy_Konkin
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button buttonViewObject;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
     }
 }

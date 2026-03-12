@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using Kursivoy_Konkin.Manager;
 using MySql.Data.MySqlClient;
 
 namespace Kursivoy_Konkin
@@ -25,7 +26,7 @@ namespace Kursivoy_Konkin
             LoadStatusCombo(); // Загрузка статусов при инициализации
             this.MinimizeBox = false; // Запрет на сворачивание
             this.MaximizeBox = false; // Запрет на разворачивание
-            this.ControlBox = false; // Скрытие системных кнопок
+           
         }
         // =========================================================
         // 1. НАСТРОЙКА ОГРАНИЧЕНИЙ (ТОЛЬКО РУССКИЙ, ЦИФРЫ И Т.Д.)
@@ -36,12 +37,16 @@ namespace Kursivoy_Konkin
             // TextBoxFilters.InputValidators.ApplyPhoneValidation(txtPhone);
             // TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtPhone);
 
+            
 
+            
 
             // Применяем валидацию: только русские буквы для ФИО
             TextBoxFilters.InputValidators.ApplyRussianLettersOnly(txtFullName_client);
             TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtFullName_client); // Обязательное поле
-
+            // 🔥 ДОБАВЬТЕ ЭТУ СТРОКУ: авто-капитализация ФИО
+            txtFullName_client.TextChanged += txtFullName_client_TextChanged;
+   
             // Только цифры для возраста (с возможностью десятичных)
             TextBoxFilters.InputValidators.ApplyNumericWithDecimal(txtAge);
             TextBoxFilters.InputValidators.ApplyNotEmptyValidation(txtAge); // Обязательное поле
@@ -215,7 +220,57 @@ namespace Kursivoy_Konkin
         }
 
 
+        // =========================================================
+        // 4. АВТОМАТИЧЕСКОЕ ФОРМАТИРОВАНИЕ ФИО (Заглавные буквы)
+        // =========================================================
 
+        /// <summary>
+        /// Обработчик TextChanged: форматирует ФИО — каждое слово с заглавной буквы
+        /// </summary>
+        private void txtFullName_client_TextChanged(object sender, EventArgs e)
+        {
+            // Временная отписка от события, чтобы избежать рекурсии при программном изменении текста
+            txtFullName_client.TextChanged -= txtFullName_client_TextChanged;
+
+            try
+            {
+                // Сохраняем позицию курсора до форматирования
+                int cursorPosition = txtFullName_client.SelectionStart;
+                string text = txtFullName_client.Text;
+
+                if (!string.IsNullOrEmpty(text))
+                {
+                    // Разбиваем текст на слова по пробелам
+                    string[] words = text.Split(' ');
+
+                    for (int i = 0; i < words.Length; i++)
+                    {
+                        if (words[i].Length > 0)
+                        {
+                            // Первая буква — заглавная, остальные — строчные
+                            words[i] = char.ToUpper(words[i][0]) +
+                                      (words[i].Length > 1 ? words[i].Substring(1).ToLower() : "");
+                        }
+                    }
+
+                    // Собираем отформатированную строку
+                    string formattedText = string.Join(" ", words);
+
+                    // Обновляем текст только если он изменился
+                    if (txtFullName_client.Text != formattedText)
+                    {
+                        txtFullName_client.Text = formattedText;
+                        // Восстанавливаем позицию курсора (с защитой от выхода за границы)
+                        txtFullName_client.SelectionStart = Math.Min(cursorPosition, formattedText.Length);
+                    }
+                }
+            }
+            finally
+            {
+                // Возвращаем подписку на событие
+                txtFullName_client.TextChanged += txtFullName_client_TextChanged;
+            }
+        }
 
         // Пример загрузки выпадающего списка статусов
         private void LoadStatusCombo()
@@ -302,6 +357,8 @@ namespace Kursivoy_Konkin
 
             // --- 5. Вставка ---
             InsertClientToDb(age, ltv, dateTimePicker1.Value);
+
+
         }
 
         // Альтернативный обработчик кнопки добавления (дублирует логику buttonAdd_Click)
@@ -359,7 +416,10 @@ namespace Kursivoy_Konkin
         // Обработчик кнопки "Назад" (закрыть форму)
         private void button1_Click(object sender, EventArgs e)
         {
-            this.Close(); // Просто закрываем текущую форму
+           FormViewClients formViewClients = new FormViewClients();
+            this.Visible = false; // Скрываем текущую форму
+            formViewClients.ShowDialog(); // Показываем форму просмотра клиентов
+            this.Close(); // Закрываем текущую форму
         }
 
         // Загрузчик формы (дублирует настройки из конструктора)
@@ -367,7 +427,15 @@ namespace Kursivoy_Konkin
         {
             this.MinimizeBox = false;
             this.MaximizeBox = false;
-            this.ControlBox = false;
+      
+        }
+
+        private void FormManagerAddClient_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true; //отменяем закрытие формы
+            }
         }
     }
 }

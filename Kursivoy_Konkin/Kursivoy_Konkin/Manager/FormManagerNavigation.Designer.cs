@@ -103,6 +103,7 @@
             this.MinimizeBox = false;
             this.Name = "FormManagerNavigation";
             this.Text = "Форма навигации - Менеджер";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormManagerNavigation_FormClosing);
             this.ResumeLayout(false);
 
         }

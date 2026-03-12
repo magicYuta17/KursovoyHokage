@@ -78,6 +78,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormViewObject";
             this.Text = "Просмотр объектов";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormViewObject_FormClosing);
             this.Load += new System.EventHandler(this.FormViewObject_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);

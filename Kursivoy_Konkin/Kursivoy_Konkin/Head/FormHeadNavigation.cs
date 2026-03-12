@@ -20,7 +20,7 @@ namespace Kursivoy_Konkin
             InitializeComponent(); // Инициализация компонентов дизайнера
             this.MinimizeBox = false; // Запрет на сворачивание окна
             this.MaximizeBox = false; // Запрет на разворачивание окна
-            this.ControlBox = false; // Скрытие системных кнопок (свернуть/развернуть/закрыть)
+          
         }
 
         // Обработчик кнопки "Выход" (button5)
@@ -67,6 +67,14 @@ namespace Kursivoy_Konkin
             this.Visible = false; // Скрываем текущую форму
             f.ShowDialog(); // Показываем форму контрактов
             this.Close(); // Закрываем текущую форму
+        }
+
+        private void FormHeadNavigation_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true; //отменяем закрытие формы
+            }
         }
     }
 }

@@ -75,6 +75,7 @@ namespace Kursivoy_Konkin
             this.textBox2.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
             this.textBox2.Location = new System.Drawing.Point(375, 99);
             this.textBox2.Margin = new System.Windows.Forms.Padding(4);
+            this.textBox2.MaxLength = 50;
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(331, 55);
             this.textBox2.TabIndex = 2;
@@ -84,6 +85,7 @@ namespace Kursivoy_Konkin
             this.textBox1.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
             this.textBox1.Location = new System.Drawing.Point(375, 241);
             this.textBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.textBox1.MaxLength = 50;
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(331, 55);
             this.textBox1.TabIndex = 3;
@@ -142,6 +144,7 @@ namespace Kursivoy_Konkin
             this.textBoxCaptcha.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
             this.textBoxCaptcha.Location = new System.Drawing.Point(745, 364);
             this.textBoxCaptcha.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxCaptcha.MaxLength = 20;
             this.textBoxCaptcha.Name = "textBoxCaptcha";
             this.textBoxCaptcha.Size = new System.Drawing.Size(331, 55);
             this.textBoxCaptcha.TabIndex = 11;

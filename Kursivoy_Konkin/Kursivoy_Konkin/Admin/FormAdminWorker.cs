@@ -17,7 +17,6 @@ namespace Kursivoy_Konkin
             InitializeComponent(); // Инициализация компонентов дизайнера
             this.MinimizeBox = false; // Запрет на сворачивание
             this.MaximizeBox = false; // Запрет на разворачивание
-            this.ControlBox = false; // Скрытие системных кнопок
 
             // Подписка на событие клика мышью по DataGridView
             dgvWorkers.MouseClick += dgvWorkers_MouseClick;
@@ -248,6 +247,14 @@ namespace Kursivoy_Konkin
         private void FormAdminWorker_Load(object sender, EventArgs e)
         {
             LoadWorkers(); // Загружаем данные при загрузке формы
+        }
+
+        private void FormAdminWorker_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true; //отменяем закрытие формы
+            }
         }
     }
 }

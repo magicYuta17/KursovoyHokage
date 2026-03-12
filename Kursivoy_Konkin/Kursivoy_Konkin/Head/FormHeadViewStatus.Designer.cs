@@ -104,6 +104,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormHeadViewStatus";
             this.Text = "Просмотр и редактирование статусов";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormHeadViewStatus_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 

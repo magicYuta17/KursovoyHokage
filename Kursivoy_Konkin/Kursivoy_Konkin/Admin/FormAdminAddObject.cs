@@ -24,7 +24,6 @@ namespace Kursivoy_Konkin
             SetupFormConstraints(); // Настройка ограничений ввода
             this.MinimizeBox = false; // Запрет на сворачивание
             this.MaximizeBox = false; // Запрет на разворачивание
-            this.ControlBox = false; // Скрытие системных кнопок
         }
 
         // Метод для настройки ограничений ввода в полях
@@ -224,7 +223,14 @@ namespace Kursivoy_Konkin
             // Дублирование настроек окна (на всякий случай)
             this.MinimizeBox = false; // Запрет на сворачивание
             this.MaximizeBox = false; // Запрет на разворачивание
-            this.ControlBox = false; // Скрытие системных кнопок
+        }
+
+        private void FormAdminAddObject_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true; //отменяем закрытие формы
+            }
         }
     }
 }

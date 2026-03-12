@@ -27,7 +27,7 @@ namespace YourNamespace
             SetupForm(); // Вызов пользовательского метода для настройки формы
             this.MinimizeBox = false; // Запрет на сворачивание окна
             this.MaximizeBox = false; // Запрет на разворачивание окна
-            this.ControlBox = false; // Скрытие системных кнопок (свернуть/развернуть/закрыть)
+            
         }
 
         #region Инициализация формы
@@ -425,8 +425,15 @@ namespace YourNamespace
             this.Close(); // Закрываем текущую форму
         }
 
+
         #endregion
 
-
+        private void FormManagerAddContract_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true; //отменяем закрытие формы
+            }
+        }
     }
 }

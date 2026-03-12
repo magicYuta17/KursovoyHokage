@@ -28,7 +28,7 @@ namespace Kursivoy_Konkin
             InitializeSearchAndFilter(); // Настройка поиска и фильтрации
             this.MinimizeBox = false; // Запрет на сворачивание
             this.MaximizeBox = false; // Запрет на разворачивание
-            this.ControlBox = false; // Скрытие системных кнопок
+
         }
 
         // Метод для инициализации контекстного меню
@@ -502,6 +502,14 @@ namespace Kursivoy_Konkin
             this.Visible = false; // Скрываем текущую форму
             f.ShowDialog(); // Показываем форму навигации
             this.Close(); // Закрываем текущую форму
+        }
+
+        private void FormHeadViewClients_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true; //отменяем закрытие формы
+            }
         }
     }
 }

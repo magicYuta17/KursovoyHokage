@@ -117,6 +117,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormAdminWorker";
             this.Text = "Сотрудники - Админ";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormAdminWorker_FormClosing);
             this.Load += new System.EventHandler(this.FormAdminWorker_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvWorkers)).EndInit();
             this.cmsWorker.ResumeLayout(false);

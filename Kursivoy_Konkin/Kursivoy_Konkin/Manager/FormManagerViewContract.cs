@@ -24,7 +24,7 @@ namespace Kursivoy_Konkin.Manager
             this.Load += FormManagerViewContract_Load; // Обработка события загрузки формы
             this.MinimizeBox = false; // Запрет свертывания окна
             this.MaximizeBox = false; // Запрет развертывания окна
-            this.ControlBox = false; // Отключение стандартных кнопок управления
+            
         }
 
         // Обработка кнопки возврата к меню навигации
@@ -124,7 +124,7 @@ namespace Kursivoy_Konkin.Manager
             // Окно не может сворачиваться или разворачиваться
             this.MinimizeBox = false;
             this.MaximizeBox = false;
-            this.ControlBox = false;
+            
 
             LoadData(); // Загружаем данные
             InitializeContextMenu(); // Инициализируем меню
@@ -281,6 +281,14 @@ namespace Kursivoy_Konkin.Manager
             this.Visible = false; // Скрываем текущую форму
             f.ShowDialog(); // Открываем форму добавления контракта модально
             this.Close(); // Закрываем текущую после
+        }
+
+        private void FormManagerViewContract_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true; //отменяем закрытие формы
+            }
         }
     }
 }
