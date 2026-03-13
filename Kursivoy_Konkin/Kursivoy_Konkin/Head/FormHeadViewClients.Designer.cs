@@ -44,6 +44,14 @@
             this.label5 = new System.Windows.Forms.Label();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.btnLast = new System.Windows.Forms.Button();
+            this.lblPageLabel = new System.Windows.Forms.Label();
+            this.txtPageNumber = new System.Windows.Forms.TextBox();
+            this.lblPageInfo = new System.Windows.Forms.Label();
+            this.btnNext = new System.Windows.Forms.Button();
+            this.btnPrev = new System.Windows.Forms.Button();
+            this.btnFirst = new System.Windows.Forms.Button();
+            this.lblRecordsInfo = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -203,6 +211,89 @@
             this.pictureBox2.TabIndex = 33;
             this.pictureBox2.TabStop = false;
             // 
+            // btnLast
+            // 
+            this.btnLast.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
+            this.btnLast.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
+            this.btnLast.Location = new System.Drawing.Point(604, 820);
+            this.btnLast.Name = "btnLast";
+            this.btnLast.Size = new System.Drawing.Size(97, 58);
+            this.btnLast.TabIndex = 41;
+            this.btnLast.Text = ">>";
+            this.btnLast.UseVisualStyleBackColor = false;
+            // 
+            // lblPageLabel
+            // 
+            this.lblPageLabel.Font = new System.Drawing.Font("Comic Sans MS", 13.25F);
+            this.lblPageLabel.Location = new System.Drawing.Point(803, 820);
+            this.lblPageLabel.Name = "lblPageLabel";
+            this.lblPageLabel.Size = new System.Drawing.Size(89, 45);
+            this.lblPageLabel.TabIndex = 40;
+            this.lblPageLabel.Text = "Стр.";
+            this.lblPageLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // txtPageNumber
+            // 
+            this.txtPageNumber.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
+            this.txtPageNumber.Location = new System.Drawing.Point(722, 820);
+            this.txtPageNumber.MaxLength = 50;
+            this.txtPageNumber.Name = "txtPageNumber";
+            this.txtPageNumber.Size = new System.Drawing.Size(75, 55);
+            this.txtPageNumber.TabIndex = 39;
+            // 
+            // lblPageInfo
+            // 
+            this.lblPageInfo.Font = new System.Drawing.Font("Comic Sans MS", 13.25F);
+            this.lblPageInfo.Location = new System.Drawing.Point(632, 878);
+            this.lblPageInfo.Name = "lblPageInfo";
+            this.lblPageInfo.Size = new System.Drawing.Size(312, 45);
+            this.lblPageInfo.TabIndex = 38;
+            this.lblPageInfo.Text = "Показано записей: 0 из 0";
+            this.lblPageInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // btnNext
+            // 
+            this.btnNext.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
+            this.btnNext.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
+            this.btnNext.Location = new System.Drawing.Point(501, 820);
+            this.btnNext.Name = "btnNext";
+            this.btnNext.Size = new System.Drawing.Size(97, 58);
+            this.btnNext.TabIndex = 37;
+            this.btnNext.Text = ">";
+            this.btnNext.UseVisualStyleBackColor = false;
+            // 
+            // btnPrev
+            // 
+            this.btnPrev.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
+            this.btnPrev.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
+            this.btnPrev.Location = new System.Drawing.Point(399, 820);
+            this.btnPrev.Name = "btnPrev";
+            this.btnPrev.Size = new System.Drawing.Size(96, 58);
+            this.btnPrev.TabIndex = 36;
+            this.btnPrev.Text = "<";
+            this.btnPrev.UseVisualStyleBackColor = false;
+            // 
+            // btnFirst
+            // 
+            this.btnFirst.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
+            this.btnFirst.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
+            this.btnFirst.Location = new System.Drawing.Point(295, 820);
+            this.btnFirst.Name = "btnFirst";
+            this.btnFirst.Size = new System.Drawing.Size(98, 58);
+            this.btnFirst.TabIndex = 35;
+            this.btnFirst.Text = "<<";
+            this.btnFirst.UseVisualStyleBackColor = false;
+            // 
+            // lblRecordsInfo
+            // 
+            this.lblRecordsInfo.Font = new System.Drawing.Font("Comic Sans MS", 13.25F);
+            this.lblRecordsInfo.Location = new System.Drawing.Point(295, 881);
+            this.lblRecordsInfo.Name = "lblRecordsInfo";
+            this.lblRecordsInfo.Size = new System.Drawing.Size(345, 45);
+            this.lblRecordsInfo.TabIndex = 34;
+            this.lblRecordsInfo.Text = "Показано записей: 0 из 0";
+            this.lblRecordsInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // FormHeadViewClients
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -210,6 +301,14 @@
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1460, 970);
+            this.Controls.Add(this.btnLast);
+            this.Controls.Add(this.lblPageLabel);
+            this.Controls.Add(this.txtPageNumber);
+            this.Controls.Add(this.lblPageInfo);
+            this.Controls.Add(this.btnNext);
+            this.Controls.Add(this.btnPrev);
+            this.Controls.Add(this.btnFirst);
+            this.Controls.Add(this.lblRecordsInfo);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.comboBox2);
             this.Controls.Add(this.label5);
@@ -250,5 +349,13 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.Button btnLast;
+        private System.Windows.Forms.Label lblPageLabel;
+        private System.Windows.Forms.TextBox txtPageNumber;
+        private System.Windows.Forms.Label lblPageInfo;
+        private System.Windows.Forms.Button btnNext;
+        private System.Windows.Forms.Button btnPrev;
+        private System.Windows.Forms.Button btnFirst;
+        private System.Windows.Forms.Label lblRecordsInfo;
     }
 }

@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormViewClients));
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -48,6 +48,14 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.label4 = new System.Windows.Forms.Label();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.lblRecordsInfo = new System.Windows.Forms.Label();
+            this.btnFirst = new System.Windows.Forms.Button();
+            this.btnPrev = new System.Windows.Forms.Button();
+            this.btnNext = new System.Windows.Forms.Button();
+            this.lblPageInfo = new System.Windows.Forms.Label();
+            this.txtPageNumber = new System.Windows.Forms.TextBox();
+            this.lblPageLabel = new System.Windows.Forms.Label();
+            this.btnLast = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -120,46 +128,46 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle13.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F);
+            dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle14.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F);
+            dataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle14;
             this.dataGridView1.EnableHeadersVisualStyles = false;
             this.dataGridView1.Location = new System.Drawing.Point(29, 255);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F);
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle15.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F);
+            dataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle15.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle15.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle15;
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(1110, 420);
+            this.dataGridView1.Size = new System.Drawing.Size(1110, 381);
             this.dataGridView1.TabIndex = 8;
             // 
             // button1
             // 
             this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
             this.button1.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
-            this.button1.Location = new System.Drawing.Point(30, 706);
+            this.button1.Location = new System.Drawing.Point(29, 652);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(162, 76);
             this.button1.TabIndex = 15;
@@ -221,11 +229,102 @@
             this.comboBox2.Size = new System.Drawing.Size(275, 55);
             this.comboBox2.TabIndex = 23;
             // 
+            // lblRecordsInfo
+            // 
+            this.lblRecordsInfo.Font = new System.Drawing.Font("Comic Sans MS", 13.25F);
+            this.lblRecordsInfo.Location = new System.Drawing.Point(197, 713);
+            this.lblRecordsInfo.Name = "lblRecordsInfo";
+            this.lblRecordsInfo.Size = new System.Drawing.Size(345, 45);
+            this.lblRecordsInfo.TabIndex = 25;
+            this.lblRecordsInfo.Text = "Показано записей: 0 из 0";
+            this.lblRecordsInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // btnFirst
+            // 
+            this.btnFirst.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
+            this.btnFirst.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
+            this.btnFirst.Location = new System.Drawing.Point(197, 652);
+            this.btnFirst.Name = "btnFirst";
+            this.btnFirst.Size = new System.Drawing.Size(98, 58);
+            this.btnFirst.TabIndex = 26;
+            this.btnFirst.Text = "<<";
+            this.btnFirst.UseVisualStyleBackColor = false;
+            // 
+            // btnPrev
+            // 
+            this.btnPrev.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
+            this.btnPrev.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
+            this.btnPrev.Location = new System.Drawing.Point(301, 652);
+            this.btnPrev.Name = "btnPrev";
+            this.btnPrev.Size = new System.Drawing.Size(96, 58);
+            this.btnPrev.TabIndex = 27;
+            this.btnPrev.Text = "<";
+            this.btnPrev.UseVisualStyleBackColor = false;
+            // 
+            // btnNext
+            // 
+            this.btnNext.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
+            this.btnNext.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
+            this.btnNext.Location = new System.Drawing.Point(403, 652);
+            this.btnNext.Name = "btnNext";
+            this.btnNext.Size = new System.Drawing.Size(97, 58);
+            this.btnNext.TabIndex = 28;
+            this.btnNext.Text = ">";
+            this.btnNext.UseVisualStyleBackColor = false;
+            // 
+            // lblPageInfo
+            // 
+            this.lblPageInfo.Font = new System.Drawing.Font("Comic Sans MS", 13.25F);
+            this.lblPageInfo.Location = new System.Drawing.Point(534, 710);
+            this.lblPageInfo.Name = "lblPageInfo";
+            this.lblPageInfo.Size = new System.Drawing.Size(312, 45);
+            this.lblPageInfo.TabIndex = 29;
+            this.lblPageInfo.Text = "Показано записей: 0 из 0";
+            this.lblPageInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // txtPageNumber
+            // 
+            this.txtPageNumber.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
+            this.txtPageNumber.Location = new System.Drawing.Point(624, 652);
+            this.txtPageNumber.MaxLength = 50;
+            this.txtPageNumber.Name = "txtPageNumber";
+            this.txtPageNumber.Size = new System.Drawing.Size(75, 55);
+            this.txtPageNumber.TabIndex = 30;
+            // 
+            // lblPageLabel
+            // 
+            this.lblPageLabel.Font = new System.Drawing.Font("Comic Sans MS", 13.25F);
+            this.lblPageLabel.Location = new System.Drawing.Point(705, 652);
+            this.lblPageLabel.Name = "lblPageLabel";
+            this.lblPageLabel.Size = new System.Drawing.Size(89, 45);
+            this.lblPageLabel.TabIndex = 31;
+            this.lblPageLabel.Text = "Стр.";
+            this.lblPageLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // btnLast
+            // 
+            this.btnLast.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(204)))), ((int)(((byte)(153)))));
+            this.btnLast.Font = new System.Drawing.Font("Comic Sans MS", 20.25F);
+            this.btnLast.Location = new System.Drawing.Point(506, 652);
+            this.btnLast.Name = "btnLast";
+            this.btnLast.Size = new System.Drawing.Size(97, 58);
+            this.btnLast.TabIndex = 32;
+            this.btnLast.Text = ">>";
+            this.btnLast.UseVisualStyleBackColor = false;
+            // 
             // FormViewClients
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1151, 793);
+            this.ClientSize = new System.Drawing.Size(1151, 854);
+            this.Controls.Add(this.btnLast);
+            this.Controls.Add(this.lblPageLabel);
+            this.Controls.Add(this.txtPageNumber);
+            this.Controls.Add(this.lblPageInfo);
+            this.Controls.Add(this.btnNext);
+            this.Controls.Add(this.btnPrev);
+            this.Controls.Add(this.btnFirst);
+            this.Controls.Add(this.lblRecordsInfo);
             this.Controls.Add(this.comboBox2);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.pictureBox2);
@@ -268,5 +367,13 @@
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.Label lblRecordsInfo;
+        private System.Windows.Forms.Button btnFirst;
+        private System.Windows.Forms.Button btnPrev;
+        private System.Windows.Forms.Button btnNext;
+        private System.Windows.Forms.Label lblPageInfo;
+        private System.Windows.Forms.TextBox txtPageNumber;
+        private System.Windows.Forms.Label lblPageLabel;
+        private System.Windows.Forms.Button btnLast;
     }
 }

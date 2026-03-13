@@ -1,4 +1,4 @@
-﻿using MySql.Data.MySqlClient; // Подключение библиотеки для работы с MySQL
+﻿using MySql.Data.MySqlClient;
 using System;
 using System.Data;
 using System.Linq;
@@ -9,74 +9,155 @@ namespace Kursivoy_Konkin
 {
     public partial class FormViewClients : Form
     {
-        private DataTable originalDataTable; // Хранит исходные данные для фильтрации и поиска
+        private DataTable originalDataTable;
+
+        // Переменные для пагинации
+        private int currentPage = 1;
+        private int pageSize = 20;
+        private int totalRecords = 0;
+        private int totalPages = 0;
 
         public FormViewClients()
         {
-            InitializeComponent(); // Инициализация компонентов формы
-            InitializeContextMenu(); // Создание контекстного меню
-            InitializeSearchAndFilter(); // Установка поиска и фильтрации
-            this.MinimizeBox = false; // Запрет сворачивания
-            this.MaximizeBox = false; // Запрет разворачивания
-            
+            InitializeComponent();
+            InitializeContextMenu();
+            InitializeSearchAndFilter();
+            InitializePaginationEvents(); // Подписка событий пагинации
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+        }
+
+        // Подписка событий для элементов пагинации (добавленных через Designer)
+        private void InitializePaginationEvents()
+        {
+            btnFirst.Click += BtnFirst_Click;
+            btnPrev.Click += BtnPrev_Click;
+            btnNext.Click += BtnNext_Click;
+            btnLast.Click += BtnLast_Click;
+            txtPageNumber.KeyPress += TxtPageNumber_KeyPress;
+        }
+
+        // Переход на первую страницу
+        private void BtnFirst_Click(object sender, EventArgs e)
+        {
+            if (currentPage > 1)
+            {
+                currentPage = 1;
+                ApplyFilters();
+            }
+        }
+
+        // Переход на предыдущую страницу
+        private void BtnPrev_Click(object sender, EventArgs e)
+        {
+            if (currentPage > 1)
+            {
+                currentPage--;
+                ApplyFilters();
+            }
+        }
+
+        // Переход на следующую страницу
+        private void BtnNext_Click(object sender, EventArgs e)
+        {
+            if (currentPage < totalPages)
+            {
+                currentPage++;
+                ApplyFilters();
+            }
+        }
+
+        // Переход на последнюю страницу
+        private void BtnLast_Click(object sender, EventArgs e)
+        {
+            if (currentPage < totalPages)
+            {
+                currentPage = totalPages;
+                ApplyFilters();
+            }
+        }
+
+        // Ввод номера страницы с клавиатуры
+        private void TxtPageNumber_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                if (int.TryParse(txtPageNumber.Text, out int pageNumber))
+                {
+                    if (pageNumber >= 1 && pageNumber <= totalPages)
+                    {
+                        currentPage = pageNumber;
+                        ApplyFilters();
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Введите номер страницы от 1 до {totalPages}", "Ошибка",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                }
+                e.Handled = true;
+            }
+        }
+
+        // Обновление информации о пагинации
+        private void UpdatePaginationInfo()
+        {
+            int displayedRecords = dataGridView1.Rows.Count;
+            lblRecordsInfo.Text = $"Показано записей: {displayedRecords} из {totalRecords}";
+            lblPageInfo.Text = $"Страница {currentPage} из {totalPages}";
+            txtPageNumber.Text = currentPage.ToString();
+
+            // Активация/деактивация кнопок
+            btnFirst.Enabled = currentPage > 1;
+            btnPrev.Enabled = currentPage > 1;
+            btnNext.Enabled = currentPage < totalPages;
+            btnLast.Enabled = currentPage < totalPages;
         }
 
         private void InitializeContextMenu()
         {
-            // Создаем контекстное меню
             contextMenuStrip1 = new ContextMenuStrip();
 
-            // Добавляем пункт "Добавить клиента"
             var menuItemAdd = new ToolStripMenuItem("Добавить клиента");
-            menuItemAdd.Click += MenuItemAdd_Click; // Обработка клика
+            menuItemAdd.Click += MenuItemAdd_Click;
             contextMenuStrip1.Items.Add(menuItemAdd);
 
-            // Добавляем пункт "Редактировать"
             var menuItemEdit = new ToolStripMenuItem("Редактировать");
             menuItemEdit.Click += MenuItemEdit_Click;
             contextMenuStrip1.Items.Add(menuItemEdit);
 
-            // Добавляем пункт "Удалить"
             var menuItemDelete = new ToolStripMenuItem("Удалить");
             menuItemDelete.Click += MenuItemDelete_Click;
             contextMenuStrip1.Items.Add(menuItemDelete);
 
-            // Привязываем контекстное меню к DataGridView
             dataGridView1.ContextMenuStrip = contextMenuStrip1;
         }
 
-        // Обработка добавления нового клиента
         private void MenuItemAdd_Click(object sender, EventArgs e)
         {
-            // Открываем форму добавления клиента
             using (var addClientForm = new FormManagerAddClient())
             {
-                this.Visible = false; // Скрываем текущую форму
+                this.Visible = false;
                 if (addClientForm.ShowDialog() == DialogResult.OK)
                 {
-                    // Обновляем таблицу после добавления нового клиента
+                    currentPage = 1;
                     FillTableData();
                 }
             }
         }
 
-        // Обработка редактирования выбранного клиента
         private void MenuItemEdit_Click(object sender, EventArgs e)
         {
             if (dataGridView1.SelectedRows.Count > 0)
             {
-                // Получаем ID клиента из выбранной строки
                 int clientId = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["ID_Client"].Value);
 
-                // Открываем форму редактирования клиента
                 using (var editClientForm = new FormManagerEditClients())
                 {
-                    this.Visible = false; // Скрываем текущую форму
-                    // Загружаем данные клиента по ID
+                    this.Visible = false;
                     editClientForm.LoadClientById(clientId);
                     if (editClientForm.ShowDialog() == DialogResult.OK)
                     {
-                        // Обновляем таблицу после редактирования клиента
                         FillTableData();
                     }
                 }
@@ -87,21 +168,17 @@ namespace Kursivoy_Konkin
             }
         }
 
-        // Обработка удаления клиента
         private void MenuItemDelete_Click(object sender, EventArgs e)
         {
             if (dataGridView1.SelectedRows.Count > 0)
             {
-                // Получаем ID клиента из выбранной строки
                 int clientId = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["ID_Client"].Value);
 
-                // Запрашиваем подтверждение удаления
                 var result = MessageBox.Show("Вы уверены, что хотите удалить клиента?", "Подтверждение", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (result == DialogResult.Yes)
                 {
                     try
                     {
-                        // Выполняем мягкое удаление (установка IsDeleted = 1)
                         string query = "UPDATE mydb.clients SET IsDeleted = 1 WHERE ID_Client = @IDClient;";
                         using (var connection = new MySqlConnection(connect.con))
                         using (var command = new MySqlCommand(query, connection))
@@ -110,7 +187,6 @@ namespace Kursivoy_Konkin
                             connection.Open();
                             command.ExecuteNonQuery();
                         }
-                        // Обновляем таблицу после удаления
                         FillTableData();
                     }
                     catch (Exception ex)
@@ -125,14 +201,12 @@ namespace Kursivoy_Konkin
             }
         }
 
-        // Заполняет таблицу данных
         private void FillTableData()
         {
             try
             {
-                dataGridView1.Columns.Clear(); // Очищаем текущие столбцы
+                dataGridView1.Columns.Clear();
 
-                // SQL-запрос для получения данных клиентов
                 string query = @"
                     SELECT 
                         c.ID_Client,
@@ -152,7 +226,7 @@ namespace Kursivoy_Konkin
                 {
                     DataTable table = new DataTable();
                     connection.Open();
-                    adapter.Fill(table); // Заполняем DataTable данными
+                    adapter.Fill(table);
 
                     if (table.Rows.Count == 0)
                     {
@@ -160,10 +234,13 @@ namespace Kursivoy_Konkin
                         return;
                     }
 
-                    originalDataTable = table.Copy(); // Сохраняем оригинал данных для фильтров
-                    dataGridView1.DataSource = table; // Устанавливаем источник данных для таблицы
+                    originalDataTable = table.Copy();
+                    totalRecords = table.Rows.Count;
+                    totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+                    currentPage = 1;
 
-                    // Устанавливаем читаемые заголовки колонок
+                    ApplyFilters();
+
                     SetHeader("ФИО", "ФИО");
                     SetHeader("Телефон", "Телефон");
                     SetHeader("Дата рождения", "Дата рождения");
@@ -171,15 +248,13 @@ namespace Kursivoy_Konkin
                     SetHeader("Статус", "Статус");
                     SetHeader("LTV", "LTV");
 
-                    // Скрываем ID_Client, так как он не нужен для отображения
                     HideColumn("ID_Client");
 
-                    // Настраиваем DataGridView
-                    dataGridView1.AllowUserToAddRows = false; // Запрещаем пользователю добавлять строки вручную
-                    dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect; // Выделение всей строки
-                    dataGridView1.MultiSelect = false; // Разрешаем выбор только одной строки
-                    dataGridView1.ReadOnly = true; // Запрет редактирования
-                    dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill; // Расширение колонок
+                    dataGridView1.AllowUserToAddRows = false;
+                    dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                    dataGridView1.MultiSelect = false;
+                    dataGridView1.ReadOnly = true;
+                    dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 }
             }
             catch (Exception ex)
@@ -188,26 +263,22 @@ namespace Kursivoy_Konkin
             }
         }
 
-        // Устанавливает заголовки колонок таблицы
         private void SetHeader(string columnName, string headerText)
         {
             if (dataGridView1.Columns.Contains(columnName))
                 dataGridView1.Columns[columnName].HeaderText = headerText;
         }
 
-        // Скрывает указанные колонки таблицы
         private void HideColumn(string columnName)
         {
             if (dataGridView1.Columns.Contains(columnName))
                 dataGridView1.Columns[columnName].Visible = false;
         }
 
-        // Обновляет возраст клиентов на основе даты рождения
         private void UpdateClientBirthdaysAndAges()
         {
             try
             {
-                // Обновляем возраст для всех клиентов
                 string query = @"
                     UPDATE mydb.clients
                     SET Age = TIMESTAMPDIFF(YEAR, Birthday, CURDATE())
@@ -217,8 +288,7 @@ namespace Kursivoy_Konkin
                 using (var command = new MySqlCommand(query, connection))
                 {
                     connection.Open();
-                    int affectedRows = command.ExecuteNonQuery(); // Количество обновленных строк
-
+                    command.ExecuteNonQuery();
                 }
             }
             catch (Exception ex)
@@ -227,7 +297,6 @@ namespace Kursivoy_Konkin
             }
         }
 
-        // Обработка правого клика мыши для показа контекстного меню
         private void dataGridView1_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
@@ -235,10 +304,8 @@ namespace Kursivoy_Konkin
                 var hitTestInfo = dataGridView1.HitTest(e.X, e.Y);
                 if (hitTestInfo.RowIndex >= 0)
                 {
-                    // Выделение строки под курсором
                     dataGridView1.ClearSelection();
                     dataGridView1.Rows[hitTestInfo.RowIndex].Selected = true;
-                    // Отображение контекстного меню
                     contextMenuStrip1.Show(dataGridView1, e.Location);
                 }
             }
@@ -246,17 +313,12 @@ namespace Kursivoy_Konkin
 
         private void FormViewClients_Load(object sender, EventArgs e)
         {
-            // Загружаем данные при запуске формы
             FillTableData();
-
-            // Обновляем возраст клиентов
             UpdateClientBirthdaysAndAges();
 
-            // Инициализация комбобоксов
             comboBox1.Items.AddRange(new[] { "ФИО", "Статус", "LTV" });
             comboBox2.Items.AddRange(new[] { "Все", "Больше 500 000", "Меньше 1 000 000", "Больше 2 000 000" });
 
-            // Загружаем статусы для фильтрации
             LoadStatusesToComboBox3();
         }
 
@@ -270,10 +332,8 @@ namespace Kursivoy_Konkin
                 using (var adapter = new MySqlDataAdapter(command))
                 {
                     DataTable statusTable = new DataTable();
-                    connection.Open();
                     adapter.Fill(statusTable);
 
-                    // Добавляем статусы в ComboBox
                     foreach (DataRow row in statusTable.Rows)
                     {
                         comboBox3.Items.Add(row["status"].ToString());
@@ -286,82 +346,106 @@ namespace Kursivoy_Konkin
             }
         }
 
-        // Настраиваем фильтры и поиск
         private void InitializeSearchAndFilter()
         {
-            // Поиск по тексту (ФИО, телефон)
-            textBox1.TextChanged += (s, e) => ApplyFilters();
-            // Фильтр по статусу
-            comboBox1.SelectedIndexChanged += (s, e) => ApplyFilters();
-            // Фильтр по статусу клиента
-            comboBox3.SelectedIndexChanged += (s, e) => ApplyFilters();
-            // Фильтр по LTV
-            comboBox2.SelectedIndexChanged += (s, e) => ApplyFilters();
+            textBox1.TextChanged += (s, e) => { currentPage = 1; ApplyFilters(); };
+            comboBox1.SelectedIndexChanged += (s, e) => { currentPage = 1; ApplyFilters(); };
+            comboBox3.SelectedIndexChanged += (s, e) => { currentPage = 1; ApplyFilters(); };
+            comboBox2.SelectedIndexChanged += (s, e) => { currentPage = 1; ApplyFilters(); };
         }
 
-        // Применяет фильтры к данным по текущим настройкам
         private void ApplyFilters()
         {
             try
             {
+                if (originalDataTable == null) return;
 
-           
-            if (originalDataTable == null) return;
+                var filteredData = originalDataTable.AsEnumerable();
 
-            var filteredData = originalDataTable.AsEnumerable();
-
-            // Поиск по тексту (ФИО, телефон)
-            string searchText = textBox1.Text.ToLower();
-            if (!string.IsNullOrEmpty(searchText))
-            {
-                filteredData = filteredData.Where(row =>
-                    row["ФИО"].ToString().ToLower().Contains(searchText) ||
-                    row["Телефон"].ToString().ToLower().Contains(searchText));
-            }
-
-            // Фильтр по статусу
-            if (comboBox3.SelectedItem != null && comboBox3.SelectedItem.ToString() != "Все")
-            {
-                string selectedStatus = comboBox3.SelectedItem.ToString();
-                filteredData = filteredData.Where(row => row["Статус"].ToString() == selectedStatus);
-            }
-
-            // Фильтр по LTV
-            if (comboBox2.SelectedItem != null && comboBox2.SelectedItem.ToString() != "Все")
-            {
-                switch (comboBox2.SelectedItem.ToString())
+                string searchText = textBox1.Text.ToLower();
+                if (!string.IsNullOrEmpty(searchText))
                 {
-                    case "Больше 500 000":
-                        filteredData = filteredData.Where(row => Convert.ToDecimal(row["LTV"]) > 500000);
-                        break;
-                    case "Меньше 1 000 000":
-                        filteredData = filteredData.Where(row => Convert.ToDecimal(row["LTV"]) < 1000000);
-                        break;
-                    case "Больше 2 000 000":
-                        filteredData = filteredData.Where(row => Convert.ToDecimal(row["LTV"]) > 2000000);
-                        break;
+                    filteredData = filteredData.Where(row =>
+                        row["ФИО"].ToString().ToLower().Contains(searchText) ||
+                        row["Телефон"].ToString().ToLower().Contains(searchText));
                 }
-            }
 
-            // Сортировка по выбранному столбцу
-            if (comboBox1.SelectedItem != null)
-            {
-                string sortColumn = comboBox1.SelectedItem.ToString();
-                switch (sortColumn)
+                if (comboBox3.SelectedItem != null && comboBox3.SelectedItem.ToString() != "Все")
                 {
-                    case "ФИО":
-                        filteredData = filteredData.OrderBy(row => row["ФИО"]);
-                        break;
-                        // Можно добавить остальные сортировки по другим колонкам
+                    string selectedStatus = comboBox3.SelectedItem.ToString();
+                    filteredData = filteredData.Where(row => row["Статус"].ToString() == selectedStatus);
                 }
-            }
 
-            // Обновляем DataGridView данными
-            dataGridView1.DataSource = filteredData.CopyToDataTable();
+                if (comboBox2.SelectedItem != null && comboBox2.SelectedItem.ToString() != "Все")
+                {
+                    switch (comboBox2.SelectedItem.ToString())
+                    {
+                        case "Больше 500 000":
+                            filteredData = filteredData.Where(row => Convert.ToDecimal(row["LTV"]) > 500000);
+                            break;
+                        case "Меньше 1 000 000":
+                            filteredData = filteredData.Where(row => Convert.ToDecimal(row["LTV"]) < 1000000);
+                            break;
+                        case "Больше 2 000 000":
+                            filteredData = filteredData.Where(row => Convert.ToDecimal(row["LTV"]) > 2000000);
+                            break;
+                    }
+                }
+
+                if (comboBox1.SelectedItem != null)
+                {
+                    string sortColumn = comboBox1.SelectedItem.ToString();
+                    switch (sortColumn)
+                    {
+                        case "ФИО":
+                            filteredData = filteredData.OrderBy(row => row["ФИО"]);
+                            break;
+                    }
+                }
+
+                // Пагинация
+                var filteredList = filteredData.ToList();
+                int totalFilteredRecords = filteredList.Count;
+                int totalPagesFiltered = (int)Math.Ceiling((double)totalFilteredRecords / pageSize);
+
+                if (currentPage > totalPagesFiltered)
+                    currentPage = totalPagesFiltered > 0 ? totalPagesFiltered : 1;
+
+                // 🔧 ИСПРАВЛЕНИЕ: Обработка пустого результата
+                if (filteredList.Count == 0)
+                {
+                    // Создаем пустую таблицу с той же структурой (без ID_Client)
+                    DataTable emptyTable = new DataTable();
+                    emptyTable.Columns.Add("ФИО", typeof(string));
+                    emptyTable.Columns.Add("Телефон", typeof(string));
+                    emptyTable.Columns.Add("Дата рождения", typeof(DateTime));
+                    emptyTable.Columns.Add("Возраст", typeof(int));
+                    emptyTable.Columns.Add("Статус", typeof(string));
+                    emptyTable.Columns.Add("LTV", typeof(decimal));
+
+                    dataGridView1.DataSource = emptyTable;
+                    totalRecords = 0;
+                    totalPages = 0;
+                    currentPage = 1;
+                }
+                else
+                {
+                    var pagedData = filteredList
+                        .Skip((currentPage - 1) * pageSize)
+                        .Take(pageSize)
+                        .CopyToDataTable();
+
+                    dataGridView1.DataSource = pagedData;
+                    totalRecords = totalFilteredRecords;
+                    totalPages = totalPagesFiltered;
+                }
+
+                // Обновляем информацию о пагинации
+                UpdatePaginationInfo();
             }
             catch (Exception ex)
             {
-                
+                MessageBox.Show($"Ошибка при фильтрации: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -369,17 +453,16 @@ namespace Kursivoy_Konkin
         {
             if (e.CloseReason == CloseReason.UserClosing)
             {
-                e.Cancel = true; //отменяем закрытие формы
+                e.Cancel = true;
             }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            // Создаем форму 
             FormManagerNavigation f = new FormManagerNavigation();
-            this.Visible = false; // Скрываем текущую
-            f.ShowDialog(); // Открываем как модальную
-            this.Close(); // Закрываем текущую форму после выхода
+            this.Visible = false;
+            f.ShowDialog();
+            this.Close();
         }
     }
 }
