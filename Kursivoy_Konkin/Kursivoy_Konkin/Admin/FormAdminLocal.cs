@@ -64,12 +64,34 @@ namespace Kursivoy_Konkin.Admin
             button4.Enabled = true;
         }
 
-       
+        private string[] ReadCsvWithEncodingDetection(string filePath)
+        {
+            // Сначала пробуем UTF-8
+            var lines = File.ReadAllLines(filePath, Encoding.UTF8);
+
+            // Проверяем, нет ли "кракозябр" в первой строке с данными
+            if (lines.Length > 1 && ContainsGarbage(lines[1]))
+            {
+                // Если есть мусор — пробуем Windows-1251
+                return File.ReadAllLines(filePath, Encoding.GetEncoding(1251));
+            }
+
+            return lines;
+        }
+
+        private bool ContainsGarbage(string text)
+        {
+            // Проверяем на наличие символов, которые появляются при неверной кодировке
+            // "" и подобные артефакты
+            return text.Contains("") ||
+                   text.Contains("") ||
+                   text.Count(c => c > 255 && c < 1024) > text.Length * 0.3;
+        }
 
         private int ImportCSV(string csvFilePath, string tableName, MySqlConnection connection)
         {
             int res = 0;
-            string[] readText = File.ReadAllLines(csvFilePath);
+            string[] readText = ReadCsvWithEncodingDetection(csvFilePath);
             string[] values;
             string query = "";
 
@@ -79,44 +101,45 @@ namespace Kursivoy_Konkin.Admin
 
                 switch (tableName)
                 {
-                    case "role":
-                        query = $@"INSERT INTO role (RoleName) 
-                                    VALUES ('{values[0]}')";
+                    case "clients":
+                        query = $@"INSERT INTO clients (FullName_client, phone, Age, Status_client_ID_Status_client, LTV, Birthday, IsDeleted) 
+                    VALUES ('{values[0]}', '{values[1]}', '{values[2]}', '{values[3]}', 
+                            {(string.IsNullOrEmpty(values[4]) ? "NULL" : $"'{values[4]}'")} , 
+                            {(string.IsNullOrEmpty(values[5]) ? "NULL" : $"'{values[5]}'")} , 
+                            '{values[6]}')";
                         break;
 
-                    case "user":
-                        query = $@"INSERT INTO user (UserSurname, UserName, UserPatronymic, UserLogin, UserPassword, UserRole) 
-                                    VALUES ('{values[0]}', '{values[1]}', '{values[2]}', '{values[3]}', '{values[4]}', '{values[5]}')";
+                    case "contract":
+                        query = $@"INSERT INTO contract (Name_contract, date_signing, END_DATE, Clients_ID_Client, worker_ID_worker, connection_contract_object_ID_object) 
+                    VALUES ('{values[0]}', '{values[1]}', '{values[2]}', '{values[3]}', '{values[4]}', '{values[5]}')";
                         break;
 
-                    case "client":
-                        query = $@"INSERT INTO client (ClientSurname, ClientName, ClientPatronymic, ClientPhone, ClientBirthday, ClientRightEye, ClientLeftEye) 
-                                    VALUES ('{values[0]}', '{values[1]}', '{values[2]}', '{values[3]}', '{values[4]}', '{values[5]}', '{values[6]}')";
+                    case "object":
+                        query = $@"INSERT INTO object (name_object, square, cost, building_dates, number_floors, parking_space, connection_contract_object_ID_object, photo, IsDeleted) 
+                    VALUES ('{values[0]}', '{values[1]}', '{values[2]}', '{values[3]}', '{values[4]}', '{values[5]}', 
+                            {(string.IsNullOrEmpty(values[6]) ? "NULL" : $"'{values[6]}'")} , 
+                            {(string.IsNullOrEmpty(values[7]) ? "NULL" : $"'{values[7]}'")} , 
+                            '{values[8]}')";
                         break;
 
-                    case "product":
-                        query = $@"INSERT INTO product (ProductArticleNumber, ProductName, ProductUnit, ProductCost, ProductManufacturer, ProductSupplier, ProductQuantityInStock, ProductDescription, ProductCategory, ProductPhoto) 
-                                    VALUES ('{values[0]}', '{values[1]}', '{values[2]}', '{values[3]}', '{values[4]}', '{values[5]}', '{values[6]}', '{values[7]}', '{values[8]}', '{values[9]}')";
+                    case "role_worker":
+                        query = $@"INSERT INTO role_worker (Role) 
+                    VALUES ('{values[0]}')";
                         break;
 
-                    case "productcategory":
-                        query = $@"INSERT INTO productcategory (ProductCategoryName) 
-                                    VALUES ('{values[0]}')";
+                    case "status_client":
+                        query = $@"INSERT INTO status_client (status, IsDeleted) 
+                    VALUES ({(string.IsNullOrEmpty(values[0]) ? "NULL" : $"'{values[0]}'")} , '{values[1]}')";
                         break;
 
-                    case "supplier":
-                        query = $@"INSERT INTO supplier (SupplierName, SupplierContactPerson, SupplierPhone, SupplierAddress, SupplierINN, SupplierKPP, SupplierPaymentAccount, SupplierBank, SupplierBIK) 
-                                    VALUES ('{values[0]}','{values[1]}', '{values[2]}', '{values[3]}', '{values[4]}', '{values[5]}', '{values[6]}', '{values[7]}', '{values[8]}')";
-                        break;
-
-                    case "order":
-                        query = $@"INSERT INTO supplier (OrderDate, ProductUser, OrderClient, OrderAmount) 
-                                    VALUES ('{values[0]}', '{values[1]}', '{values[2]}', '{values[3]}')";
-                        break;
-
-                    case "orderproduct":
-                        query = $@"INSERT INTO supplier (ProductArticleNumber, OrderCount) 
-                                    VALUES ('{values[0]}', '{values[1]}')";
+                    case "worker":
+                        query = $@"INSERT INTO worker (ID_Clientsl, FIO, Age, phone, Role_worker_ID_Role, IsDeleted, photo, password) 
+                    VALUES ('{values[0]}', 
+                            {(string.IsNullOrEmpty(values[1]) ? "NULL" : $"'{values[1]}'")} , 
+                            {(string.IsNullOrEmpty(values[2]) ? "NULL" : $"'{values[2]}'")} , 
+                            '{values[3]}', '{values[4]}', '{values[5]}', 
+                            {(string.IsNullOrEmpty(values[6]) ? "NULL" : $"'{values[6]}'")} , 
+                            '{values[7]}')";
                         break;
                 }
                 MySqlCommand command = new MySqlCommand(query, connection);
@@ -137,6 +160,8 @@ namespace Kursivoy_Konkin.Admin
             FillTables();
             button1.Enabled = false;
             button4.Enabled = false;
+
+            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -184,7 +209,7 @@ namespace Kursivoy_Konkin.Admin
                         DataTable table = new DataTable();
                         table.Load(reader);
 
-                        StreamWriter streamWriter = new StreamWriter(filePath, false);
+                        StreamWriter streamWriter = new StreamWriter(filePath, false, new UTF8Encoding(true));
 
                         for (int i = 0, len = table.Columns.Count - 1; i <= len; ++i)
                         {
