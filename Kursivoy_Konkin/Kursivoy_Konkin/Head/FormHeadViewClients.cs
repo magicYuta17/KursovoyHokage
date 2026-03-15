@@ -1,14 +1,10 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Kursivoy_Konkin.Manager;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Contexts;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Kursivoy_Konkin
@@ -17,23 +13,23 @@ namespace Kursivoy_Konkin
     {
         private DataTable originalDataTable;
 
-        // 🔹 Переменные для пагинации
         private int currentPage = 1;
         private int pageSize = 20;
         private int totalRecords = 0;
         private int totalPages = 0;
+
+        private bool isMasked = true; // по умолчанию данные скрыты
 
         public FormHeadViewClients()
         {
             InitializeComponent();
             InitializeContextMenu();
             InitializeSearchAndFilter();
-            InitializePaginationEvents(); // 🔹 Подписка событий пагинации
+            InitializePaginationEvents();
             this.MinimizeBox = false;
             this.MaximizeBox = false;
         }
 
-        // 🔹 Подписка событий для элементов пагинации
         private void InitializePaginationEvents()
         {
             btnFirst.Click += BtnFirst_Click;
@@ -43,47 +39,26 @@ namespace Kursivoy_Konkin
             txtPageNumber.KeyPress += TxtPageNumber_KeyPress;
         }
 
-        // 🔹 Переход на первую страницу
         private void BtnFirst_Click(object sender, EventArgs e)
         {
-            if (currentPage > 1)
-            {
-                currentPage = 1;
-                ApplyFilters();
-            }
+            if (currentPage > 1) { currentPage = 1; ApplyFilters(); }
         }
 
-        // 🔹 Переход на предыдущую страницу
         private void BtnPrev_Click(object sender, EventArgs e)
         {
-            if (currentPage > 1)
-            {
-                currentPage--;
-                ApplyFilters();
-            }
+            if (currentPage > 1) { currentPage--; ApplyFilters(); }
         }
 
-        // 🔹 Переход на следующую страницу
         private void BtnNext_Click(object sender, EventArgs e)
         {
-            if (currentPage < totalPages)
-            {
-                currentPage++;
-                ApplyFilters();
-            }
+            if (currentPage < totalPages) { currentPage++; ApplyFilters(); }
         }
 
-        // 🔹 Переход на последнюю страницу
         private void BtnLast_Click(object sender, EventArgs e)
         {
-            if (currentPage < totalPages)
-            {
-                currentPage = totalPages;
-                ApplyFilters();
-            }
+            if (currentPage < totalPages) { currentPage = totalPages; ApplyFilters(); }
         }
 
-        // 🔹 Ввод номера страницы с клавиатуры
         private void TxtPageNumber_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Enter)
@@ -105,7 +80,6 @@ namespace Kursivoy_Konkin
             }
         }
 
-        // 🔹 Обновление информации о пагинации
         private void UpdatePaginationInfo()
         {
             int displayedRecords = dataGridView1.Rows.Count;
@@ -123,6 +97,12 @@ namespace Kursivoy_Konkin
         {
             contextMenuStrip1 = new ContextMenuStrip();
 
+            // ── Просмотреть запись ────────────────────────────────
+            var menuItemView = new ToolStripMenuItem("Просмотреть запись");
+            menuItemView.Click += MenuItemView_Click;
+            contextMenuStrip1.Items.Add(menuItemView);
+
+            // ── Печать отчёта по LTV ──────────────────────────────
             var menuItemPrint = new ToolStripMenuItem("Печать отчета по LTV");
             menuItemPrint.Click += MenuItemPrint_Click;
             contextMenuStrip1.Items.Add(menuItemPrint);
@@ -130,23 +110,39 @@ namespace Kursivoy_Konkin
             dataGridView1.ContextMenuStrip = contextMenuStrip1;
         }
 
-        private void MenuItemAdd_Click(object sender, EventArgs e)
+        // ── Просмотр карточки клиента ─────────────────────────────
+        private void MenuItemView_Click(object sender, EventArgs e)
         {
-            using (var addClientForm = new FormManagerAddClient())
+            int clientId = GetSelectedClientId();
+            if (clientId <= 0)
             {
-                if (addClientForm.ShowDialog() == DialogResult.OK)
-                {
-                    currentPage = 1; // 🔹 Сброс на первую страницу
-                    FillTableData();
-                }
+                MessageBox.Show("Выберите клиента для просмотра.", "Информация",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
             }
+
+            var viewForm = new FormHeadDetailsClients(clientId);
+            this.Visible = false;
+            viewForm.ShowDialog();
+            this.Visible = true;
+        }
+
+        // ── Получить ID выбранной строки из Tag ───────────────────
+        private int GetSelectedClientId()
+        {
+            if (dataGridView1.SelectedRows.Count == 0) return -1;
+            var row = dataGridView1.SelectedRows[0];
+            if (row.Tag != null && int.TryParse(row.Tag.ToString(), out int id))
+                return id;
+            return -1;
         }
 
         private void MenuItemPrint_Click(object sender, EventArgs e)
         {
             if (dataGridView1.Rows.Count == 0)
             {
-                MessageBox.Show("Нет данных для печати.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Нет данных для печати.", "Информация",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -154,7 +150,8 @@ namespace Kursivoy_Konkin
             string fileName = Path.Combine(baseDir, "docPrint", "printLTV.docx");
             if (!File.Exists(fileName))
             {
-                MessageBox.Show($"Шаблон не найден:\n{fileName}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Шаблон не найден:\n{fileName}", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -166,7 +163,7 @@ namespace Kursivoy_Konkin
                 var wordDocument = word.Documents.Add(fileName);
                 ReplaceWordStub("{Дата}", DateTime.Now.ToString("dd.MM.yyyy"), wordDocument);
 
-                var excludedColumns = new[] { "Телефон", "Дата рождения", };
+                var excludedColumns = new[] { "Телефон", "Дата рождения" };
                 var visibleColumns = dataGridView1.Columns
                     .Cast<DataGridViewColumn>()
                     .Where(c => c.Visible && !excludedColumns.Contains(c.HeaderText))
@@ -191,97 +188,42 @@ namespace Kursivoy_Konkin
                     var cell = wordTable.Cell(1, col + 1);
                     cell.Range.Text = visibleColumns[col].HeaderText;
                     cell.Range.Bold = 1;
-                    cell.Range.ParagraphFormat.Alignment = Microsoft.Office.Interop.Word.WdParagraphAlignment.wdAlignParagraphCenter;
+                    cell.Range.ParagraphFormat.Alignment =
+                        Microsoft.Office.Interop.Word.WdParagraphAlignment.wdAlignParagraphCenter;
                 }
 
                 for (int row = 0; row < rowCount; row++)
-                {
                     for (int col = 0; col < colCount; col++)
                     {
                         var cellValue = dataGridView1.Rows[row].Cells[visibleColumns[col].Index].Value;
-                        string text = cellValue != null && cellValue != DBNull.Value ? cellValue.ToString() : "";
+                        string text = cellValue != null && cellValue != DBNull.Value
+                            ? cellValue.ToString() : "";
                         wordTable.Cell(row + 2, col + 1).Range.Text = text;
                     }
-                }
 
                 foreach (Microsoft.Office.Interop.Word.Row wordRow in wordTable.Rows)
-                {
                     foreach (Microsoft.Office.Interop.Word.Cell cell in wordRow.Cells)
-                    {
                         cell.Range.Font.Size = 9;
-                    }
-                }
 
                 word.Visible = true;
             }
             catch (Exception ex)
             {
                 word.Quit();
-                MessageBox.Show($"Ошибка при формировании отчёта: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Ошибка при формировании отчёта: {ex.Message}", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void ReplaceWordStub(string stubToReplace, string text, Microsoft.Office.Interop.Word.Document wordDocument)
+        private void ReplaceWordStub(string stub, string text,
+            Microsoft.Office.Interop.Word.Document doc)
         {
-            var range = wordDocument.Content;
+            var range = doc.Content;
             range.Find.ClearFormatting();
             range.Find.Execute(
-                FindText: stubToReplace,
+                FindText: stub,
                 ReplaceWith: text,
-                Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll
-            );
-        }
-
-        private void MenuItemEdit_Click(object sender, EventArgs e)
-        {
-            if (dataGridView1.SelectedRows.Count > 0)
-            {
-                int clientId = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["ID_Client"].Value);
-                using (var editClientForm = new FormManagerEditClients())
-                {
-                    editClientForm.LoadClientById(clientId);
-                    if (editClientForm.ShowDialog() == DialogResult.OK)
-                    {
-                        FillTableData();
-                    }
-                }
-            }
-            else
-            {
-                MessageBox.Show("Выберите клиента для редактирования.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-        }
-
-        private void MenuItemDelete_Click(object sender, EventArgs e)
-        {
-            if (dataGridView1.SelectedRows.Count > 0)
-            {
-                int clientId = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["ID_Client"].Value);
-                var result = MessageBox.Show("Вы уверены, что хотите удалить клиента?", "Подтверждение", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (result == DialogResult.Yes)
-                {
-                    try
-                    {
-                        string query = "UPDATE mydb.clients SET IsDeleted = 1 WHERE ID_Client = @IDClient;";
-                        using (var connection = new MySqlConnection(connect.con))
-                        using (var command = new MySqlCommand(query, connection))
-                        {
-                            command.Parameters.AddWithValue("@IDClient", clientId);
-                            connection.Open();
-                            command.ExecuteNonQuery();
-                        }
-                        FillTableData();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"Ошибка при удалении клиента: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
-            else
-            {
-                MessageBox.Show("Выберите клиента для удаления.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+                Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
         }
 
         private void FillTableData()
@@ -291,7 +233,7 @@ namespace Kursivoy_Konkin
                 dataGridView1.Columns.Clear();
 
                 string query = @"
-                   SELECT 
+                    SELECT 
                         c.ID_Client,
                         c.FullName_client AS 'ФИО',
                         c.phone AS 'Телефон',
@@ -315,28 +257,17 @@ namespace Kursivoy_Konkin
 
                     if (table.Rows.Count == 0)
                     {
-                        MessageBox.Show("Данные не найдены.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Данные не найдены.", "Информация",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return;
                     }
 
                     originalDataTable = table.Copy();
-
-                    // 🔹 Инициализация пагинации
                     totalRecords = table.Rows.Count;
                     totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
                     currentPage = 1;
 
-                    ApplyFilters(); // 🔹 Применяем фильтры с пагинацией
-
-                    SetHeader("ФИО", "ФИО");
-                    SetHeader("Телефон", "Телефон");
-                    SetHeader("Дата рождения", "Дата рождения");
-                    SetHeader("Возраст", "Возраст");
-                    SetHeader("Статус", "Статус");
-                    SetHeader("LTV", "LTV");
-                    SetHeader("ФИО сотрудника", "Сотрудник");
-
-                    HideColumn("ID_Client");
+                    ApplyFilters();
 
                     dataGridView1.AllowUserToAddRows = false;
                     dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -347,20 +278,9 @@ namespace Kursivoy_Konkin
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при загрузке данных: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Ошибка при загрузке данных: {ex.Message}", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void SetHeader(string columnName, string headerText)
-        {
-            if (dataGridView1.Columns.Contains(columnName))
-                dataGridView1.Columns[columnName].HeaderText = headerText;
-        }
-
-        private void HideColumn(string columnName)
-        {
-            if (dataGridView1.Columns.Contains(columnName))
-                dataGridView1.Columns[columnName].Visible = false;
         }
 
         private void UpdateClientBirthdaysAndAges()
@@ -381,7 +301,8 @@ namespace Kursivoy_Konkin
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при обновлении данных: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Ошибка при обновлении данных: {ex.Message}", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -401,6 +322,9 @@ namespace Kursivoy_Konkin
 
         private void FormHeadViewClients_Load(object sender, EventArgs e)
         {
+            isMasked = true;
+            
+
             FillTableData();
             UpdateClientBirthdaysAndAges();
 
@@ -421,22 +345,19 @@ namespace Kursivoy_Konkin
                 {
                     DataTable statusTable = new DataTable();
                     adapter.Fill(statusTable);
-
                     foreach (DataRow row in statusTable.Rows)
-                    {
                         comboBox3.Items.Add(row["status"].ToString());
-                    }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при загрузке статусов: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Ошибка при загрузке статусов: {ex.Message}", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void InitializeSearchAndFilter()
         {
-            // 🔹 При поиске/фильтрации сбрасываем на первую страницу
             textBox1.TextChanged += (s, e) => { currentPage = 1; ApplyFilters(); };
             comboBox1.SelectedIndexChanged += (s, e) => { currentPage = 1; ApplyFilters(); };
             comboBox3.SelectedIndexChanged += (s, e) => { currentPage = 1; ApplyFilters(); };
@@ -450,28 +371,28 @@ namespace Kursivoy_Konkin
 
             var filteredData = originalDataTable.AsEnumerable();
 
+            // Поиск по ФИО / Телефону
             string searchText = textBox1.Text.ToLower();
             if (!string.IsNullOrEmpty(searchText))
-            {
                 filteredData = filteredData.Where(row =>
                     row["ФИО"].ToString().ToLower().Contains(searchText) ||
                     row["Телефон"].ToString().ToLower().Contains(searchText));
-            }
 
-            string employeeSearchText = textBox2.Text.ToLower();
-            if (!string.IsNullOrEmpty(employeeSearchText))
-            {
+            // Поиск по сотруднику
+            string employeeText = textBox2.Text.ToLower();
+            if (!string.IsNullOrEmpty(employeeText))
                 filteredData = filteredData.Where(row =>
                     row["ФИО сотрудника"] != DBNull.Value &&
-                    row["ФИО сотрудника"].ToString().ToLower().Contains(employeeSearchText));
-            }
+                    row["ФИО сотрудника"].ToString().ToLower().Contains(employeeText));
 
+            // Фильтр по статусу
             if (comboBox3.SelectedItem != null && comboBox3.SelectedItem.ToString() != "Все")
             {
-                string selectedStatus = comboBox3.SelectedItem.ToString();
-                filteredData = filteredData.Where(row => row["Статус"].ToString() == selectedStatus);
+                string sel = comboBox3.SelectedItem.ToString();
+                filteredData = filteredData.Where(row => row["Статус"].ToString() == sel);
             }
 
+            // Фильтр по LTV
             if (comboBox2.SelectedItem != null && comboBox2.SelectedItem.ToString() != "Все")
             {
                 switch (comboBox2.SelectedItem.ToString())
@@ -488,10 +409,10 @@ namespace Kursivoy_Konkin
                 }
             }
 
+            // Сортировка
             if (comboBox1.SelectedItem != null)
             {
-                string sortColumn = comboBox1.SelectedItem.ToString();
-                switch (sortColumn)
+                switch (comboBox1.SelectedItem.ToString())
                 {
                     case "ФИО":
                         filteredData = filteredData.OrderBy(row => row["ФИО"]);
@@ -500,12 +421,12 @@ namespace Kursivoy_Konkin
                         filteredData = filteredData.OrderBy(row => row["Статус"]);
                         break;
                     case "LTV":
-                        filteredData = filteredData.OrderBy(row => Convert.ToDecimal(row["LTV"]));
+                        filteredData = filteredData.OrderByDescending(row => Convert.ToDecimal(row["LTV"]));
                         break;
                 }
             }
 
-            // 🔹 Пагинация
+            // Пагинация
             var filteredList = filteredData.ToList();
             int totalFilteredRecords = filteredList.Count;
             int totalPagesFiltered = (int)Math.Ceiling((double)totalFilteredRecords / pageSize);
@@ -515,35 +436,115 @@ namespace Kursivoy_Konkin
 
             if (filteredList.Count == 0)
             {
-                // 🔹 Создаём пустую таблицу с правильной структурой
-                DataTable emptyTable = new DataTable();
-                emptyTable.Columns.Add("ФИО", typeof(string));
-                emptyTable.Columns.Add("Телефон", typeof(string));
-                emptyTable.Columns.Add("Дата рождения", typeof(DateTime));
-                emptyTable.Columns.Add("Возраст", typeof(int));
-                emptyTable.Columns.Add("Статус", typeof(string));
-                emptyTable.Columns.Add("LTV", typeof(decimal));
-                emptyTable.Columns.Add("ФИО сотрудника", typeof(string));
-
-                dataGridView1.DataSource = emptyTable;
+                dataGridView1.DataSource = BuildDisplayTable(new List<DataRow>());
                 totalRecords = 0;
                 totalPages = 0;
                 currentPage = 1;
             }
             else
             {
-                var pagedData = filteredList
+                var pagedRows = filteredList
                     .Skip((currentPage - 1) * pageSize)
                     .Take(pageSize)
-                    .CopyToDataTable();
+                    .ToList();
 
-                dataGridView1.DataSource = pagedData;
+                // ✅ Строим таблицу с маскировкой или без
+                dataGridView1.DataSource = BuildDisplayTable(pagedRows);
+
                 totalRecords = totalFilteredRecords;
                 totalPages = totalPagesFiltered;
+
+                // Сохраняем ID в Tag каждой строки грида
+                for (int i = 0; i < pagedRows.Count && i < dataGridView1.Rows.Count; i++)
+                    dataGridView1.Rows[i].Tag = pagedRows[i]["ID_Client"].ToString();
             }
 
-            // 🔹 Обновляем информацию о пагинации
+            HideColumn("ID_Client");
             UpdatePaginationInfo();
+        }
+
+        private void HideColumn(string columnName)
+        {
+            if (dataGridView1.Columns.Contains(columnName))
+                dataGridView1.Columns[columnName].Visible = false;
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        //  Строит DataTable для отображения с маскировкой или без
+        // ─────────────────────────────────────────────────────────────
+        private DataTable BuildDisplayTable(List<DataRow> rows)
+        {
+            var display = new DataTable();
+            display.Columns.Add("ФИО", typeof(string));
+            display.Columns.Add("Телефон", typeof(string));
+            display.Columns.Add("Дата рождения", typeof(string));
+            display.Columns.Add("Возраст", typeof(object));
+            display.Columns.Add("Статус", typeof(string));
+            display.Columns.Add("LTV", typeof(object));
+            display.Columns.Add("ФИО сотрудника", typeof(string));
+
+            foreach (var row in rows)
+            {
+                string fio = row["ФИО"].ToString();
+                string phone = row["Телефон"].ToString();
+                string bday = row["Дата рождения"] == DBNull.Value
+                                      ? ""
+                                      : Convert.ToDateTime(row["Дата рождения"]).ToString("dd.MM.yyyy");
+                object age = row["Возраст"];
+                string status = row["Статус"].ToString();
+                object ltv = row["LTV"];
+                string employee = row["ФИО сотрудника"] == DBNull.Value
+                                      ? ""
+                                      : row["ФИО сотрудника"].ToString();
+
+                if (isMasked)
+                    display.Rows.Add(
+                        MaskFio(fio),
+                        MaskPhone(phone),
+                        "**.**.**** ",
+                        age,
+                        status,
+                        ltv,
+                        employee);   // ФИО сотрудника не маскируем
+                else
+                    display.Rows.Add(fio, phone, bday, age, status, ltv, employee);
+            }
+
+            return display;
+        }
+
+        // ─────────────────────────────────────────
+        //  Маскировка
+        // ─────────────────────────────────────────
+
+        private string MaskFio(string fio)
+        {
+            if (string.IsNullOrEmpty(fio)) return fio;
+            var words = fio.Split(' ');
+            var masked = words.Select(word =>
+            {
+                if (word.Length <= 2) return new string('*', word.Length);
+                int visible = word.Length <= 4 ? 2 : 3;
+                return word.Substring(0, visible) + new string('*', word.Length - visible);
+            });
+            return string.Join(" ", masked);
+        }
+
+        private string MaskPhone(string phone)
+        {
+            if (string.IsNullOrEmpty(phone)) return phone;
+            int visible = Math.Min(9, phone.Length);
+            return phone.Substring(0, visible) + new string('*', phone.Length - visible);
+        }
+
+        // ─────────────────────────────────────────
+        //  Кнопка переключения маски
+        // ─────────────────────────────────────────
+        private void buttonToggleMask_Click(object sender, EventArgs e)
+        {
+            isMasked = !isMasked;
+           
+            ApplyFilters();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -557,9 +558,7 @@ namespace Kursivoy_Konkin
         private void FormHeadViewClients_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.UserClosing)
-            {
                 e.Cancel = true;
-            }
         }
     }
 }

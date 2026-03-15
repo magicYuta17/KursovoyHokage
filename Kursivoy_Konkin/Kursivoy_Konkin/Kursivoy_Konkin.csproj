@@ -162,6 +162,12 @@
     <Compile Include="FormAutorization.Designer.cs">
       <DependentUpon>FormAutorization.cs</DependentUpon>
     </Compile>
+    <Compile Include="Head\FormHeadDetailsClients.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Head\FormHeadDetailsClients.Designer.cs">
+      <DependentUpon>FormHeadDetailsClients.cs</DependentUpon>
+    </Compile>
     <Compile Include="Head\FormHeadViewContract.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -216,6 +222,12 @@
     <Compile Include="Manager\FormManagerViewContract.Designer.cs">
       <DependentUpon>FormManagerViewContract.cs</DependentUpon>
     </Compile>
+    <Compile Include="Manager\FormViewClientDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Manager\FormViewClientDetails.Designer.cs">
+      <DependentUpon>FormViewClientDetails.cs</DependentUpon>
+    </Compile>
     <Compile Include="Manager\FormViewClients.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -258,6 +270,9 @@
     <EmbeddedResource Include="FormAutorization.resx">
       <DependentUpon>FormAutorization.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Head\FormHeadDetailsClients.resx">
+      <DependentUpon>FormHeadDetailsClients.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Head\FormHeadViewContract.resx">
       <DependentUpon>FormHeadViewContract.cs</DependentUpon>
     </EmbeddedResource>
@@ -284,6 +299,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Manager\FormManagerViewContract.resx">
       <DependentUpon>FormManagerViewContract.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Manager\FormViewClientDetails.resx">
+      <DependentUpon>FormViewClientDetails.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Manager\FormViewClients.resx">
       <DependentUpon>FormViewClients.cs</DependentUpon>
