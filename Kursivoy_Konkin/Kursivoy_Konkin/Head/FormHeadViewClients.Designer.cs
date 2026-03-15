@@ -244,7 +244,7 @@
             // lblPageInfo
             // 
             this.lblPageInfo.Font = new System.Drawing.Font("Comic Sans MS", 13.25F);
-            this.lblPageInfo.Location = new System.Drawing.Point(632, 878);
+            this.lblPageInfo.Location = new System.Drawing.Point(646, 878);
             this.lblPageInfo.Name = "lblPageInfo";
             this.lblPageInfo.Size = new System.Drawing.Size(312, 45);
             this.lblPageInfo.TabIndex = 38;
