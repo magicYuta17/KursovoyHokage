@@ -82,10 +82,7 @@ namespace Kursivoy_Konkin.Manager
             }
         }
 
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
+        
 
         private void btnClose_Click_1(object sender, EventArgs e)
         {

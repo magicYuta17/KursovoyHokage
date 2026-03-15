@@ -106,6 +106,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActivityMonitor.cs" />
     <Compile Include="Admin\FormAdminEditObject.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -161,6 +162,12 @@
     </Compile>
     <Compile Include="FormAutorization.Designer.cs">
       <DependentUpon>FormAutorization.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSettings.Designer.cs">
+      <DependentUpon>FormSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="Head\FormHeadDetailsClients.cs">
       <SubType>Form</SubType>
@@ -270,6 +277,9 @@
     <EmbeddedResource Include="FormAutorization.resx">
       <DependentUpon>FormAutorization.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormSettings.resx">
+      <DependentUpon>FormSettings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Head\FormHeadDetailsClients.resx">
       <DependentUpon>FormHeadDetailsClients.cs</DependentUpon>
     </EmbeddedResource>
@@ -359,6 +369,7 @@
     <Content Include="img\save.png" />
     <Content Include="img\setting.png" />
     <Content Include="dumb and dll\MySql.Data.dll" />
+    <None Include="Resources\setting.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="photo_object\" />

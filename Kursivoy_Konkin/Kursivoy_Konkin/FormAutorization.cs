@@ -362,5 +362,13 @@ namespace Kursivoy_Konkin
                 e.Cancel = true; //отменяем закрытие формы
             }
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            FormSettings settings = new FormSettings();
+            this.Visible = false;
+            settings.ShowDialog();
+            this.Close();
+        }
     }
 }
