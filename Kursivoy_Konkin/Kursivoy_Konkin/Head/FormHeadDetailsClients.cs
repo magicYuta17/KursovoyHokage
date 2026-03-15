@@ -90,7 +90,7 @@ namespace Kursivoy_Konkin.Manager
         {
             if (e.CloseReason == CloseReason.UserClosing)
                 e.Cancel = true;
-//3
+
         }
     }
 }
