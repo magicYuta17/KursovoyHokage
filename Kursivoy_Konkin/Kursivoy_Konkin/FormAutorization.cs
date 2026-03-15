@@ -86,6 +86,7 @@ namespace Kursivoy_Konkin
                 // 2. Проверка в таблице worker (логин и пароль из БД)
                 try
                 {
+
                     using (MySqlConnection conn = new MySqlConnection(connectionString))
                     {
                         conn.Open();
@@ -93,8 +94,8 @@ namespace Kursivoy_Konkin
                         string query = "SELECT Role_worker_ID_Role FROM worker WHERE FIO = @login AND password = @password";
                         using (MySqlCommand cmd = new MySqlCommand(query, conn))
                         {
-                            cmd.Parameters.AddWithValue("@login", textBox2.Text);   // логин
-                            cmd.Parameters.AddWithValue("@password", textBox1.Text); // пароль
+                            cmd.Parameters.AddWithValue("@login", textBox2.Text.Trim());   // логин
+                            cmd.Parameters.AddWithValue("@password", textBox1.Text.Trim()); // пароль
 
                             object result = cmd.ExecuteScalar(); // получаем значение role
                             if (result != null)
